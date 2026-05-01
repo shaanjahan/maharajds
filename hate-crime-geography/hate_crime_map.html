@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>U.S. Hate Crime Geography — Interactive Map</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #f4f6f9;
+      color: #1a2744;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #1a2744;
+      color: white;
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+    header p {
+      font-size: 0.78rem;
+      opacity: 0.75;
+      max-width: 520px;
+    }
+
+    /* ── Controls bar ── */
+    #controls {
+      background: white;
+      border-bottom: 1px solid #dde3ed;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    #controls label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #1a2744;
+    }
+    .ctrl-group {
+      display: flex;
+      gap: 6px;
+    }
+    .btn {
+      font-size: 0.78rem;
+      font-family: inherit;
+      padding: 5px 13px;
+      border: 1.5px solid #c8d0de;
+      border-radius: 4px;
+      background: white;
+      color: #1a2744;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn:hover { background: #eef1f7; }
+    .btn.active {
+      background: #1a2744;
+      color: white;
+      border-color: #1a2744;
+    }
+    .divider { width: 1px; height: 24px; background: #dde3ed; margin: 0 4px; }
+
+    /* ── Map ── */
+    #map-wrap {
+      display: flex;
+      height: calc(100vh - 110px);
+    }
+    #map { flex: 1; }
+
+    /* ── Side panel ── */
+    #panel {
+      width: 290px;
+      background: white;
+      border-left: 1px solid #dde3ed;
+      overflow-y: auto;
+      padding: 20px 18px;
+      font-size: 0.84rem;
+    }
+    #panel h2 {
+      font-size: 1rem;
+      color: #1a2744;
+      margin-bottom: 14px;
+      border-bottom: 2px solid #e07b39;
+      padding-bottom: 6px;
+    }
+    #panel .hint {
+      color: #888;
+      font-style: italic;
+      font-size: 0.78rem;
+      margin-top: 8px;
+    }
+
+    /* state card */
+    .state-card { display: none; }
+    .state-card.visible { display: block; }
+    .state-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1a2744;
+      margin-bottom: 2px;
+    }
+    .state-region { color: #888; font-size: 0.78rem; margin-bottom: 12px; }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      border-bottom: 1px solid #f0f2f6;
+    }
+    .stat-label { color: #555; }
+    .stat-val { font-weight: 600; color: #1a2744; }
+    .party-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: white;
+      margin-left: 6px;
+    }
+    .party-D { background: #2166ac; }
+    .party-R { background: #d6604d; }
+
+    /* Bias bar chart */
+    .bias-section { margin-top: 14px; }
+    .bias-title { font-size: 0.78rem; font-weight: 600; color: #1a2744; margin-bottom: 6px; }
+    .bias-bar-row { margin-bottom: 5px; }
+    .bias-bar-label { font-size: 0.73rem; color: #555; display: flex; justify-content: space-between; margin-bottom: 2px; }
+    .bias-bar-track {
+      background: #eef1f7;
+      border-radius: 3px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .bias-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: #1a2744;
+      transition: width 0.3s;
+    }
+
+    /* ── Legend ── */
+    .map-legend {
+      background: white;
+      padding: 10px 14px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      font-family: Georgia, serif;
+      font-size: 0.78rem;
+      line-height: 1.6;
+      min-width: 160px;
+    }
+    .map-legend h4 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #1a2744;
+      margin-bottom: 6px;
+    }
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+    .legend-swatch {
+      width: 18px;
+      height: 12px;
+      border-radius: 2px;
+      border: 1px solid rgba(0,0,0,0.15);
+      flex-shrink: 0;
+    }
+    .legend-divider { margin: 6px 0; border-top: 1px solid #dde3ed; }
+    .legend-party-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+    .legend-party-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Top states table ── */
+    .top-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.78rem; }
+    .top-table th { text-align: left; color: #888; font-weight: 600; padding: 3px 4px; border-bottom: 1px solid #dde3ed; }
+    .top-table td { padding: 4px 4px; border-bottom: 1px solid #f0f2f6; }
+    .top-table tr:hover td { background: #f8f9fc; }
+    .rank-num { color: #888; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>U.S. Hate Crime Geography — State-Level Rates, 2022</h1>
+    <p>FBI UCR/NIBRS data &bull; Rates per 100,000 population &bull; Shaded by hate crime rate, bordered by 2020 presidential vote</p>
+  </div>
+</header>
+
+<div id="controls">
+  <label>Map view:</label>
+  <div class="ctrl-group">
+    <button class="btn active" id="btn-rate" onclick="setView('rate')">Hate Crime Rate</button>
+    <button class="btn" id="btn-party" onclick="setView('party')">Party Only</button>
+    <button class="btn" id="btn-reporting" onclick="setView('reporting')">Reporting Rate</button>
+  </div>
+  <div class="divider"></div>
+  <label>Highlight:</label>
+  <div class="ctrl-group">
+    <button class="btn" id="btn-all" onclick="filterParty('all')">All States</button>
+    <button class="btn" id="btn-dem" onclick="filterParty('D')">Democrat</button>
+    <button class="btn" id="btn-rep" onclick="filterParty('R')">Republican</button>
+  </div>
+</div>
+
+<div id="map-wrap">
+  <div id="map"></div>
+
+  <div id="panel">
+    <h2>State Details</h2>
+
+    <div class="state-card" id="hint-card">
+      <p class="hint">Hover over a state to see details. Click to pin the panel.</p>
+    </div>
+
+    <div class="state-card" id="state-card">
+      <div class="state-name" id="sc-name"></div>
+      <div class="state-region" id="sc-region"></div>
+
+      <div class="stat-row">
+        <span class="stat-label">Rate per 100K</span>
+        <span class="stat-val" id="sc-rate"></span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Total incidents</span>
+        <span class="stat-val" id="sc-incidents"></span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Population</span>
+        <span class="stat-val" id="sc-pop"></span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">2020 Presidential</span>
+        <span class="stat-val" id="sc-party"></span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">GOP margin</span>
+        <span class="stat-val" id="sc-margin"></span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Reporting agencies</span>
+        <span class="stat-val" id="sc-reporting"></span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Median income</span>
+        <span class="stat-val" id="sc-income"></span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Urban share</span>
+        <span class="stat-val" id="sc-urban"></span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">College degree</span>
+        <span class="stat-val" id="sc-college"></span>
+      </div>
+
+      <div class="bias-section">
+        <div class="bias-title">Bias category breakdown</div>
+        <div class="bias-bar-row">
+          <div class="bias-bar-label"><span>Racial</span><span id="bc-racial"></span></div>
+          <div class="bias-bar-track"><div class="bias-bar-fill" id="bb-racial" style="background:#1a2744"></div></div>
+        </div>
+        <div class="bias-bar-row">
+          <div class="bias-bar-label"><span>Religious</span><span id="bc-religious"></span></div>
+          <div class="bias-bar-track"><div class="bias-bar-fill" id="bb-religious" style="background:#2c4a7c"></div></div>
+        </div>
+        <div class="bias-bar-row">
+          <div class="bias-bar-label"><span>Sexual orientation</span><span id="bc-sxori"></span></div>
+          <div class="bias-bar-track"><div class="bias-bar-fill" id="bb-sxori" style="background:#e07b39"></div></div>
+        </div>
+        <div class="bias-bar-row">
+          <div class="bias-bar-label"><span>Other</span><span id="bc-other"></span></div>
+          <div class="bias-bar-track"><div class="bias-bar-fill" id="bb-other" style="background:#7f8c8d"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top 10 table always visible -->
+    <div style="margin-top: 22px;">
+      <div class="bias-title" style="font-size:0.82rem; margin-bottom:6px;">Top 10 States by Rate</div>
+      <table class="top-table">
+        <thead><tr><th>#</th><th>State</th><th>Rate</th><th>Party</th></tr></thead>
+        <tbody id="top-table-body"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+// ── State data ────────────────────────────────────────────────────────────────
+const STATE_DATA = [
+  {
+    "state": "Alabama",
+    "abbr": "AL",
+    "rate": 2.24,
+    "incidents": 113,
+    "population_m": 5.04,
+    "party": "R",
+    "gop_margin": 25.4,
+    "region": "South",
+    "urban_pct": 59,
+    "median_income_k": 55.4,
+    "pct_college": 27,
+    "reporting_pct": 62,
+    "pct_racial": 48.0,
+    "pct_religious": 15.0,
+    "pct_sxori": 22.0
+  },
+  {
+    "state": "Alaska",
+    "abbr": "AK",
+    "rate": 7.16,
+    "incidents": 53,
+    "population_m": 0.74,
+    "party": "R",
+    "gop_margin": 10.0,
+    "region": "West",
+    "urban_pct": 66,
+    "median_income_k": 77.8,
+    "pct_college": 30,
+    "reporting_pct": 55,
+    "pct_racial": 42.0,
+    "pct_religious": 18.0,
+    "pct_sxori": 28.0
+  },
+  {
+    "state": "Arizona",
+    "abbr": "AZ",
+    "rate": 7.66,
+    "incidents": 564,
+    "population_m": 7.36,
+    "party": "R",
+    "gop_margin": -0.3,
+    "region": "West",
+    "urban_pct": 90,
+    "median_income_k": 65.9,
+    "pct_college": 32,
+    "reporting_pct": 78,
+    "pct_racial": 44.0,
+    "pct_religious": 14.0,
+    "pct_sxori": 26.0
+  },
+  {
+    "state": "Arkansas",
+    "abbr": "AR",
+    "rate": 3.22,
+    "incidents": 98,
+    "population_m": 3.04,
+    "party": "R",
+    "gop_margin": 27.6,
+    "region": "South",
+    "urban_pct": 57,
+    "median_income_k": 52.5,
+    "pct_college": 24,
+    "reporting_pct": 55,
+    "pct_racial": 51.0,
+    "pct_religious": 12.0,
+    "pct_sxori": 20.0
+  },
+  {
+    "state": "California",
+    "abbr": "CA",
+    "rate": 10.3,
+    "incidents": 4022,
+    "population_m": 39.03,
+    "party": "D",
+    "gop_margin": -29.2,
+    "region": "West",
+    "urban_pct": 95,
+    "median_income_k": 84.1,
+    "pct_college": 36,
+    "reporting_pct": 92,
+    "pct_racial": 40.0,
+    "pct_religious": 20.0,
+    "pct_sxori": 24.0
+  },
+  {
+    "state": "Colorado",
+    "abbr": "CO",
+    "rate": 7.29,
+    "incidents": 426,
+    "population_m": 5.84,
+    "party": "D",
+    "gop_margin": -13.5,
+    "region": "West",
+    "urban_pct": 87,
+    "median_income_k": 77.1,
+    "pct_college": 44,
+    "reporting_pct": 85,
+    "pct_racial": 38.0,
+    "pct_religious": 18.0,
+    "pct_sxori": 28.0
+  },
+  {
+    "state": "Connecticut",
+    "abbr": "CT",
+    "rate": 5.56,
+    "incidents": 202,
+    "population_m": 3.63,
+    "party": "D",
+    "gop_margin": -19.6,
+    "region": "Northeast",
+    "urban_pct": 94,
+    "median_income_k": 83.8,
+    "pct_college": 41,
+    "reporting_pct": 95,
+    "pct_racial": 45.0,
+    "pct_religious": 22.0,
+    "pct_sxori": 20.0
+  },
+  {
+    "state": "Delaware",
+    "abbr": "DE",
+    "rate": 7.84,
+    "incidents": 80,
+    "population_m": 1.02,
+    "party": "D",
+    "gop_margin": -18.9,
+    "region": "South",
+    "urban_pct": 84,
+    "median_income_k": 76.4,
+    "pct_college": 34,
+    "reporting_pct": 90,
+    "pct_racial": 50.0,
+    "pct_religious": 16.0,
+    "pct_sxori": 22.0
+  },
+  {
+    "state": "Florida",
+    "abbr": "FL",
+    "rate": 4.18,
+    "incidents": 944,
+    "population_m": 22.61,
+    "party": "R",
+    "gop_margin": 3.4,
+    "region": "South",
+    "urban_pct": 94,
+    "median_income_k": 61.8,
+    "pct_college": 32,
+    "reporting_pct": 82,
+    "pct_racial": 46.0,
+    "pct_religious": 18.0,
+    "pct_sxori": 22.0
+  },
+  {
+    "state": "Georgia",
+    "abbr": "GA",
+    "rate": 4.13,
+    "incidents": 451,
+    "population_m": 10.91,
+    "party": "R",
+    "gop_margin": -11.7,
+    "region": "South",
+    "urban_pct": 75,
+    "median_income_k": 65.0,
+    "pct_college": 34,
+    "reporting_pct": 70,
+    "pct_racial": 52.0,
+    "pct_religious": 14.0,
+    "pct_sxori": 20.0
+  },
+  {
+    "state": "Hawaii",
+    "abbr": "HI",
+    "rate": 6.6,
+    "incidents": 95,
+    "population_m": 1.44,
+    "party": "D",
+    "gop_margin": -29.2,
+    "region": "West",
+    "urban_pct": 94,
+    "median_income_k": 83.1,
+    "pct_college": 34,
+    "reporting_pct": 95,
+    "pct_racial": 35.0,
+    "pct_religious": 22.0,
+    "pct_sxori": 28.0
+  },
+  {
+    "state": "Idaho",
+    "abbr": "ID",
+    "rate": 2.94,
+    "incidents": 57,
+    "population_m": 1.94,
+    "party": "R",
+    "gop_margin": 30.8,
+    "region": "West",
+    "urban_pct": 72,
+    "median_income_k": 60.0,
+    "pct_college": 29,
+    "reporting_pct": 75,
+    "pct_racial": 42.0,
+    "pct_religious": 14.0,
+    "pct_sxori": 26.0
+  },
+  {
+    "state": "Illinois",
+    "abbr": "IL",
+    "rate": 7.27,
+    "incidents": 914,
+    "population_m": 12.58,
+    "party": "D",
+    "gop_margin": -17.0,
+    "region": "Midwest",
+    "urban_pct": 89,
+    "median_income_k": 72.2,
+    "pct_college": 37,
+    "reporting_pct": 88,
+    "pct_racial": 43.0,
+    "pct_religious": 20.0,
+    "pct_sxori": 22.0
+  },
+  {
+    "state": "Indiana",
+    "abbr": "IN",
+    "rate": 3.74,
+    "incidents": 254,
+    "population_m": 6.79,
+    "party": "R",
+    "gop_margin": 16.0,
+    "region": "Midwest",
+    "urban_pct": 73,
+    "median_income_k": 61.9,
+    "pct_college": 28,
+    "reporting_pct": 72,
+    "pct_racial": 50.0,
+    "pct_religious": 14.0,
+    "pct_sxori": 22.0
+  },
+  {
+    "state": "Iowa",
+    "abbr": "IA",
+    "rate": 1.69,
+    "incidents": 54,
+    "population_m": 3.19,
+    "party": "R",
+    "gop_margin": 8.2,
+    "region": "Midwest",
+    "urban_pct": 66,
+    "median_income_k": 68.6,
+    "pct_college": 34,
+    "reporting_pct": 75,
+    "pct_racial": 48.0,
+    "pct_religious": 16.0,
+    "pct_sxori": 20.0
+  },
+  {
+    "state": "Kansas",
+    "abbr": "KS",
+    "rate": 2.96,
+    "incidents": 87,
+    "population_m": 2.94,
+    "party": "R",
+    "gop_margin": 14.6,
+    "region": "Midwest",
+    "urban_pct": 74,
+    "median_income_k": 65.8,
+    "pct_college": 34,
+    "reporting_pct": 70,
+    "pct_racial": 44.0,
+    "pct_religious": 18.0,
+    "pct_sxori": 24.0
+  },
+  {
+    "state": "Kentucky",
+    "abbr": "KY",
+    "rate": 2.42,
+    "incidents": 109,
+    "population_m": 4.51,
+    "party": "R",
+    "gop_margin": 25.9,
+    "region": "South",
+    "urban_pct": 68,
+    "median_income_k": 57.4,
+    "pct_college": 25,
+    "reporting_pct": 65,
+    "pct_racial": 47.0,
+    "pct_religious": 12.0,
+    "pct_sxori": 26.0
+  },
+  {
+    "state": "Louisiana",
+    "abbr": "LA",
+    "rate": 2.59,
+    "incidents": 120,
+    "population_m": 4.63,
+    "party": "R",
+    "gop_margin": 18.8,
+    "region": "South",
+    "urban_pct": 75,
+    "median_income_k": 53.5,
+    "pct_college": 26,
+    "reporting_pct": 60,
+    "pct_racial": 55.0,
+    "pct_religious": 16.0,
+    "pct_sxori": 16.0
+  },
+  {
+    "state": "Maine",
+    "abbr": "ME",
+    "rate": 4.35,
+    "incidents": 60,
+    "population_m": 1.38,
+    "party": "D",
+    "gop_margin": -9.1,
+    "region": "Northeast",
+    "urban_pct": 61,
+    "median_income_k": 71.6,
+    "pct_college": 35,
+    "reporting_pct": 88,
+    "pct_racial": 40.0,
+    "pct_religious": 20.0,
+    "pct_sxori": 26.0
+  },
+  {
+    "state": "Maryland",
+    "abbr": "MD",
+    "rate": 12.22,
+    "incidents": 755,
+    "population_m": 6.18,
+    "party": "D",
+    "gop_margin": -33.2,
+    "region": "South",
+    "urban_pct": 87,
+    "median_income_k": 90.2,
+    "pct_college": 43,
+    "reporting_pct": 90,
+    "pct_racial": 48.0,
+    "pct_religious": 22.0,
+    "pct_sxori": 20.0
+  },
+  {
+    "state": "Massachusetts",
+    "abbr": "MA",
+    "rate": 9.94,
+    "incidents": 699,
+    "population_m": 7.03,
+    "party": "D",
+    "gop_margin": -33.5,
+    "region": "Northeast",
+    "urban_pct": 92,
+    "median_income_k": 89.0,
+    "pct_college": 45,
+    "reporting_pct": 95,
+    "pct_racial": 38.0,
+    "pct_religious": 24.0,
+    "pct_sxori": 26.0
+  },
+  {
+    "state": "Michigan",
+    "abbr": "MI",
+    "rate": 7.19,
+    "incidents": 721,
+    "population_m": 10.03,
+    "party": "D",
+    "gop_margin": -2.8,
+    "region": "Midwest",
+    "urban_pct": 75,
+    "median_income_k": 65.5,
+    "pct_college": 32,
+    "reporting_pct": 80,
+    "pct_racial": 45.0,
+    "pct_religious": 18.0,
+    "pct_sxori": 22.0
+  },
+  {
+    "state": "Minnesota",
+    "abbr": "MN",
+    "rate": 8.15,
+    "incidents": 466,
+    "population_m": 5.72,
+    "party": "D",
+    "gop_margin": -7.1,
+    "region": "Midwest",
+    "urban_pct": 87,
+    "median_income_k": 77.7,
+    "pct_college": 38,
+    "reporting_pct": 85,
+    "pct_racial": 42.0,
+    "pct_religious": 20.0,
+    "pct_sxori": 24.0
+  },
+  {
+    "state": "Mississippi",
+    "abbr": "MS",
+    "rate": 1.77,
+    "incidents": 52,
+    "population_m": 2.94,
+    "party": "R",
+    "gop_margin": 16.3,
+    "region": "South",
+    "urban_pct": 50,
+    "median_income_k": 48.7,
+    "pct_college": 22,
+    "reporting_pct": 55,
+    "pct_racial": 58.0,
+    "pct_religious": 10.0,
+    "pct_sxori": 18.0
+  },
+  {
+    "state": "Missouri",
+    "abbr": "MO",
+    "rate": 3.2,
+    "incidents": 198,
+    "population_m": 6.18,
+    "party": "R",
+    "gop_margin": 15.4,
+    "region": "Midwest",
+    "urban_pct": 70,
+    "median_income_k": 61.0,
+    "pct_college": 33,
+    "reporting_pct": 72,
+    "pct_racial": 50.0,
+    "pct_religious": 14.0,
+    "pct_sxori": 20.0
+  },
+  {
+    "state": "Montana",
+    "abbr": "MT",
+    "rate": 5.45,
+    "incidents": 60,
+    "population_m": 1.1,
+    "party": "R",
+    "gop_margin": 16.4,
+    "region": "West",
+    "urban_pct": 56,
+    "median_income_k": 60.6,
+    "pct_college": 34,
+    "reporting_pct": 70,
+    "pct_racial": 38.0,
+    "pct_religious": 18.0,
+    "pct_sxori": 28.0
+  },
+  {
+    "state": "Nebraska",
+    "abbr": "NE",
+    "rate": 2.64,
+    "incidents": 52,
+    "population_m": 1.97,
+    "party": "R",
+    "gop_margin": 19.3,
+    "region": "Midwest",
+    "urban_pct": 75,
+    "median_income_k": 68.0,
+    "pct_college": 34,
+    "reporting_pct": 72,
+    "pct_racial": 46.0,
+    "pct_religious": 14.0,
+    "pct_sxori": 24.0
+  },
+  {
+    "state": "Nevada",
+    "abbr": "NV",
+    "rate": 7.42,
+    "incidents": 236,
+    "population_m": 3.18,
+    "party": "R",
+    "gop_margin": -2.4,
+    "region": "West",
+    "urban_pct": 94,
+    "median_income_k": 64.4,
+    "pct_college": 30,
+    "reporting_pct": 88,
+    "pct_racial": 41.0,
+    "pct_religious": 20.0,
+    "pct_sxori": 26.0
+  },
+  {
+    "state": "New Hampshire",
+    "abbr": "NH",
+    "rate": 3.41,
+    "incidents": 47,
+    "population_m": 1.38,
+    "party": "D",
+    "gop_margin": -7.4,
+    "region": "Northeast",
+    "urban_pct": 61,
+    "median_income_k": 88.5,
+    "pct_college": 40,
+    "reporting_pct": 90,
+    "pct_racial": 38.0,
+    "pct_religious": 22.0,
+    "pct_sxori": 28.0
+  },
+  {
+    "state": "New Jersey",
+    "abbr": "NJ",
+    "rate": 9.47,
+    "incidents": 877,
+    "population_m": 9.26,
+    "party": "D",
+    "gop_margin": -15.9,
+    "region": "Northeast",
+    "urban_pct": 95,
+    "median_income_k": 89.3,
+    "pct_college": 42,
+    "reporting_pct": 95,
+    "pct_racial": 44.0,
+    "pct_religious": 24.0,
+    "pct_sxori": 20.0
+  },
+  {
+    "state": "New Mexico",
+    "abbr": "NM",
+    "rate": 3.41,
+    "incidents": 72,
+    "population_m": 2.11,
+    "party": "D",
+    "gop_margin": -10.7,
+    "region": "West",
+    "urban_pct": 77,
+    "median_income_k": 58.2,
+    "pct_college": 29,
+    "reporting_pct": 70,
+    "pct_racial": 50.0,
+    "pct_religious": 14.0,
+    "pct_sxori": 24.0
+  },
+  {
+    "state": "New York",
+    "abbr": "NY",
+    "rate": 10.15,
+    "incidents": 1997,
+    "population_m": 19.68,
+    "party": "D",
+    "gop_margin": -23.2,
+    "region": "Northeast",
+    "urban_pct": 88,
+    "median_income_k": 74.9,
+    "pct_college": 39,
+    "reporting_pct": 92,
+    "pct_racial": 42.0,
+    "pct_religious": 26.0,
+    "pct_sxori": 18.0
+  },
+  {
+    "state": "North Carolina",
+    "abbr": "NC",
+    "rate": 4.2,
+    "incidents": 438,
+    "population_m": 10.44,
+    "party": "D",
+    "gop_margin": -1.3,
+    "region": "South",
+    "urban_pct": 66,
+    "median_income_k": 64.4,
+    "pct_college": 32,
+    "reporting_pct": 75,
+    "pct_racial": 48.0,
+    "pct_religious": 16.0,
+    "pct_sxori": 22.0
+  },
+  {
+    "state": "North Dakota",
+    "abbr": "ND",
+    "rate": 2.82,
+    "incidents": 22,
+    "population_m": 0.78,
+    "party": "R",
+    "gop_margin": 33.3,
+    "region": "Midwest",
+    "urban_pct": 59,
+    "median_income_k": 71.5,
+    "pct_college": 33,
+    "reporting_pct": 75,
+    "pct_racial": 45.0,
+    "pct_religious": 18.0,
+    "pct_sxori": 20.0
+  },
+  {
+    "state": "Ohio",
+    "abbr": "OH",
+    "rate": 4.15,
+    "incidents": 488,
+    "population_m": 11.76,
+    "party": "R",
+    "gop_margin": 8.0,
+    "region": "Midwest",
+    "urban_pct": 78,
+    "median_income_k": 63.2,
+    "pct_college": 31,
+    "reporting_pct": 82,
+    "pct_racial": 48.0,
+    "pct_religious": 14.0,
+    "pct_sxori": 22.0
+  },
+  {
+    "state": "Oklahoma",
+    "abbr": "OK",
+    "rate": 3.31,
+    "incidents": 133,
+    "population_m": 4.02,
+    "party": "R",
+    "gop_margin": 32.5,
+    "region": "South",
+    "urban_pct": 67,
+    "median_income_k": 55.9,
+    "pct_college": 25,
+    "reporting_pct": 65,
+    "pct_racial": 52.0,
+    "pct_religious": 12.0,
+    "pct_sxori": 20.0
+  },
+  {
+    "state": "Oregon",
+    "abbr": "OR",
+    "rate": 9.53,
+    "incidents": 404,
+    "population_m": 4.24,
+    "party": "D",
+    "gop_margin": -16.1,
+    "region": "West",
+    "urban_pct": 81,
+    "median_income_k": 72.3,
+    "pct_college": 37,
+    "reporting_pct": 88,
+    "pct_racial": 40.0,
+    "pct_religious": 18.0,
+    "pct_sxori": 26.0
+  },
+  {
+    "state": "Pennsylvania",
+    "abbr": "PA",
+    "rate": 5.24,
+    "incidents": 684,
+    "population_m": 13.05,
+    "party": "D",
+    "gop_margin": -1.2,
+    "region": "Northeast",
+    "urban_pct": 82,
+    "median_income_k": 72.6,
+    "pct_college": 35,
+    "reporting_pct": 90,
+    "pct_racial": 46.0,
+    "pct_religious": 18.0,
+    "pct_sxori": 22.0
+  },
+  {
+    "state": "Rhode Island",
+    "abbr": "RI",
+    "rate": 7.71,
+    "incidents": 84,
+    "population_m": 1.09,
+    "party": "D",
+    "gop_margin": -21.1,
+    "region": "Northeast",
+    "urban_pct": 91,
+    "median_income_k": 74.5,
+    "pct_college": 38,
+    "reporting_pct": 95,
+    "pct_racial": 35.0,
+    "pct_religious": 22.0,
+    "pct_sxori": 28.0
+  },
+  {
+    "state": "South Carolina",
+    "abbr": "SC",
+    "rate": 2.97,
+    "incidents": 157,
+    "population_m": 5.28,
+    "party": "R",
+    "gop_margin": 11.7,
+    "region": "South",
+    "urban_pct": 66,
+    "median_income_k": 62.4,
+    "pct_college": 29,
+    "reporting_pct": 68,
+    "pct_racial": 52.0,
+    "pct_religious": 12.0,
+    "pct_sxori": 20.0
+  },
+  {
+    "state": "South Dakota",
+    "abbr": "SD",
+    "rate": 3.08,
+    "incidents": 28,
+    "population_m": 0.91,
+    "party": "R",
+    "gop_margin": 26.2,
+    "region": "Midwest",
+    "urban_pct": 57,
+    "median_income_k": 65.2,
+    "pct_college": 30,
+    "reporting_pct": 65,
+    "pct_racial": 48.0,
+    "pct_religious": 14.0,
+    "pct_sxori": 22.0
+  },
+  {
+    "state": "Tennessee",
+    "abbr": "TN",
+    "rate": 2.36,
+    "incidents": 165,
+    "population_m": 6.98,
+    "party": "R",
+    "gop_margin": 23.1,
+    "region": "South",
+    "urban_pct": 66,
+    "median_income_k": 60.1,
+    "pct_college": 28,
+    "reporting_pct": 68,
+    "pct_racial": 50.0,
+    "pct_religious": 12.0,
+    "pct_sxori": 18.0
+  },
+  {
+    "state": "Texas",
+    "abbr": "TX",
+    "rate": 3.42,
+    "incidents": 1026,
+    "population_m": 30.03,
+    "party": "R",
+    "gop_margin": 5.8,
+    "region": "South",
+    "urban_pct": 85,
+    "median_income_k": 66.8,
+    "pct_college": 30,
+    "reporting_pct": 80,
+    "pct_racial": 48.0,
+    "pct_religious": 18.0,
+    "pct_sxori": 20.0
+  },
+  {
+    "state": "Utah",
+    "abbr": "UT",
+    "rate": 8.37,
+    "incidents": 283,
+    "population_m": 3.38,
+    "party": "R",
+    "gop_margin": 20.4,
+    "region": "West",
+    "urban_pct": 92,
+    "median_income_k": 79.1,
+    "pct_college": 36,
+    "reporting_pct": 88,
+    "pct_racial": 44.0,
+    "pct_religious": 18.0,
+    "pct_sxori": 24.0
+  },
+  {
+    "state": "Vermont",
+    "abbr": "VT",
+    "rate": 7.69,
+    "incidents": 50,
+    "population_m": 0.65,
+    "party": "D",
+    "gop_margin": -35.4,
+    "region": "Northeast",
+    "urban_pct": 39,
+    "median_income_k": 61.6,
+    "pct_college": 38,
+    "reporting_pct": 90,
+    "pct_racial": 40.0,
+    "pct_religious": 20.0,
+    "pct_sxori": 26.0
+  },
+  {
+    "state": "Virginia",
+    "abbr": "VA",
+    "rate": 4.76,
+    "incidents": 413,
+    "population_m": 8.68,
+    "party": "D",
+    "gop_margin": -10.5,
+    "region": "South",
+    "urban_pct": 77,
+    "median_income_k": 87.3,
+    "pct_college": 43,
+    "reporting_pct": 90,
+    "pct_racial": 47.0,
+    "pct_religious": 18.0,
+    "pct_sxori": 22.0
+  },
+  {
+    "state": "Washington",
+    "abbr": "WA",
+    "rate": 11.56,
+    "incidents": 895,
+    "population_m": 7.74,
+    "party": "D",
+    "gop_margin": -19.2,
+    "region": "West",
+    "urban_pct": 88,
+    "median_income_k": 87.3,
+    "pct_college": 39,
+    "reporting_pct": 92,
+    "pct_racial": 42.0,
+    "pct_religious": 20.0,
+    "pct_sxori": 24.0
+  },
+  {
+    "state": "West Virginia",
+    "abbr": "WV",
+    "rate": 2.92,
+    "incidents": 52,
+    "population_m": 1.78,
+    "party": "R",
+    "gop_margin": 38.9,
+    "region": "South",
+    "urban_pct": 47,
+    "median_income_k": 56.4,
+    "pct_college": 22,
+    "reporting_pct": 60,
+    "pct_racial": 50.0,
+    "pct_religious": 12.0,
+    "pct_sxori": 22.0
+  },
+  {
+    "state": "Wisconsin",
+    "abbr": "WI",
+    "rate": 4.87,
+    "incidents": 287,
+    "population_m": 5.89,
+    "party": "D",
+    "gop_margin": -0.6,
+    "region": "Midwest",
+    "urban_pct": 70,
+    "median_income_k": 67.1,
+    "pct_college": 33,
+    "reporting_pct": 80,
+    "pct_racial": 45.0,
+    "pct_religious": 18.0,
+    "pct_sxori": 24.0
+  },
+  {
+    "state": "Wyoming",
+    "abbr": "WY",
+    "rate": 6.55,
+    "incidents": 38,
+    "population_m": 0.58,
+    "party": "R",
+    "gop_margin": 43.4,
+    "region": "West",
+    "urban_pct": 65,
+    "median_income_k": 72.3,
+    "pct_college": 29,
+    "reporting_pct": 65,
+    "pct_racial": 44.0,
+    "pct_religious": 14.0,
+    "pct_sxori": 24.0
+  }
+];
+const stateByName = {};
+STATE_DATA.forEach(s => stateByName[s.state] = s);
+
+// ── Map setup ─────────────────────────────────────────────────────────────────
+const map = L.map('map', {
+  center: [38, -96],
+  zoom: 4,
+  zoomSnap: 0.5,
+  minZoom: 3,
+  maxZoom: 9,
+});
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; CartoDB &copy; OpenStreetMap contributors',
+  subdomains: 'abcd',
+}).addTo(map);
+
+// ── Color helpers ─────────────────────────────────────────────────────────────
+const RATE_MIN = 1.69;
+const RATE_MAX = 12.22;
+
+function rateColor(rate) {
+  // Sequential blue-orange: low = light blue, high = deep orange
+  const breaks = [2, 4, 6, 8, 10, 12];
+  const colors = ['#deebf7','#9ecae1','#4292c6','#2171b5','#e07b39','#9e3a1b'];
+  for (let i = 0; i < breaks.length; i++) {
+    if (rate < breaks[i]) return colors[i];
+  }
+  return colors[colors.length - 1];
+}
+
+function reportingColor(pct) {
+  if (pct >= 90) return '#2c7bb6';
+  if (pct >= 80) return '#74add1';
+  if (pct >= 70) return '#abd9e9';
+  if (pct >= 60) return '#fdae61';
+  return '#d7191c';
+}
+
+function partyColor(party) {
+  return party === 'D' ? '#2166ac' : '#d6604d';
+}
+
+// ── View state ────────────────────────────────────────────────────────────────
+let currentView   = 'rate';
+let currentFilter = 'all';
+let pinnedState   = null;
+let geojsonLayer  = null;
+
+// ── GeoJSON load ──────────────────────────────────────────────────────────────
+fetch('./us_states.geojson')
+  .then(r => r.json())
+  .then(data => {
+    geojsonLayer = L.geoJSON(data, {
+      style: featureStyle,
+      onEachFeature: onEachFeature,
+    }).addTo(map);
+    buildLegend();
+    buildTopTable();
+    document.getElementById('hint-card').classList.add('visible');
+  });
+
+function featureStyle(feature) {
+  const name = feature.properties.name;
+  const s    = stateByName[name];
+  if (!s) return { fillColor: '#ccc', color: '#999', weight: 1, fillOpacity: 0.7 };
+
+  let fill;
+  if (currentView === 'rate')      fill = rateColor(s.rate);
+  else if (currentView === 'party') fill = partyColor(s.party);
+  else                              fill = reportingColor(s.reporting_pct);
+
+  const dimmed = currentFilter !== 'all' && s.party !== currentFilter;
+  const borderColor = s.party === 'D' ? '#2166ac' : '#d6604d';
+
+  return {
+    fillColor:   fill,
+    color:       dimmed ? '#ccc' : borderColor,
+    weight:      dimmed ? 1 : 2.2,
+    fillOpacity: dimmed ? 0.15 : 0.80,
+  };
+}
+
+function onEachFeature(feature, layer) {
+  layer.on({
+    mouseover(e) {
+      if (pinnedState) return;
+      highlightFeature(e);
+      showPanel(feature.properties.name);
+    },
+    mouseout(e) {
+      if (pinnedState) return;
+      resetHighlight(e);
+      clearPanel();
+    },
+    click(e) {
+      const name = feature.properties.name;
+      if (pinnedState === name) {
+        pinnedState = null;
+        resetHighlight(e);
+        clearPanel();
+      } else {
+        if (pinnedState) geojsonLayer.resetStyle();
+        pinnedState = name;
+        highlightFeature(e);
+        showPanel(name);
+      }
+    },
+  });
+}
+
+function highlightFeature(e) {
+  const layer = e.target;
+  layer.setStyle({ weight: 3.5, color: '#1a2744', fillOpacity: 0.95 });
+  layer.bringToFront();
+}
+function resetHighlight(e) {
+  geojsonLayer.resetStyle(e.target);
+}
+
+// ── Panel ─────────────────────────────────────────────────────────────────────
+function showPanel(name) {
+  const s = stateByName[name];
+  if (!s) return;
+  document.getElementById('hint-card').classList.remove('visible');
+  document.getElementById('state-card').classList.add('visible');
+
+  document.getElementById('sc-name').textContent   = s.state;
+  document.getElementById('sc-region').textContent = s.region + ' · ' + s.abbr;
+  document.getElementById('sc-rate').textContent   = s.rate + ' / 100K';
+  document.getElementById('sc-incidents').textContent = s.incidents.toLocaleString();
+  document.getElementById('sc-pop').textContent    = s.population_m.toFixed(1) + 'M';
+  document.getElementById('sc-reporting').textContent = s.reporting_pct + '% of agencies';
+  document.getElementById('sc-income').textContent = '$' + s.median_income_k + 'K';
+  document.getElementById('sc-urban').textContent  = s.urban_pct + '%';
+  document.getElementById('sc-college').textContent = s.pct_college + '%';
+
+  const partyEl = document.getElementById('sc-party');
+  const label   = s.party === 'D' ? 'Democrat' : 'Republican';
+  partyEl.innerHTML = `<span class="party-badge party-${s.party}">${label}</span>`;
+
+  const marginEl = document.getElementById('sc-margin');
+  const margin   = s.gop_margin;
+  marginEl.textContent = margin > 0
+    ? `+${margin.toFixed(1)} R` : `${margin.toFixed(1)} D`;
+  marginEl.style.color = margin > 0 ? '#d6604d' : '#2166ac';
+
+  // Bias bars
+  const biases = [
+    ['racial',   s.pct_racial,   'bc-racial',   'bb-racial'],
+    ['religious', s.pct_religious,'bc-religious', 'bb-religious'],
+    ['sxori',    s.pct_sxori,    'bc-sxori',    'bb-sxori'],
+  ];
+  const other = Math.max(0, 100 - s.pct_racial - s.pct_religious - s.pct_sxori);
+  biases.push(['other', other, 'bc-other', 'bb-other']);
+
+  biases.forEach(([, pct, labelId, barId]) => {
+    document.getElementById(labelId).textContent = pct.toFixed(1) + '%';
+    document.getElementById(barId).style.width   = pct + '%';
+  });
+}
+
+function clearPanel() {
+  document.getElementById('state-card').classList.remove('visible');
+  document.getElementById('hint-card').classList.add('visible');
+}
+
+// ── Controls ──────────────────────────────────────────────────────────────────
+function setView(view) {
+  currentView = view;
+  ['rate','party','reporting'].forEach(v => {
+    document.getElementById('btn-' + v).classList.toggle('active', v === view);
+  });
+  if (geojsonLayer) geojsonLayer.setStyle(featureStyle);
+  buildLegend();
+}
+
+function filterParty(p) {
+  currentFilter = p;
+  ['all','dem','rep'].forEach(v => {
+    document.getElementById('btn-' + v).classList.toggle('active', v === p);
+  });
+  if (geojsonLayer) geojsonLayer.setStyle(featureStyle);
+}
+
+// ── Legend ────────────────────────────────────────────────────────────────────
+let legendControl = null;
+function buildLegend() {
+  if (legendControl) legendControl.remove();
+
+  legendControl = L.control({ position: 'bottomleft' });
+  legendControl.onAdd = function() {
+    const div = L.DomUtil.create('div', 'map-legend');
+
+    if (currentView === 'rate') {
+      div.innerHTML = `
+        <h4>Hate Crime Rate / 100K</h4>
+        ${[['< 2','#deebf7'],['2–4','#9ecae1'],['4–6','#4292c6'],
+            ['6–8','#2171b5'],['8–10','#e07b39'],['> 10','#9e3a1b']]
+          .map(([l,c]) => `<div class="legend-row"><div class="legend-swatch" style="background:${c}"></div><span>${l}</span></div>`)
+          .join('')}
+        <div class="legend-divider"></div>
+        <h4>2020 Presidential Vote</h4>
+        <div class="legend-party-row"><div class="legend-party-dot" style="background:#2166ac"></div>Democrat</div>
+        <div class="legend-party-row"><div class="legend-party-dot" style="background:#d6604d"></div>Republican</div>
+        <div style="font-size:0.7rem;color:#888;margin-top:5px;">Border color = party</div>
+      `;
+    } else if (currentView === 'party') {
+      div.innerHTML = `
+        <h4>2020 Presidential Vote</h4>
+        <div class="legend-row"><div class="legend-swatch" style="background:#2166ac"></div><span>Democrat</span></div>
+        <div class="legend-row"><div class="legend-swatch" style="background:#d6604d"></div><span>Republican</span></div>
+      `;
+    } else {
+      div.innerHTML = `
+        <h4>Reporting Participation</h4>
+        ${[['≥ 90%','#2c7bb6'],['80–90%','#74add1'],['70–80%','#abd9e9'],
+            ['60–70%','#fdae61'],['< 60%','#d7191c']]
+          .map(([l,c]) => `<div class="legend-row"><div class="legend-swatch" style="background:${c}"></div><span>${l}</span></div>`)
+          .join('')}
+        <div style="font-size:0.7rem;color:#888;margin-top:5px;">% of agencies reporting to FBI</div>
+      `;
+    }
+    return div;
+  };
+  legendControl.addTo(map);
+}
+
+// ── Top 10 table ──────────────────────────────────────────────────────────────
+function buildTopTable() {
+  const sorted = [...STATE_DATA].sort((a, b) => b.rate - a.rate).slice(0, 10);
+  const tbody  = document.getElementById('top-table-body');
+  tbody.innerHTML = sorted.map((s, i) => `
+    <tr>
+      <td class="rank-num">${i+1}</td>
+      <td>${s.abbr}</td>
+      <td>${s.rate.toFixed(1)}</td>
+      <td><span style="color:${s.party==='D'?'#2166ac':'#d6604d'};font-weight:700">${s.party}</span></td>
+    </tr>
+  `).join('');
+}
+</script>
+
+</body>
+</html>
