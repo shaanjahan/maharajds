@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Foreign Holdings of U.S. Securities — L. Maharaj</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <!-- MathJax for LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #0b0d14;
+      --deep:     #0e1119;
+      --surface:  #121520;
+      --card:     #161a27;
+      --rule:     #222840;
+      --gold:     #b89a5a;
+      --gold-lt:  #d4b97a;
+      --gold-dim: #7a6332;
+      --blue:     #2a4a8a;
+      --blue-mid: #3b6abf;
+      --blue-lt:  #6b96d6;
+      --slate:    #6b7a96;
+      --mist:     #a0aabf;
+      --cream:    #dde2ec;
+      --white:    #eef1f8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ink);
+      color: var(--cream);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 6%; height: 72px;
+      background: rgba(11,13,20,.92); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--rule);
+      transition: border-color .3s;
+    }
+    .nav-logo { font-family:'Cinzel',serif; font-size:.95rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--white); text-decoration:none; }
+    .nav-logo em { font-style:normal; color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2.8rem; list-style:none; }
+    .nav-links a { font-family:'Cinzel',serif; font-size:.68rem; font-weight:400; letter-spacing:.2em; text-transform:uppercase; color:var(--slate); text-decoration:none; transition:color .25s; position:relative; }
+    .nav-links a::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:1px; background:var(--gold); transition:width .3s; }
+    .nav-links a:hover { color:var(--cream); }
+    .nav-links a:hover::after { width:100%; }
+    .nav-cta { border:1px solid var(--gold-dim) !important; color:var(--gold-lt) !important; padding:.38rem 1.2rem; }
+    .nav-cta::after { display:none !important; }
+    @media(max-width:760px){ .nav-links { display:none; } }
+
+    /* ── PROJECT HEADER ── */
+    #proj-header {
+      position: relative; z-index:1;
+      padding: 130px 6% 60px;
+      background: var(--deep);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .proj-breadcrumb {
+      font-family: 'Cinzel', serif;
+      font-size: .6rem; letter-spacing:.28em; text-transform:uppercase;
+      color: var(--gold-dim); margin-bottom: 1.4rem;
+      display: flex; align-items: center; gap:.6rem;
+    }
+    .proj-breadcrumb a { color:var(--gold-dim); text-decoration:none; transition:color .2s; }
+    .proj-breadcrumb a:hover { color:var(--gold-lt); }
+
+    .proj-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 300; line-height: 1.1;
+      color: var(--white); margin-bottom: 1rem;
+      max-width: 840px;
+    }
+
+    .proj-title em { font-style:italic; color:var(--blue-lt); }
+
+    .proj-meta {
+      display: flex; flex-wrap:wrap; gap:1.8rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .proj-meta-item {
+      display:flex; flex-direction:column; gap:.25rem;
+    }
+
+    .proj-meta-label {
+      font-family:'Cinzel',serif; font-size:.55rem;
+      letter-spacing:.25em; text-transform:uppercase; color:var(--gold-dim);
+    }
+
+    .proj-meta-val {
+      font-family:'Jost',serif; font-size:.88rem;
+      font-weight:400; color:var(--mist);
+    }
+
+    .proj-abstract {
+      font-size:.97rem; font-weight:300; color:var(--mist);
+      max-width:820px; line-height:1.85;
+      padding: 1.4rem 0 1.4rem 1.4rem;
+      border-left: 2px solid var(--gold-dim);
+      margin-top:.8rem;
+    }
+
+    /* ── TOC STRIP ── */
+    .toc-strip {
+      position: relative; z-index:1;
+      background: var(--surface);
+      border-bottom: 1px solid var(--rule);
+      padding: 1rem 6%;
+      display: flex; flex-wrap:wrap; gap:.6rem 1.4rem; align-items:center;
+    }
+
+    .toc-label {
+      font-family:'Cinzel',serif; font-size:.58rem;
+      letter-spacing:.22em; text-transform:uppercase; color:var(--gold-dim);
+      margin-right:.4rem;
+    }
+
+    .toc-link {
+      font-family:'Cinzel',serif; font-size:.6rem;
+      letter-spacing:.14em; text-transform:uppercase;
+      color:var(--slate); text-decoration:none;
+      padding:.28rem .7rem; border:1px solid var(--rule);
+      transition:border-color .2s, color .2s;
+    }
+
+    .toc-link:hover { border-color:var(--gold-dim); color:var(--gold-lt); }
+
+    /* ── MAIN CONTENT ── */
+    .proj-body {
+      position:relative; z-index:1;
+      max-width: 1080px; margin: 0 auto;
+      padding: 0 6% 80px;
+    }
+
+    /* Section block */
+    .analysis-section {
+      padding: 72px 0 56px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .analysis-section:last-of-type { border-bottom: none; }
+
+    .sec-eyebrow {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .sec-num {
+      font-family:'Cinzel',serif; font-size:.58rem;
+      letter-spacing:.28em; text-transform:uppercase;
+      color:var(--gold); border:1px solid var(--gold-dim);
+      padding:.25rem .7rem;
+    }
+
+    .sec-method {
+      font-family:'Cinzel',serif; font-size:.58rem;
+      letter-spacing:.2em; text-transform:uppercase; color:var(--slate);
+    }
+
+    .sec-title {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(1.4rem,2.5vw,2rem);
+      font-weight:400; color:var(--white);
+      line-height:1.2; margin-bottom:1.2rem;
+    }
+
+    .sec-title em { font-style:italic; color:var(--blue-lt); }
+
+    .sec-rule {
+      width:48px; height:1px;
+      background:linear-gradient(90deg,var(--gold),transparent);
+      margin-bottom:1.6rem;
+    }
+
+    .sec-body {
+      font-size:.95rem; font-weight:300;
+      color:var(--mist); line-height:1.9;
+      max-width:760px;
+    }
+
+    .sec-body p { margin-bottom:1rem; }
+    .sec-body strong { color:var(--cream); font-weight:400; }
+
+    /* Equation block */
+    .eq-block {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-left: 2px solid var(--gold-dim);
+      padding: 1.4rem 1.8rem;
+      margin: 1.6rem 0;
+      overflow-x:auto;
+    }
+
+    .eq-label {
+      font-family:'Cinzel',serif; font-size:.55rem;
+      letter-spacing:.22em; text-transform:uppercase;
+      color:var(--gold-dim); margin-bottom:.7rem; display:block;
+    }
+
+    .eq-block .MathJax, .eq-block mjx-container {
+      color: var(--cream) !important;
+    }
+
+    /* Data table */
+    .data-table-wrap {
+      margin: 2rem 0;
+      overflow-x: auto;
+    }
+
+    .data-table-title {
+      font-family:'Cinzel',serif; font-size:.6rem;
+      letter-spacing:.22em; text-transform:uppercase;
+      color:var(--gold); margin-bottom:.8rem;
+      display:flex; align-items:center; gap:.8rem;
+    }
+
+    .data-table-title::before {
+      content:''; width:4px; height:4px;
+      background:var(--gold); transform:rotate(45deg); flex-shrink:0;
+    }
+
+    table.styled {
+      width:100%; border-collapse:collapse;
+      font-family:'Jost',sans-serif; font-size:.85rem;
+    }
+
+    table.styled thead tr {
+      border-bottom: 1px solid var(--gold-dim);
+    }
+
+    table.styled th {
+      font-family:'Cinzel',serif; font-size:.58rem;
+      letter-spacing:.14em; text-transform:uppercase;
+      color:var(--gold-dim); font-weight:400;
+      padding:.65rem .9rem; text-align:left;
+    }
+
+    table.styled td {
+      padding:.6rem .9rem; color:var(--mist);
+      font-weight:300; border-bottom:1px solid rgba(34,40,64,.6);
+    }
+
+    table.styled tbody tr:hover td { background:rgba(184,154,90,.04); }
+
+    .sig-star { color:var(--gold-lt); font-weight:500; }
+    .val-hi { color:var(--cream); font-weight:400; }
+
+    /* Figure layout */
+    .figure-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin: 2.4rem 0;
+      align-items: start;
+    }
+
+    .figure-panel {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      overflow: hidden;
+    }
+
+    .figure-panel img {
+      width: 100%; display: block;
+    }
+
+    .figure-caption {
+      font-family:'Cinzel',serif; font-size:.55rem;
+      letter-spacing:.16em; text-transform:uppercase;
+      color:var(--slate); padding:.7rem 1rem;
+      border-top:1px solid var(--rule);
+      text-align:center;
+    }
+
+    /* Full-width single figure */
+    .figure-full {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      margin: 2.4rem 0;
+      overflow: hidden;
+    }
+
+    .figure-full img { width:100%; display:block; }
+
+    @media(max-width:700px){
+      .figure-row { grid-template-columns: 1fr; }
+    }
+
+    /* Finding callout */
+    .finding {
+      background:rgba(184,154,90,.06);
+      border:1px solid rgba(184,154,90,.18);
+      border-left:3px solid var(--gold);
+      padding:1.2rem 1.6rem; margin:1.8rem 0;
+    }
+
+    .finding-label {
+      font-family:'Cinzel',serif; font-size:.55rem;
+      letter-spacing:.22em; text-transform:uppercase;
+      color:var(--gold); margin-bottom:.5rem; display:block;
+    }
+
+    .finding p {
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.1rem; font-weight:400;
+      color:var(--cream); line-height:1.6; font-style:italic;
+      margin:0;
+    }
+
+    /* Methods + references */
+    #methods, #references {
+      padding: 72px 0;
+      border-top: 1px solid var(--rule);
+    }
+
+    .ref-list { list-style:none; display:flex; flex-direction:column; gap:.9rem; margin-top:1.4rem; }
+    .ref-list li { font-size:.88rem; font-weight:300; color:var(--mist); line-height:1.7; padding-left:1.2rem; position:relative; }
+    .ref-list li::before { content:'—'; position:absolute; left:0; color:var(--gold-dim); font-size:.75rem; }
+    .ref-list em { font-style:italic; color:var(--cream); }
+
+    /* ── FOOTER ── */
+    footer {
+      position:relative; z-index:1;
+      background:var(--surface); border-top:1px solid var(--rule);
+      padding:2.4rem 6%;
+      display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem;
+    }
+    .footer-logo { font-family:'Cinzel',serif; font-size:.75rem; font-weight:600; letter-spacing:.28em; text-transform:uppercase; color:var(--cream); }
+    .footer-logo em { font-style:normal; color:var(--gold); }
+    footer p { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.18em; color:var(--slate); text-transform:uppercase; }
+    .footer-links { display:flex; gap:2rem; list-style:none; }
+    .footer-links a { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.2em; color:var(--slate); text-decoration:none; text-transform:uppercase; transition:color .25s; }
+    .footer-links a:hover { color:var(--gold-lt); }
+
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../../index.html" class="nav-logo">L. <em>Maharaj</em></a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../about.html">About Me</a></li>
+    <li><a href="../../index.html#specializations">Projects</a></li>
+    <li><a href="../../outside-data.html" class="nav-cta">Outside Data</a></li>
+  </ul>
+</nav>
+
+<!-- HEADER -->
+<section id="proj-header">
+  <div class="proj-breadcrumb">
+    <a href="../../index.html">Home</a> ›
+    <a href="../../index.html#specializations">Projects</a> ›
+    <span style="color:var(--mist)">Foreign Holdings of U.S. Securities</span>
+  </div>
+  <h1 class="proj-title">
+    Foreign Holdings of U.S. Securities<br/>
+    <em>from a Structural Standpoint</em>
+  </h1>
+  <div class="proj-meta">
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Author</span>
+      <span class="proj-meta-val">L. Maharaj</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Year</span>
+      <span class="proj-meta-val">2026</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Data Source</span>
+      <span class="proj-meta-val">U.S. Treasury TIC SHL Survey</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Period</span>
+      <span class="proj-meta-val">2002–2024 (Annual)</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Coverage</span>
+      <span class="proj-meta-val">247 Economies · 51,978 Observations</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Category</span>
+      <span class="proj-meta-val">Economics · International Finance</span>
+    </div>
+  </div>
+  <p class="proj-abstract">
+    For a long time, foreign Treasury ownership was a simple story: Japan and China buying U.S. debt. It has since become something more complicated. The creditor base has shifted, China has been selling steadily, and the composition of what foreigners actually hold looks very different today than it did in 2002. I used the TIC SHL survey data to look at five specific questions about how that structure has evolved. Each question called for a different method, and I picked them because they fit the problem, not to pad the methodology section.
+  </p>
+</section>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc-strip">
+  <span class="toc-label">Sections</span>
+  <a href="#s1" class="toc-link">I. Structural Break</a>
+  <a href="#s2" class="toc-link">II. Concentration</a>
+  <a href="#s3" class="toc-link">III. China Divestment</a>
+  <a href="#s4" class="toc-link">IV. Portfolio Rotation</a>
+  <a href="#s5" class="toc-link">V. Clustering</a>
+  <a href="#methods" class="toc-link">Methods</a>
+  <a href="#references" class="toc-link">References</a>
+</div>
+
+<!-- BODY -->
+<div class="proj-body">
+
+  <!-- ══ SECTION 1 ══ -->
+  <div class="analysis-section" id="s1">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section I</span>
+      <span class="sec-method">Log-Linear OLS · Chow Structural Break Test</span>
+    </div>
+    <h2 class="sec-title">Did the 2008 Crisis Permanently Alter the <em>Growth Rate</em> of Foreign Treasury Demand?</h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>Foreign Treasury holdings went from <strong>$0.91 trillion in 2002 to $7.11 trillion by 2024</strong>, a 683% increase over 22 years. The question I wanted to answer was whether that growth follows a single trend or whether 2008 broke it into two distinct regimes. A log-linear model converts the slope into an approximate annual growth rate, and the Chow test checks formally whether the pre- and post-2008 slopes are actually different from each other.</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">Log-Linear OLS Model</span>
+      $$\ln(H_t) = \alpha + \beta \cdot t + \varepsilon_t$$
+      <p style="font-size:.82rem;color:var(--slate);margin-top:.6rem;">Where $H_t$ is total foreign Treasury holdings in trillions at time $t$, and $\beta \approx \text{CAGR}$ (continuous compounding rate).</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">Chow Structural Break Test</span>
+      $$F = \frac{(RSS_R - RSS_U) / k}{RSS_U / (n - 2k)} \sim F_{k,\, n-2k}$$
+      <p style="font-size:.82rem;color:var(--slate);margin-top:.6rem;">$RSS_R$ = residual sum of squares under parameter stability (pooled). $RSS_U$ = combined RSS from separate pre/post regressions. $k$ = number of parameters. Under $H_0$: $\beta_{\text{pre}} = \beta_{\text{post}}$.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig1_structural_break.png" alt="Log-Linear Fit with Chow Break at 2008" loading="lazy" />
+      <div class="figure-caption">Fig. 1 — Log-Linear Fit with Chow Structural Break at 2008</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Structural Break Metrics</div>
+      <table class="styled">
+        <thead><tr><th>Sample</th><th>β (log slope)</th><th>CAGR (%)</th><th>R²</th><th>p-value</th><th>Chow F</th></tr></thead>
+        <tbody>
+          <tr><td>Pre-2008</td><td>0.1509</td><td class="val-hi">16.29%</td><td>0.960</td><td>6.1×10⁻⁴</td><td>—</td></tr>
+          <tr><td>Post-2008</td><td>0.0585</td><td class="val-hi">6.03%</td><td>0.799</td><td>&lt;1×10⁻⁶</td><td>—</td></tr>
+          <tr><td>Full Sample</td><td>0.0894</td><td>9.35%</td><td>0.885</td><td>&lt;1×10⁻⁶</td><td>—</td></tr>
+          <tr><td>Chow Test</td><td>—</td><td>—</td><td>—</td><td class="val-hi">4.76×10⁻⁵</td><td class="val-hi">17.59</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>The break is real. Pre-crisis, foreign demand was growing at 16.3% per year. After 2008 that number drops to 6.0%, and the Chow test confirms these slopes are statistically different (F = 17.59, p &lt; 0.001). The level of holdings shifted up permanently after the crisis but the growth rate never came back.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 2 ══ -->
+  <div class="analysis-section" id="s2">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section II</span>
+      <span class="sec-method">Herfindahl-Hirschman Index · Linear Trend Regression</span>
+    </div>
+    <h2 class="sec-title">Is the Foreign Creditor Base Becoming More or Less <em>Concentrated</em>?</h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>When a small number of countries hold most of the foreign-owned debt, any coordinated selling creates real rollover risk. The HHI is the standard way to measure that kind of concentration, and running it year by year gives a clear picture of how the creditor base has changed in structure over time.</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">Herfindahl-Hirschman Index</span>
+      $$\text{HHI}_t = \sum_{i=1}^{N} s_{it}^2$$
+      <p style="font-size:.82rem;color:var(--slate);margin-top:.6rem;">Where $s_{it}$ is country $i$'s share of total foreign Treasury holdings in year $t$. $\text{HHI} \in (0,1]$; higher values indicate greater concentration. A monopoly holder yields $\text{HHI} = 1$.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig2_concentration.png" alt="HHI Concentration Trend" loading="lazy" />
+      <div class="figure-caption">Fig. 2 — HHI Annual Values with Linear Trend (2002–2024)</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">HHI Concentration Summary</div>
+      <table class="styled">
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>HHI in 2002</td><td class="val-hi">0.107</td></tr>
+          <tr><td>HHI in 2024</td><td class="val-hi">0.056</td></tr>
+          <tr><td>Total Reduction</td><td class="val-hi">47.2%</td></tr>
+          <tr><td>Annual Trend Slope</td><td>−0.0043 per year</td></tr>
+          <tr><td>Trend R²</td><td>0.700</td></tr>
+          <tr><td>Trend p-value</td><td class="val-hi">&lt;0.000001</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>The creditor base is meaningfully less concentrated than it was in 2002. Japan's share dropped from 29% to 14%, and China peaked at 33% in 2010 and has since fallen to 11%. The space they left behind has been picked up by a wider group of countries, which is better for debt management stability even if it makes the overall picture harder to track.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 3 ══ -->
+  <div class="analysis-section" id="s3">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section III</span>
+      <span class="sec-method">OLS Trend Regression · Pearson Correlation · Linear Projection</span>
+    </div>
+    <h2 class="sec-title">China Is Selling — Is Anyone <em>Absorbing It</em>?</h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>China's Treasury holdings peaked at <strong>$1.302 trillion in 2011</strong> and have been falling ever since, reaching <strong>$0.753 trillion by 2024</strong>. This gets a lot of attention, but the more interesting question is whether the selling creates an actual demand gap or whether other buyers are filling it in.</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">OLS Slope Estimator (China Divestment)</span>
+      $$\hat{\beta} = \frac{\sum_{t}(t - \bar{t})(H_t^{CN} - \bar{H}^{CN})}{\sum_{t}(t - \bar{t})^2}$$
+      <p style="font-size:.82rem;color:var(--slate);margin-top:.6rem;">$H_t^{CN}$ = China's holdings in year $t$. $\hat\beta = -36.21$ B USD/year, 95% CI: $[-48.1,\ -24.3]$ B USD/year.</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">Pearson Correlation (Substitution Test)</span>
+      $$r_{XY} = \frac{\sum_{t}(s_t^{CN} - \bar{s}^{CN})(s_t^{j} - \bar{s}^{j})}{\sqrt{\sum_t (s_t^{CN}-\bar{s}^{CN})^2} \cdot \sqrt{\sum_t (s_t^{j}-\bar{s}^{j})^2}}$$
+      <p style="font-size:.82rem;color:var(--slate);margin-top:.6rem;">A negative $r$ between China's share $s_t^{CN}$ and country $j$'s share $s_t^j$ is direct evidence of systematic substitution.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig3_china_divestment.png" alt="China Holdings Trend with Substitution Correlations" loading="lazy" />
+      <div class="figure-caption">Fig. 3 — China Holdings Trend with Substitution Correlations</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">China Divestment — OLS Results</div>
+      <table class="styled">
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Peak Holding (June 2011)</td><td class="val-hi">$1.302 trillion</td></tr>
+          <tr><td>Holding in June 2024</td><td>$0.753 trillion</td></tr>
+          <tr><td>OLS Slope</td><td class="val-hi">−$36.21 billion/year</td></tr>
+          <tr><td>95% Confidence Interval</td><td>[−$48.1B, −$24.3B]</td></tr>
+          <tr><td>R²</td><td>0.786</td></tr>
+          <tr><td>p-value</td><td class="val-hi">2.41×10⁻⁵</td></tr>
+          <tr><td>Projected Holding 2030</td><td>$0.657 trillion</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Substitution Correlations with China's Share</div>
+      <table class="styled">
+        <thead><tr><th>Country</th><th>Pearson r</th><th>p-value</th><th>Significance</th><th>Direction</th></tr></thead>
+        <tbody>
+          <tr><td>United Kingdom</td><td class="val-hi">−0.702</td><td>1.87×10⁻⁴</td><td class="sig-star">***</td><td>Substitution</td></tr>
+          <tr><td>France</td><td class="val-hi">−0.657</td><td>6.62×10⁻⁴</td><td class="sig-star">***</td><td>Substitution</td></tr>
+          <tr><td>Canada</td><td class="val-hi">−0.589</td><td>0.00312</td><td class="sig-star">***</td><td>Substitution</td></tr>
+          <tr><td>Korea, South</td><td>−0.549</td><td>0.00667</td><td class="sig-star">***</td><td>Substitution</td></tr>
+          <tr><td>India</td><td>−0.435</td><td>0.03799</td><td class="sig-star">**</td><td>Substitution</td></tr>
+          <tr><td>Norway</td><td>−0.378</td><td>0.0756</td><td class="sig-star">*</td><td>Substitution</td></tr>
+          <tr><td>Japan</td><td style="color:var(--slate)">−0.104</td><td style="color:var(--slate)">0.638</td><td style="color:var(--slate)">n.s.</td><td style="color:var(--slate)">Neutral</td></tr>
+          <tr><td>Taiwan</td><td style="color:var(--slate)">−0.002</td><td style="color:var(--slate)">0.992</td><td style="color:var(--slate)">n.s.</td><td style="color:var(--slate)">Neutral</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:.72rem;color:var(--slate);margin-top:.5rem;font-family:'Cinzel',serif;letter-spacing:.1em;">*** p &lt; 0.01 &nbsp;&nbsp; ** p &lt; 0.05 &nbsp;&nbsp; * p &lt; 0.10 &nbsp;&nbsp; n.s. = not significant</p>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>China is selling at roughly $36 billion per year and the regression is tight. Looking at how each country's share correlates with China's, the UK, France, Canada, and South Korea all move in the opposite direction in a statistically meaningful way. Japan and Taiwan show no systematic relationship with China's trajectory at all. So far the market is absorbing it without a visible demand shortfall.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 4 ══ -->
+  <div class="analysis-section" id="s4">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section IV</span>
+      <span class="sec-method">Linear Trend Regression · Welch Two-Sample t-Test</span>
+    </div>
+    <h2 class="sec-title">Has the Foreign Portfolio Rotated from Bonds to <em>Equity</em>?</h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>The TIC data covers all U.S. long-term securities, not just Treasuries. Over the past two decades U.S. equities dramatically outperformed bonds, and the spread of passive index funds meant more and more of that performance ended up in foreign portfolios almost automatically. I wanted to see whether the composition of what foreigners hold has actually shifted, or whether the nominal amounts just grew alongside everything else.</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">Welch Two-Sample t-Test (Unequal Variances)</span>
+      $$t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}}}, \quad df = \frac{\left(\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}\right)^2}{\dfrac{(s_1^2/n_1)^2}{n_1-1} + \dfrac{(s_2^2/n_2)^2}{n_2-1}}$$
+      <p style="font-size:.82rem;color:var(--slate);margin-top:.6rem;">More appropriate than the standard $t$-test here given the evident difference in variability between the early (2002–2010) and late (2014–2024) periods. Result: $t = -6.61$, $p &lt; 0.00001$.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig4_portfolio_composition.png" alt="Foreign Portfolio Composition by Security Type" loading="lazy" />
+      <div class="figure-caption">Fig. 4 — Foreign Portfolio Composition by Security Type (2002–2024)</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Portfolio Share Trend Metrics</div>
+      <table class="styled">
+        <thead><tr><th>Metric</th><th>Equity Share</th><th>Treasury Share</th></tr></thead>
+        <tbody>
+          <tr><td>Value in 2002</td><td>32.17%</td><td>20.93%</td></tr>
+          <tr><td>Value in 2024</td><td class="val-hi">54.66%</td><td>23.03%</td></tr>
+          <tr><td>Change (pp)</td><td class="val-hi">+22.49 pp</td><td>+2.10 pp</td></tr>
+          <tr><td>Annual Trend Slope</td><td class="val-hi">+1.051 pp/year</td><td>+0.204 pp/year</td></tr>
+          <tr><td>Trend R²</td><td class="val-hi">0.735</td><td>0.088</td></tr>
+          <tr><td>Trend p-value</td><td class="val-hi">&lt;0.000001</td><td style="color:var(--slate)">0.170 (n.s.)</td></tr>
+          <tr><td>Welch t-statistic</td><td class="val-hi">−6.61</td><td>—</td></tr>
+          <tr><td>Welch p-value</td><td class="val-hi">0.00001</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>The equity share went from 32% in 2002 to nearly 55% in 2024, gaining about a percentage point per year with an R² of 0.735. The Treasury share has no significant trend over that same period. This matters because equity ownership is a fundamentally different kind of external liability. There is no rollover risk, and foreign returns end up tied to how the U.S. economy actually performs.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 5 ══ -->
+  <div class="analysis-section" id="s5">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section V</span>
+      <span class="sec-method">Principal Component Analysis · K-Means Clustering (k = 4)</span>
+    </div>
+    <h2 class="sec-title">Do Distinct Country Groups <em>Emerge</em> from the Data?</h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>With 247 countries across 23 years, you cannot look at the raw data and expect to see anything useful. PCA brings the dimensionality down to something workable by finding the directions in the data that carry the most variation. From there, K-Means groups countries by how similar their trajectories have been over time, without any prior assumptions about which countries belong together.</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">Principal Component Analysis</span>
+      $$\mathbf{X} = \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^\top, \quad \mathbf{Z} = \mathbf{X} \mathbf{V}_k$$
+      <p style="font-size:.82rem;color:var(--slate);margin-top:.6rem;">$\mathbf{X} \in \mathbb{R}^{73 \times 23}$ is the demeaned country-by-year share matrix. $\mathbf{V}_k$ contains the top $k$ right singular vectors. PC1 alone explains 93.0% of total variance.</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">K-Means Objective</span>
+      $$\underset{\{C_k\}}{\arg\min} \sum_{k=1}^{K} \sum_{\mathbf{z}_i \in C_k} \|\mathbf{z}_i - \boldsymbol{\mu}_k\|^2$$
+      <p style="font-size:.82rem;color:var(--slate);margin-top:.6rem;">Minimises within-cluster sum of squares in PCA space. $K = 4$ selected by elbow method. $\boldsymbol{\mu}_k$ = centroid of cluster $k$. Cluster assignments are unsupervised — no country labels provided to the algorithm.</p>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">PCA Explained Variance</div>
+      <table class="styled">
+        <thead><tr><th>Component</th><th>Variance Explained (%)</th><th>Cumulative (%)</th></tr></thead>
+        <tbody>
+          <tr><td>PC1</td><td class="val-hi">92.96%</td><td class="val-hi">92.96%</td></tr>
+          <tr><td>PC2</td><td>3.86%</td><td>96.82%</td></tr>
+          <tr><td>PC3</td><td>2.51%</td><td>99.32%</td></tr>
+          <tr><td>PC4</td><td>0.19%</td><td>99.51%</td></tr>
+          <tr><td>PC5</td><td>0.15%</td><td>99.66%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">K-Means Cluster Assignments (k = 4)</div>
+      <table class="styled">
+        <thead><tr><th>Cluster</th><th>n</th><th>Mean Share</th><th>Profile</th><th>Notable Members</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>15</td><td>2.40%</td><td>Large Western economies; growing or stable shares</td><td>UK, Canada, France, India, Brazil, Switzerland, Norway</td></tr>
+          <tr><td>1</td><td class="val-hi">1</td><td class="val-hi">23.12%</td><td>Mega-holder; long history, gradually declining</td><td class="val-hi">Japan</td></tr>
+          <tr><td>2</td><td>56</td><td>0.35%</td><td>Small to mid-sized; minimal share</td><td>Australia, Austria, Bahamas, Argentina, others</td></tr>
+          <tr><td>3</td><td class="val-hi">1</td><td class="val-hi">20.37%</td><td>Strategic reducer; large but falling share</td><td class="val-hi">China</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="fig5_pca_clusters.png" alt="PCA Cluster Map" loading="lazy" />
+        <div class="figure-caption">Fig. 5 — PCA Cluster Map (PC1 vs PC2)</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig5b_cluster_trajectories.png" alt="Cluster Trajectories" loading="lazy" />
+        <div class="figure-caption">Fig. 5b — Cluster Trajectories Over Time</div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>PC1 alone explains 93% of the total variance, which basically means the data is dominated by differences in scale. Japan and China both end up as singleton clusters, something the algorithm worked out entirely on its own. The 15-country middle tier is the most structurally interesting group. These are the economies that have been growing into the space as China pulls back, and lumping them in with the 56-country peripheral group would miss that story entirely.</p>
+    </div>
+  </div>
+
+  <!-- ══ METHODS ══ -->
+  <div id="methods">
+    <div class="sec-eyebrow"><span class="sec-num">Methods</span></div>
+    <h2 class="sec-title">Econometric <em>Toolkit</em></h2>
+    <div class="sec-rule"></div>
+    <div class="data-table-wrap">
+      <table class="styled">
+        <thead><tr><th>Method</th><th>Application</th></tr></thead>
+        <tbody>
+          <tr><td>Log-Linear OLS</td><td>Models exponential growth in holdings; slope ≈ CAGR</td></tr>
+          <tr><td>Chow Test</td><td>Tests whether regression parameters differ across a known break date</td></tr>
+          <tr><td>Herfindahl-Hirschman Index</td><td>Measures portfolio concentration as sum of squared country shares</td></tr>
+          <tr><td>Pearson Correlation</td><td>Tests systematic co-movement between two country share series</td></tr>
+          <tr><td>Welch Two-Sample t-Test</td><td>Compares period means without equal-variance assumption</td></tr>
+          <tr><td>Principal Component Analysis</td><td>Reduces 23-dimensional country trajectories to dominant components</td></tr>
+          <tr><td>K-Means Clustering</td><td>Groups countries by behavioral similarity in PCA space</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ REFERENCES ══ -->
+  <div id="references">
+    <div class="sec-eyebrow"><span class="sec-num">References</span></div>
+    <h2 class="sec-title">Theoretical <em>Grounding</em></h2>
+    <div class="sec-rule"></div>
+    <div class="sec-body">
+      <p>This work draws on a few well-established lines of research. The safe-asset shortage hypothesis from Caballero, Farhi, and Gourinchas (2017) is the natural backdrop for why the level of foreign holdings shifted up after 2008 even as growth slowed. The HHI findings fit into the reserve management literature, which has long documented how Treasury accumulation has broadened beyond just Japan and China. Gourinchas and Rey's exorbitant privilege framework is the right lens for thinking about what the portfolio composition shift actually means for the U.S. external position.</p>
+    </div>
+    <ul class="ref-list" style="margin-top:1.6rem;">
+      <li>Caballero, R. J., Farhi, E., & Gourinchas, P.-O. (2017). <em>The safe assets shortage conundrum.</em> Journal of Economic Perspectives, 31(3), 29–46.</li>
+      <li>Chow, G. C. (1960). <em>Tests of equality between sets of coefficients in two linear regressions.</em> Econometrica, 28(3), 591–605.</li>
+      <li>Gourinchas, P.-O., & Rey, H. (2007). <em>From world banker to world venture capitalist.</em> In R. Clarida (Ed.), G7 Current Account Imbalances. University of Chicago Press.</li>
+      <li>Herfindahl, O. C. (1950). <em>Concentration in the Steel Industry.</em> PhD Dissertation, Columbia University.</li>
+      <li>Obstfeld, M., & Rogoff, K. (1996). <em>Foundations of International Macroeconomics.</em> MIT Press.</li>
+      <li>U.S. Department of the Treasury. <em>TIC System: Annual Survey of Foreign Portfolio Holdings of U.S. Securities.</em> https://home.treasury.gov</li>
+    </ul>
+  </div>
+
+</div><!-- end proj-body -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">L. <em>Maharaj</em> — Data Scientist</div>
+  <p class="disclaimer" style="font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.12em;font-style:italic;color:var(--slate);max-width:480px;line-height:1.7;">
+    None of my personal projects reflect the views of any institution I work for. This work is entirely private and unattached to any of my employers.
+  </p>
+  <p>© 2026 L. Maharaj. All Rights Reserved.</p>
+  <ul class="footer-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../about.html">About</a></li>
+    <li><a href="../../index.html#specializations">Projects</a></li>
+    <li><a href="../../outside-data.html">Outside Data</a></li>
+  </ul>
+</footer>
+
+<script>
+  /* Nav scroll */
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.borderBottomColor = window.scrollY > 40 ? 'rgba(184,154,90,.2)' : 'rgba(34,40,64,1)';
+  });
+
+  /* Fade-in on scroll */
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; } });
+  }, { threshold: .08 });
+
+  document.querySelectorAll('.analysis-section, .eq-block, .data-table-wrap, .finding, .figure-full, .figure-row').forEach(el => {
+    el.style.opacity='0'; el.style.transform='translateY(16px)';
+    el.style.transition='opacity .65s ease, transform .65s ease';
+    obs.observe(el);
+  });
+</script>
+</body>
+</html>

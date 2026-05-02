@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Hindu American Profile — L. Maharaj</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #0b0d14;
+      --deep:     #0e1119;
+      --surface:  #121520;
+      --card:     #161a27;
+      --rule:     #222840;
+      --gold:     #b89a5a;
+      --gold-lt:  #d4b97a;
+      --gold-dim: #7a6332;
+      --blue:     #2a4a8a;
+      --blue-mid: #3b6abf;
+      --blue-lt:  #6b96d6;
+      --slate:    #6b7a96;
+      --mist:     #a0aabf;
+      --cream:    #dde2ec;
+      --white:    #eef1f8;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background:var(--ink); color:var(--cream); font-family:'Jost',sans-serif; font-weight:300; line-height:1.7; overflow-x:hidden; }
+
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 6%; height:72px; background:rgba(11,13,20,.92); backdrop-filter:blur(20px); border-bottom:1px solid var(--rule); transition:border-color .3s; }
+    .nav-logo { font-family:'Cinzel',serif; font-size:.95rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--white); text-decoration:none; }
+    .nav-logo em { font-style:normal; color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2.8rem; list-style:none; }
+    .nav-links a { font-family:'Cinzel',serif; font-size:.68rem; font-weight:400; letter-spacing:.2em; text-transform:uppercase; color:var(--slate); text-decoration:none; transition:color .25s; position:relative; }
+    .nav-links a::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:1px; background:var(--gold); transition:width .3s; }
+    .nav-links a:hover { color:var(--cream); }
+    .nav-links a:hover::after { width:100%; }
+    .nav-cta { border:1px solid var(--gold-dim) !important; color:var(--gold-lt) !important; padding:.38rem 1.2rem; }
+    .nav-cta::after { display:none !important; }
+    @media(max-width:760px){ .nav-links { display:none; } }
+
+    #proj-header { position:relative; z-index:1; padding:130px 6% 60px; background:var(--deep); border-bottom:1px solid var(--rule); }
+    .proj-breadcrumb { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-dim); margin-bottom:1.4rem; display:flex; align-items:center; gap:.6rem; }
+    .proj-breadcrumb a { color:var(--gold-dim); text-decoration:none; transition:color .2s; }
+    .proj-breadcrumb a:hover { color:var(--gold-lt); }
+    .proj-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,3.5vw,3rem); font-weight:300; line-height:1.1; color:var(--white); margin-bottom:1rem; max-width:860px; }
+    .proj-title em { font-style:italic; color:var(--blue-lt); }
+    .proj-meta { display:flex; flex-wrap:wrap; gap:1.8rem; margin-bottom:1.8rem; }
+    .proj-meta-item { display:flex; flex-direction:column; gap:.25rem; }
+    .proj-meta-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gold-dim); }
+    .proj-meta-val { font-family:'Jost',serif; font-size:.88rem; font-weight:400; color:var(--mist); }
+    .proj-abstract { font-size:.97rem; font-weight:300; color:var(--mist); max-width:820px; line-height:1.85; padding:1.4rem 0 1.4rem 1.4rem; border-left:2px solid var(--gold-dim); margin-top:.8rem; }
+
+    .toc-strip { position:relative; z-index:1; background:var(--surface); border-bottom:1px solid var(--rule); padding:1rem 6%; display:flex; flex-wrap:wrap; gap:.6rem 1.4rem; align-items:center; }
+    .toc-label { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-dim); margin-right:.4rem; }
+    .toc-link { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; color:var(--slate); text-decoration:none; padding:.28rem .7rem; border:1px solid var(--rule); transition:border-color .2s, color .2s; }
+    .toc-link:hover { border-color:var(--gold-dim); color:var(--gold-lt); }
+
+    .proj-body { position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:0 6% 80px; }
+    .analysis-section { padding:72px 0 56px; border-bottom:1px solid var(--rule); }
+    .analysis-section:last-of-type { border-bottom:none; }
+
+    .sec-eyebrow { display:flex; align-items:center; gap:1rem; margin-bottom:1rem; }
+    .sec-num { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); border:1px solid var(--gold-dim); padding:.25rem .7rem; }
+    .sec-method { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.2em; text-transform:uppercase; color:var(--slate); }
+    .sec-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.4rem,2.5vw,2rem); font-weight:400; color:var(--white); line-height:1.2; margin-bottom:1.2rem; }
+    .sec-title em { font-style:italic; color:var(--blue-lt); }
+    .sec-rule { width:48px; height:1px; background:linear-gradient(90deg,var(--gold),transparent); margin-bottom:1.6rem; }
+    .sec-body { font-size:.95rem; font-weight:300; color:var(--mist); line-height:1.9; max-width:760px; }
+    .sec-body p { margin-bottom:1rem; }
+    .sec-body strong { color:var(--cream); font-weight:400; }
+
+    .eq-block { background:var(--card); border:1px solid var(--rule); border-left:2px solid var(--gold-dim); padding:1.4rem 1.8rem; margin:1.6rem 0; overflow-x:auto; }
+    .eq-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-dim); margin-bottom:.7rem; display:block; }
+
+    .data-table-wrap { margin:2rem 0; overflow-x:auto; }
+    .data-table-title { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:.8rem; display:flex; align-items:center; gap:.8rem; }
+    .data-table-title::before { content:''; width:4px; height:4px; background:var(--gold); transform:rotate(45deg); flex-shrink:0; }
+    table.styled { width:100%; border-collapse:collapse; font-family:'Jost',sans-serif; font-size:.85rem; }
+    table.styled thead tr { border-bottom:1px solid var(--gold-dim); }
+    table.styled th { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold-dim); font-weight:400; padding:.65rem .9rem; text-align:left; }
+    table.styled td { padding:.6rem .9rem; color:var(--mist); font-weight:300; border-bottom:1px solid rgba(34,40,64,.6); }
+    table.styled tbody tr:hover td { background:rgba(184,154,90,.04); }
+    .val-hi { color:var(--cream); font-weight:400; }
+
+    .figure-row { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin:2.4rem 0; align-items:start; }
+    .figure-panel { background:var(--card); border:1px solid var(--rule); overflow:hidden; }
+    .figure-panel img { width:100%; display:block; }
+    .figure-caption { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.16em; text-transform:uppercase; color:var(--slate); padding:.7rem 1rem; border-top:1px solid var(--rule); text-align:center; }
+    .figure-full { background:var(--card); border:1px solid var(--rule); margin:2.4rem 0; overflow:hidden; }
+    .figure-full img { width:100%; display:block; }
+
+    .finding { background:rgba(184,154,90,.06); border:1px solid rgba(184,154,90,.18); border-left:3px solid var(--gold); padding:1.2rem 1.6rem; margin:1.8rem 0; }
+    .finding-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:.5rem; display:block; }
+    .finding p { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:400; color:var(--cream); line-height:1.6; font-style:italic; margin:0; }
+
+    #methods, #references { padding:72px 0; border-top:1px solid var(--rule); }
+    .ref-list { list-style:none; display:flex; flex-direction:column; gap:.9rem; margin-top:1.4rem; }
+    .ref-list li { font-size:.88rem; font-weight:300; color:var(--mist); line-height:1.7; padding-left:1.2rem; position:relative; }
+    .ref-list li::before { content:'—'; position:absolute; left:0; color:var(--gold-dim); font-size:.75rem; }
+    .ref-list em { font-style:italic; color:var(--cream); }
+
+    footer { position:relative; z-index:1; background:var(--surface); border-top:1px solid var(--rule); padding:2.4rem 6%; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; }
+    .footer-logo { font-family:'Cinzel',serif; font-size:.75rem; font-weight:600; letter-spacing:.28em; text-transform:uppercase; color:var(--cream); }
+    .footer-logo em { font-style:normal; color:var(--gold); }
+    footer p { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.18em; color:var(--slate); text-transform:uppercase; }
+    .footer-links { display:flex; gap:2rem; list-style:none; }
+    .footer-links a { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.2em; color:var(--slate); text-decoration:none; text-transform:uppercase; transition:color .25s; }
+    .footer-links a:hover { color:var(--gold-lt); }
+
+    @media(max-width:700px){ .figure-row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../index.html" class="nav-logo">L. <em>Maharaj</em></a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../about.html">About Me</a></li>
+    <li><a href="../../index.html#specializations">Projects</a></li>
+    <li><a href="../../outside-data.html" class="nav-cta">Outside Data</a></li>
+  </ul>
+</nav>
+
+<section id="proj-header">
+  <div class="proj-breadcrumb">
+    <a href="../../index.html">Home</a> ›
+    <a href="../../index.html#specializations">Projects</a> ›
+    <span style="color:var(--mist)">The Hindu American Profile</span>
+  </div>
+  <h1 class="proj-title">
+    The Hindu American Profile:<br/>
+    <em>Education, Income, and Crime</em>
+  </h1>
+  <div class="proj-meta">
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Author</span>
+      <span class="proj-meta-val">L. Maharaj</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Date</span>
+      <span class="proj-meta-val">2025</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Data Sources</span>
+      <span class="proj-meta-val">ACS 2023 · Pew 2014 & 2023 · FBI UCR 1996–2023</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Population</span>
+      <span class="proj-meta-val">~3.1 Million Hindu Americans (2023)</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Category</span>
+      <span class="proj-meta-val">Sociology · Labor Economics · Criminology</span>
+    </div>
+  </div>
+  <p class="proj-abstract">
+    Hindu Americans are about 1% of the U.S. adult population and they are at the top of nearly every economic indicator the data tracks. This paper profiles that community across three domains — educational attainment, household income and occupational sorting, and anti-Hindu hate crime — using the Census ACS, two Pew Research Center surveys, and 28 years of FBI data. A Kitagawa decomposition shows that 50% of the income premium is driven by education endowment, 30% by higher returns to education conditional on degree level, and a genuine structural returns premium exists even after accounting for what people study. The crime picture runs against the success narrative: anti-Hindu incidents have nearly tripled since the early period, with a particularly sharp acceleration post-2019.
+  </p>
+</section>
+
+<div class="toc-strip">
+  <span class="toc-label">Sections</span>
+  <a href="#s1" class="toc-link">I. Educational Attainment</a>
+  <a href="#s2" class="toc-link">II. Income &amp; Occupations</a>
+  <a href="#s3" class="toc-link">III. Income Decomposition</a>
+  <a href="#s4" class="toc-link">IV. Hate Crime</a>
+  <a href="#s5" class="toc-link">V. Identity &amp; Civic Life</a>
+  <a href="#methods" class="toc-link">Methods</a>
+  <a href="#references" class="toc-link">References</a>
+</div>
+
+<div class="proj-body">
+
+  <!-- ══ SECTION 1 ══ -->
+  <div class="analysis-section" id="s1">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section I</span>
+      <span class="sec-method">ACS 2023 · Pew Religious Landscape Study · Generational Analysis</span>
+    </div>
+    <h2 class="sec-title">First Among All Religious Groups <em>in College Attainment</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>The U.S. Census does not ask about religion, which creates a methodological challenge for any study of Hindu Americans specifically. The workaround used here is an Indian-ancestry proxy in ACS microdata — justified by Pew's 2023 finding that roughly 75% of Indian Americans identify as Hindu. For direct religious identification, I draw on the Pew 2014 Religious Landscape Study, which cross-tabulated education and income against religious affiliation across a nationally representative sample.</p>
+      <p>The bachelor's degree attainment rate for Indian Americans is 77%. The national average is 35.5%. Even among Asian Americans as a group — already a high-attainment population — the rate is only 57.4%. The graduate degree gap is even more striking: 43% of Indian American adults hold a master's, professional, or doctoral degree, which is nearly three times the national rate. When you look at graduate attainment specifically, this group is at a different altitude from everyone else.</p>
+      <p>Looking across religious groups using the Pew 2014 data, Hindus rank first in college attainment at 77%, ahead of Jews (58%), Episcopalians (59%), and Presbyterians (60%). This cross-religious comparison matters because it controls for racial and ethnic composition — it tells you something about the community specifically, not just the racial group it overlaps with. The generational pattern shows a slight decline from first-generation immigrants (79% bachelor's+) to the second generation (71%), which is consistent with regression toward the mean documented in the immigrant assimilation literature, though even second-generation rates remain roughly double the U.S. average.</p>
+      <p>The nativity data gives important context for where this attainment comes from. Roughly 72% of Indian Americans are foreign-born — one of the highest foreign-born shares of any major ethnic group in the country. That share reflects decades of H-1B and employment-based immigration policy that selects explicitly for workers in specialty occupations requiring at least a bachelor's degree. The selection mechanism is institutional, not merely cultural: the visa system filters before arrival, and the resulting population inherits those selection effects in every outcome measure. The generational decline in attainment is therefore expected rather than alarming — it reflects regression from an extremely filtered immigrant cohort toward a more representative second generation.</p>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="fig01_bachelors_attainment.png" alt="Bachelor's Degree Attainment by Group" loading="lazy" />
+        <div class="figure-caption">Fig. 1 — Bachelor's Degree Attainment by Race/Ethnic Group, 2023. Source: ACS 2023; Pew 2023.</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig02_graduate_attainment.png" alt="Graduate Degree Attainment by Group" loading="lazy" />
+        <div class="figure-caption">Fig. 2 — Graduate Degree Attainment by Race/Ethnic Group, 2023. Source: ACS 2023.</div>
+      </div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig07_nativity.png" alt="Foreign-Born Share by Race/Ethnic Group, 2023" loading="lazy" />
+      <div class="figure-caption">Fig. 3 — Foreign-Born Share by Race/Ethnic Group, 2023. Indian Americans are among the most foreign-born groups (~72%), reflecting decades of employment-based immigration selection. Source: ACS 2023.</div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig08_college_by_religion.png" alt="College Attainment by Religious Group" loading="lazy" />
+      <div class="figure-caption">Fig. 4 — College Degree Attainment Across 13 Major Religious Groups. Hindus rank first at 77%. Source: Pew Research Center Religious Landscape Study, 2014.</div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig14_education_by_generation.png" alt="Education by Generation Among Hindu Americans" loading="lazy" />
+      <div class="figure-caption">Fig. 5 — Educational Attainment by Generation Among Hindu Americans. First-gen: 79% bachelor's+; Second-gen: 71%. Source: Pew Research Center, 2023.</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Educational Attainment — Key Comparisons, 2023</div>
+      <table class="styled">
+        <thead><tr><th>Group</th><th>Bachelor's+</th><th>Graduate Degree</th><th>vs. U.S. Average</th></tr></thead>
+        <tbody>
+          <tr><td class="val-hi">Hindu / Indian American</td><td class="val-hi">77%</td><td class="val-hi">43%</td><td class="val-hi">+41.5 pp</td></tr>
+          <tr><td>Jewish American (Pew 2014)</td><td>58%</td><td>—</td><td>+22.5 pp</td></tr>
+          <tr><td>Asian American (all)</td><td>57.4%</td><td>—</td><td>+21.9 pp</td></tr>
+          <tr><td>White non-Hispanic</td><td>~40%</td><td>~15%</td><td>—</td></tr>
+          <tr><td>U.S. National Average</td><td>35.5%</td><td>~15%</td><td>baseline</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>Hindu Americans rank first among all major religious groups in college degree attainment at 77% — more than double the national average and ahead of every other group in the Pew survey. The high foreign-born share (~72%) traces this premium directly to employment-based immigration filtering, which selects for degree holders before arrival. The generational descent from 79% to 71% is expected regression from an unusually filtered first-generation baseline, not evidence of assimilation failure.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 2 ══ -->
+  <div class="analysis-section" id="s2">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section II</span>
+      <span class="sec-method">ACS 2023 · Pew 2023 · Occupational Sorting · Geographic Concentration</span>
+    </div>
+    <h2 class="sec-title">$145,000 Median Income and <em>Six Times the STEM Rate</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>Indian American median household income reached $145,000 in 2023, approximately 80% above the U.S. median of $80,610. This exceeds all other major racial and ethnic groups — including Asian Americans broadly ($109,360) and Chinese Americans ($104,000). Among religious groups in the Pew data, Hindus rank second in the share with family income above $100,000 at 43%, behind only Jewish Americans at 46%. The income distribution is heavily right-skewed: 34% of Hindu Americans report household income above $150,000, compared to a small fraction of the general population.</p>
+      <p>The Pew 2023 survey allows a more precise cut: comparing Hindu Indian Americans to non-Hindu Indian Americans (mostly Sikh, Christian, Muslim, and secular). Hindu Indians outperform non-Hindu Indians across every major economic indicator — median income, STEM concentration, and graduate degree rates. This within-ethnicity comparison is important because it isolates religion from race: the Hindu premium is not just an Indian American premium, it exists even when the comparison group is drawn from the same country of origin.</p>
+      <p>The income distribution data reinforces the right-skew story. Nearly 36% of Hindu American households report income above $150,000, compared to 8% of U.S. households nationally. The mass of the distribution sits above the national median, with only a small share in the lower income brackets. This is a structurally different income distribution, not merely a shifted one — the tails are asymmetric in a way that the median alone understates.</p>
+      <p>The occupational story explains most of the income story. Forty percent of Indian American workers are in computer, engineering, or science occupations — nearly six times the U.S. average of 7% and more than double the rate for Chinese Americans at 28%. Software developers account for 18.2% of Indian American workers, 3.8 times the national rate. Physicians and surgeons account for 8.4%, 5.2 times the national rate. These two occupations alone, with median wages of $130,000 and $250,000 respectively, do a lot of the work in pulling up the group mean. The broader occupational distribution further illustrates the concentration: management, business, and professional occupations dominate, with near-absence in agriculture, construction, and service trades that make up a larger share of other groups' employment.</p>
+      <p>Geographically, the community is concentrated where the jobs are. California hosts roughly 680,000 Indian Americans, followed by New York at 370,000 and New Jersey at 340,000. New Jersey has the highest state share at 3.7% of the total population. This clustering around Silicon Valley, the Boston Route 128 corridor, and the New York metro area reflects both the pull of technology employment and established community networks that reduce job search costs for new arrivals.</p>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="fig03_median_hh_income.png" alt="Median Household Income by Race/Ethnic Group" loading="lazy" />
+        <div class="figure-caption">Fig. 6 — Median Household Income by Race/Ethnic Group, 2023. Indian American median of $145,000 is 80% above the U.S. median. Sources: ACS 2023; Pew 2023.</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig04_income_index.png" alt="Household Income Relative to U.S. Average, 2023" loading="lazy" />
+        <div class="figure-caption">Fig. 7 — Household Income Relative to U.S. Average (U.S. = 0), 2023. Indian Americans show the largest positive deviation of any group. Source: ACS 2023.</div>
+      </div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig11_income_distribution.png" alt="Household Income Distribution: Hindu Americans vs. U.S. Total" loading="lazy" />
+      <div class="figure-caption">Fig. 8 — Household Income Distribution: Hindu Americans vs. U.S. Total, 2023. The Hindu distribution is heavily right-skewed, with 36% of households above $150K vs. 8% nationally. Source: Pew Research Center, 2023.</div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig10_hindu_vs_nonhindu.png" alt="Hindu vs. Non-Hindu Indian Americans: Key Socioeconomic Indicators" loading="lazy" />
+      <div class="figure-caption">Fig. 9 — Hindu vs. Non-Hindu Indian Americans: Key Socioeconomic Indicators, 2023. Hindu Indians outperform non-Hindu Indians across income, STEM, and degree attainment. Source: Pew Research Center, 2023.</div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig09_income_by_religion.png" alt="Income Distribution by Religious Group" loading="lazy" />
+      <div class="figure-caption">Fig. 10 — Share of Families with Income Above $100,000 by Religious Group. Hindus rank 2nd at 43%. Source: Pew Research Center Religious Landscape Study, 2014.</div>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="fig22_stem_concentration.png" alt="STEM Occupational Concentration by Group" loading="lazy" />
+        <div class="figure-caption">Fig. 11 — STEM Occupational Concentration by Group, 2023. Indian Americans: 40% vs. U.S. 7%. Source: ACS 2023.</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig21_top_occupations.png" alt="Top Occupations for Indian Americans" loading="lazy" />
+        <div class="figure-caption">Fig. 12 — Top Occupations for Indian Americans with Over-Representation Ratios. Source: ACS 2023 S0201.</div>
+      </div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig05_occupational_distribution.png" alt="Occupational Distribution by Race/Ethnic Group, 2023" loading="lazy" />
+      <div class="figure-caption">Fig. 13 — Occupational Distribution by Race/Ethnic Group, 2023. Indian Americans show near-complete concentration in management, professional, and STEM roles relative to other groups. Source: ACS 2023.</div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig23_geographic_distribution.png" alt="Top 10 States by Indian American Population, 2023" loading="lazy" />
+      <div class="figure-caption">Fig. 14 — Top 10 States by Indian American Population, 2023. California, New York, and New Jersey account for over half the national Indian American population. Source: ACS 2023 Selected Population Profiles S0201.</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Top Occupations — Indian Americans (Hindu Proxy), 2023</div>
+      <table class="styled">
+        <thead><tr><th>Occupation</th><th>Share of Indian Amer.</th><th>Median Wage</th><th>Over-Rep. vs. U.S.</th></tr></thead>
+        <tbody>
+          <tr><td class="val-hi">Software developers &amp; engineers</td><td class="val-hi">18.2%</td><td class="val-hi">$130K</td><td class="val-hi">3.8×</td></tr>
+          <tr><td class="val-hi">Physicians &amp; surgeons</td><td class="val-hi">8.4%</td><td class="val-hi">$250K</td><td class="val-hi">5.2×</td></tr>
+          <tr><td>Financial analysts &amp; managers</td><td>7.1%</td><td>$99K</td><td>2.1×</td></tr>
+          <tr><td class="val-hi">Computer / IS managers</td><td>5.9%</td><td>$164K</td><td class="val-hi">4.0×</td></tr>
+          <tr><td>Pharmacists</td><td>3.2%</td><td>$134K</td><td>2.9×</td></tr>
+          <tr><td>Dentists</td><td>1.9%</td><td>$174K</td><td class="val-hi">4.1×</td></tr>
+          <tr><td>Physical scientists</td><td>1.7%</td><td>$87K</td><td>3.5×</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>The Hindu income premium holds even within the Indian American population: Hindu Indians outperform non-Hindu Indians on every major economic metric. The income distribution is not merely shifted upward — it is structurally skewed right, with more than a third of households above $150,000. STEM concentration at 40% (6× the national rate) and extreme over-representation in software engineering and medicine are the proximate mechanisms driving this outcome.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 3 ══ -->
+  <div class="analysis-section" id="s3">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section III</span>
+      <span class="sec-method">Kitagawa Decomposition · Education Endowment · Returns to Education</span>
+    </div>
+    <h2 class="sec-title">Half Education, Thirty Percent <em>Something Else</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>The income premium is $50,350 per year — the gap between Indian American mean earnings and the U.S. average. The interesting question is how much of that is because of higher education and how much is because of something the education numbers do not capture. The Kitagawa decomposition answers that by splitting the gap into an endowment effect (what would happen if the minority group had the national education distribution but their own earnings at each level) and a returns effect (what would happen if they had the national education distribution but kept their own earnings at each level).</p>
+      <p>The education endowment effect accounts for $25,240, or 50% of the gap. This is the part that is straightforwardly explained by the fact that Indian Americans have dramatically higher education levels. If you gave the average American worker the same education distribution as Indian Americans, median earnings would rise by about $25,000. That is real, but it is only half the story.</p>
+      <p>The returns effect accounts for $15,310, or 30% of the gap. This is the part that survives education controls. Even at equivalent degree levels, Indian American workers earn more than the national average — consistent with sorting into higher-paying specializations within each credential category (software engineering rather than teaching, surgery rather than general practice), selective immigration filtering under H-1B and employment-based visas, and possible network-based wage premiums. An interaction term between the two effects accounts for the remaining 19%.</p>
+      <p>The education-income scatter visualizes the relationship geometrically: each group occupies a distinct position on the education-income frontier. Indian Americans sit in the upper-right corner — the highest on both axes — but the slope of the line connecting their position to the national average is steeper than what education alone would predict. That excess slope is what the returns component measures: conditional on having a degree, this group earns more. The scatter also shows that some high-attainment groups (e.g. Filipino Americans) achieve comparable education but lower income, suggesting the occupation channel — not education alone — is doing the heavy lifting for Indian Americans specifically.</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">Kitagawa Income Decomposition</span>
+      $$\text{Gap} = \underbrace{\sum_i (s_i^{IA} - s_i^{US}) \cdot w_i^{US}}_{\text{Endowment Effect}} + \underbrace{\sum_i s_i^{US} \cdot (w_i^{IA} - w_i^{US})}_{\text{Returns Effect}} + \underbrace{\text{Interaction}}_{}$$
+      <p style="font-size:.82rem;color:var(--slate);margin-top:.6rem;">$s_i$ is the share of workers at education level $i$; $w_i$ is median earnings at education level $i$. Superscripts $IA$ and $US$ denote Indian American and national averages respectively. The endowment effect captures the role of education sorting; the returns effect captures differential earnings at equivalent credentials.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig06_education_income_scatter.png" alt="Education–Income Relationship by Group, 2023" loading="lazy" />
+      <div class="figure-caption">Fig. 15 — Education–Income Relationship by Group, 2023. Indian Americans occupy the upper-right corner; the steeper-than-average slope reflects the returns component in the Kitagawa decomposition. Source: ACS 2023.</div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig25_decomposition_waterfall.png" alt="Kitagawa Decomposition Waterfall Chart" loading="lazy" />
+      <div class="figure-caption">Fig. 16 — Kitagawa Decomposition of the Indian American Income Premium ($50,350 total). Endowment: $25,240 (50%); Returns: $15,310 (30%); Interaction: 19%. Source: Authors' calculations from ACS 2023 and Census Table A-3.</div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig24_education_distribution.png" alt="Education Distribution Indian Americans vs US" loading="lazy" />
+      <div class="figure-caption">Fig. 17 — Educational Attainment Distribution: Indian Americans vs. U.S. Average, 2023. 43% of Indian Americans hold graduate degrees versus 15% nationally. Source: ACS 2023.</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Kitagawa Decomposition — $50,350 Income Gap Relative to U.S. Average</div>
+      <table class="styled">
+        <thead><tr><th>Component</th><th>Dollar Amount</th><th>Share of Gap</th><th>Interpretation</th></tr></thead>
+        <tbody>
+          <tr><td class="val-hi">Endowment Effect</td><td class="val-hi">$25,240</td><td class="val-hi">50%</td><td>Higher education levels</td></tr>
+          <tr><td class="val-hi">Returns Effect</td><td class="val-hi">$15,310</td><td class="val-hi">30%</td><td>Higher pay at same credential level</td></tr>
+          <tr><td>Interaction Term</td><td>~$9,800</td><td>~19%</td><td>Joint endowment × returns effect</td></tr>
+          <tr><td>Total Gap</td><td>$50,350</td><td>100%</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>The income premium is not simply explained by more education. Even after controlling for the higher education distribution, 30% of the gap — about $15,000 per year — reflects higher earnings at equivalent credential levels. The education-income scatter confirms that occupation sorting is the mechanism: Indian Americans who hold the same degrees as other groups systematically end up in higher-paying specializations, a pattern consistent with H-1B visa selection concentrating workers in the highest-demand STEM fields.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 4 ══ -->
+  <div class="analysis-section" id="s4">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section IV</span>
+      <span class="sec-method">FBI UCR Hate Crime Statistics · 1996–2023 · OLS Trend Regression</span>
+    </div>
+    <h2 class="sec-title">Incidents Have Nearly Tripled — <em>The Post-2019 Acceleration</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>The FBI has tracked anti-Hindu bias incidents in its Uniform Crime Reports since 1996. The 28-year series shows a clear and statistically significant upward trend: the OLS slope is +0.78 incidents per year with an R² of 0.74 (p &lt; 0.001). That is not noise. Annual incidents averaged 7.3 in the early period from 1996 through 2005, rose to an average of 14.8 in the middle period from 2006 through 2015, and surged to 24.8 in the post-2019 period — a 3.4-fold increase from where the series started. The 2021 peak of 30 incidents and the 2023 figure of 31 are the highest annual totals in the reporting history.</p>
+      <p>The cross-religion comparison provides useful scale. The multi-group chart shows Hindu incidents relative to anti-Sikh and anti-Christian targeting over the same 28-year period. Anti-Sikh incidents surged in the years immediately following September 11, 2001 — driven by visual misidentification of Sikhs as Muslim — and have remained volatile. Anti-Hindu incidents follow a different trajectory: a slower but more sustained upward drift, without the post-9/11 spike, suggesting a distinct targeting dynamic that is less event-driven and more chronic. By the late 2010s, the Hindu trend line has converged with and, in some years, exceeded the Sikh line in absolute terms.</p>
+      <p>The direct Hindu-Sikh comparison by period sharpens this point. In the early period (1996–2005), Sikh incidents substantially exceeded Hindu incidents on a per-year basis. By the most recent period (2020–2023), that gap has narrowed significantly, with Hindu incidents now running at roughly similar absolute levels. Both communities are experiencing worsening conditions; the convergence is a function of Hindu incidents rising faster, not Sikh incidents declining.</p>
+      <p>The post-2020 spike sits within a broader surge in anti-Asian and anti-South Asian sentiment documented during the COVID-19 pandemic. The timing and scale are consistent with what Stop AAPI Hate documented for South Asian communities more broadly, though Hindu-specific targeting has its own distinct characteristics in terms of offense type and target. Vandalism and property destruction account for 48% of anti-Hindu incidents, compared to 39% for all religious bias crimes combined — consistent with targeting Hindu institutions and temples rather than individuals, though personal assaults are not absent from the record.</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">OLS Trend Regression — Anti-Hindu Incidents, 1996–2023</span>
+      $$\text{Incidents}_t = \alpha + \beta \cdot t + \varepsilon_t, \quad \hat{\beta} = +0.78, \quad R^2 = 0.74, \quad p < 0.001$$
+      <p style="font-size:.82rem;color:var(--slate);margin-top:.6rem;">$t$ is calendar year. The positive slope indicates a statistically robust upward trend of approximately 0.78 additional incidents per year over the 28-year period. The high $R^2$ of 0.74 reflects the consistency of the trend rather than cyclical noise.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig15_anti_hindu_trend.png" alt="Anti-Hindu Hate Crime Trend 1996-2023" loading="lazy" />
+      <div class="figure-caption">Fig. 18 — Anti-Hindu Hate Crime Incidents, 1996–2023. OLS trend: +0.78 incidents/year, R²=0.74, p&lt;0.001. 2023 total of 31 is the highest on record. Source: FBI UCR Table 1.</div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig16_religion_comparison_small.png" alt="Religious Bias Hate Crimes: Hindu, Sikh, and Christian, 1996–2023" loading="lazy" />
+      <div class="figure-caption">Fig. 19 — Religious Bias Hate Crimes: Hindu, Sikh, and Christian Targets, 1996–2023. Anti-Sikh incidents spiked post-9/11; anti-Hindu incidents show a slower but sustained upward trajectory. Source: FBI UCR Table 1.</div>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="fig20_decade_comparison.png" alt="Anti-Hindu vs. Anti-Sikh Incidents by Period" loading="lazy" />
+        <div class="figure-caption">Fig. 20 — Anti-Hindu vs. Anti-Sikh Incidents by Period (1996–2023). The Hindu-Sikh gap has narrowed substantially as Hindu incidents rise faster. Source: FBI UCR.</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig17_per_capita_rates.png" alt="Per-Capita Hate Crime Rates by Religious Group" loading="lazy" />
+        <div class="figure-caption">Fig. 21 — Hate Crime Victimization Rates by Religious Group (per million adherents). Source: FBI UCR; Pew population denominators.</div>
+      </div>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="fig18_offense_types.png" alt="Anti-Hindu Offense Types" loading="lazy" />
+        <div class="figure-caption">Fig. 22 — Anti-Hindu Offense Types vs. All Religious Bias Crimes (5-Year Avg. 2019–2023). Property: 48% vs. 39% average. Source: FBI UCR Table 4.</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig19_geographic_distribution.png" alt="Geographic Distribution of Anti-Hindu Incidents" loading="lazy" />
+        <div class="figure-caption">Fig. 23 — Top 10 States by Anti-Hindu Hate Crime Incidents (5-Year Average 2019–2023). Concentration mirrors Hindu population distribution. Source: FBI UCR Table 13.</div>
+      </div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Anti-Hindu Hate Crime — Period Averages</div>
+      <table class="styled">
+        <thead><tr><th>Period</th><th>Annual Average</th><th>vs. Early Period</th></tr></thead>
+        <tbody>
+          <tr><td>Early (1996–2005)</td><td>7.3 incidents / yr</td><td>baseline</td></tr>
+          <tr><td>Middle (2006–2015)</td><td>14.8 incidents / yr</td><td class="val-hi">2.0×</td></tr>
+          <tr><td class="val-hi">Post-2019 (2020–2023)</td><td class="val-hi">24.8 incidents / yr</td><td class="val-hi">3.4×</td></tr>
+          <tr><td class="val-hi">2023 (single year)</td><td class="val-hi">31 incidents</td><td class="val-hi">Record high</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>Anti-Hindu hate incidents have nearly tripled since the early reporting period, with 2023 setting a new record at 31 incidents. The Hindu-Sikh comparison reveals a distinctive dynamic: unlike the event-driven Sikh spike post-9/11, the Hindu trend is a chronic upward drift that has now brought Hindu absolute counts to near-parity with Sikh counts in recent years. The offense profile — predominantly property and intimidation targeting Hindu institutions — points to communal harassment as the primary mode of targeting.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 5 ══ -->
+  <div class="analysis-section" id="s5">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section V</span>
+      <span class="sec-method">Pew 2023 · Religious Practice · Political Affiliation · Civic Identity</span>
+    </div>
+    <h2 class="sec-title">Moderate Practice, Strong Identity, <em>Leaning Democratic</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>Beyond economic outcomes, Pew's 2023 survey of Indian Americans provides a picture of how Hindu Americans relate to their faith and to civic life. Religious practice is moderate by American standards: 45% say religion is "very important" in their lives, lower than evangelical Christians at 79% or Muslims at 72%, but comparable to mainline Protestants. Cultural observance is higher than devotional intensity — 78% observe major Hindu festivals and 42% meditate weekly. Vegetarianism is practiced by 32%, substantially above the U.S. average of around 5%.</p>
+      <p>Politically, Hindu Americans lean strongly Democratic: 65% identify as or lean Democrat, compared to 48% nationally. This partisan gap is large and is consistent with patterns seen among other highly educated immigrant groups. The most likely drivers are ideological alignment on social and immigration issues and a community response to anti-immigrant political rhetoric that has periodically targeted South Asian communities specifically.</p>
+      <p>The radar profile chart brings the full community picture into one visualization — education, income, STEM concentration, degree attainment, and civic participation, all indexed to the U.S. average. The result is a profile with no weak dimensions: Hindu Americans are above the national average on every axis, and the combined shape of the radar confirms what the individual sections show — this is one of the most structurally advantaged groups in the U.S. economic landscape, with a hate crime trend that runs sharply against that advantage narrative.</p>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="fig12_religious_practice.png" alt="Religious Practice Among Hindu Americans" loading="lazy" />
+        <div class="figure-caption">Fig. 24 — Religious Practice and Identity Among Hindu Americans. Source: Pew Research Center, 2023.</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig13_political_affiliation.png" alt="Political Affiliation Hindu Americans vs US" loading="lazy" />
+        <div class="figure-caption">Fig. 25 — Political Affiliation: Hindu Americans vs. U.S. Total. 65% Democratic vs. 48% nationally. Source: Pew Research Center, 2023.</div>
+      </div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig26_radar_profile.png" alt="Indian American Socioeconomic Profile Radar Chart" loading="lazy" />
+      <div class="figure-caption">Fig. 26 — Indian American Socioeconomic Profile Relative to U.S. Average (1×), 2023. Every dimension — income, education, STEM, graduate degrees, median earnings — sits above the national baseline. Source: ACS 2023; Pew 2023.</div>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>Hindu American political identity is distinct: a 17-percentage-point Democratic lean over the national average, combined with moderate religious observance and strong cultural identity markers. The radar profile confirms what every section has documented individually — this is a community that outperforms the national average across every measurable economic dimension, making the worsening hate crime trajectory all the more anomalous in the data.</p>
+    </div>
+  </div>
+
+  <!-- ══ METHODS ══ -->
+  <div id="methods">
+    <div class="sec-eyebrow"><span class="sec-num">Methods</span></div>
+    <h2 class="sec-title">Data &amp; <em>Analytical Framework</em></h2>
+    <div class="sec-rule"></div>
+    <div class="sec-body">
+      <p>Because the U.S. Census does not ask about religion, this paper deploys two complementary identification strategies: Indian ancestry or nativity in ACS microdata as a large-sample Hindu proxy (justified by Pew's finding that ~75% of Indian Americans identify as Hindu), and direct religious self-identification from Pew survey data. Income decomposition follows the Kitagawa (1955) standardization approach using grouped education-earnings data. Hate crime analysis uses OLS trend regression on the full 1996–2023 FBI UCR series with per-capita normalization using Pew population denominators. The Hindu vs. non-Hindu Indian American comparison uses Pew 2023 microdata splits; the cross-group education-income scatter uses ACS 2023 Selected Population Profiles.</p>
+    </div>
+    <div class="data-table-wrap" style="margin-top:1.6rem;">
+      <table class="styled">
+        <thead><tr><th>Data Source</th><th>Sample / Coverage</th><th>Use in This Paper</th></tr></thead>
+        <tbody>
+          <tr><td class="val-hi">ACS 2023 (Census Bureau)</td><td>~3M+ Indian-ancestry respondents</td><td>Educational attainment, income, occupation, nativity, geography</td></tr>
+          <tr><td class="val-hi">Pew Religious Landscape Study (2014)</td><td>n ≈ 35,000; Hindu n ≈ 190</td><td>Cross-religious education and income comparisons</td></tr>
+          <tr><td class="val-hi">Pew Indian Americans Survey (2023)</td><td>n ≈ 3,000</td><td>Hindu/non-Hindu splits, income distribution, generational analysis, identity, political affiliation</td></tr>
+          <tr><td class="val-hi">FBI UCR Hate Crime Statistics</td><td>1996–2023 (28 years)</td><td>Anti-Hindu, Sikh, and cross-religion incident counts, offense types, geographic distribution, per-capita rates</td></tr>
+          <tr><td class="val-hi">Census CPS Table A-3</td><td>1975–2023</td><td>Education-earnings profiles used in Kitagawa decomposition</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ REFERENCES ══ -->
+  <div id="references">
+    <div class="sec-eyebrow"><span class="sec-num">References</span></div>
+    <h2 class="sec-title">Theoretical <em>Grounding</em></h2>
+    <div class="sec-rule"></div>
+    <div class="sec-body">
+      <p>The income decomposition methodology draws on Kitagawa (1955) for the standardization approach and parallels the Blinder (1973) framework. Immigrant assimilation and intergenerational regression are contextualized using Borjas (1992) and Portes and Rumbaut (2001). Occupational sorting among Asian Americans draws on Sakamoto, Goyette, and Kim (2009). The post-2020 anti-Asian hate crime context draws on Stop AAPI Hate (2021).</p>
+    </div>
+    <ul class="ref-list" style="margin-top:1.6rem;">
+      <li>Kitagawa, E. M. (1955). <em>Components of a difference between two rates.</em> Journal of the American Statistical Association, 50(272), 1168–1194.</li>
+      <li>Blinder, A. S. (1973). <em>Wage discrimination: Reduced form and structural estimates.</em> Journal of Human Resources, 8(4), 436–455.</li>
+      <li>Borjas, G. J. (1992). <em>Ethnic capital and intergenerational mobility.</em> Quarterly Journal of Economics, 107(1), 123–150.</li>
+      <li>Portes, A., & Rumbaut, R. G. (2001). <em>Legacies: The Story of the Immigrant Second Generation.</em> University of California Press.</li>
+      <li>Sakamoto, A., Goyette, K. A., & Kim, C. H. (2009). <em>Socioeconomic attainments of Asian Americans.</em> Annual Review of Sociology, 35, 255–276.</li>
+      <li>Stop AAPI Hate. (2021). <em>Stop AAPI Hate National Report: 2020–2021.</em> Asian Pacific Policy and Planning Council.</li>
+      <li>Pew Research Center. (2014). <em>Religious Landscape Study.</em> Pew Research Center.</li>
+      <li>Pew Research Center. (2023). <em>Indian Americans: A Demographic Portrait.</em> Pew Research Center.</li>
+      <li>FBI. (2024). <em>Hate Crime Statistics, Table 1 (1996–2023).</em> Uniform Crime Reports. U.S. Department of Justice.</li>
+      <li>U.S. Census Bureau. (2024). <em>American Community Survey 2023 1-Year Estimates: Selected Population Profiles (S0201).</em> U.S. Department of Commerce.</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo">L. <em>Maharaj</em> — Data Scientist</div>
+  <p class="disclaimer" style="font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.12em;font-style:italic;color:var(--slate);max-width:480px;line-height:1.7;">
+    None of my personal projects reflect the views of any institution I work for. This work is entirely private and unattached to any of my employers.
+  </p>
+  <p>© 2026 L. Maharaj. All Rights Reserved.</p>
+  <ul class="footer-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../about.html">About</a></li>
+    <li><a href="../../index.html#specializations">Projects</a></li>
+    <li><a href="../../outside-data.html">Outside Data</a></li>
+  </ul>
+</footer>
+
+<script>
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.borderBottomColor = window.scrollY > 40 ? 'rgba(184,154,90,.2)' : 'rgba(34,40,64,1)';
+  });
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; } });
+  }, { threshold: .08 });
+
+  document.querySelectorAll('.analysis-section, .eq-block, .data-table-wrap, .finding, .figure-full, .figure-row').forEach(el => {
+    el.style.opacity='0'; el.style.transform='translateY(16px)';
+    el.style.transition='opacity .65s ease, transform .65s ease';
+    obs.observe(el);
+  });
+</script>
+</body>
+</html>
