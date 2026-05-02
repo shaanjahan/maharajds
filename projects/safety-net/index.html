@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safety Net and Ethnic Stratification — L. Maharaj</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #0b0d14;
+      --deep:     #0e1119;
+      --surface:  #121520;
+      --card:     #161a27;
+      --rule:     #222840;
+      --gold:     #b89a5a;
+      --gold-lt:  #d4b97a;
+      --gold-dim: #7a6332;
+      --blue:     #2a4a8a;
+      --blue-mid: #3b6abf;
+      --blue-lt:  #6b96d6;
+      --slate:    #6b7a96;
+      --mist:     #a0aabf;
+      --cream:    #dde2ec;
+      --white:    #eef1f8;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background:var(--ink); color:var(--cream); font-family:'Jost',sans-serif; font-weight:300; line-height:1.7; overflow-x:hidden; }
+
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 6%; height:72px; background:rgba(11,13,20,.92); backdrop-filter:blur(20px); border-bottom:1px solid var(--rule); transition:border-color .3s; }
+    .nav-logo { font-family:'Cinzel',serif; font-size:.95rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--white); text-decoration:none; }
+    .nav-logo em { font-style:normal; color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2.8rem; list-style:none; }
+    .nav-links a { font-family:'Cinzel',serif; font-size:.68rem; font-weight:400; letter-spacing:.2em; text-transform:uppercase; color:var(--slate); text-decoration:none; transition:color .25s; position:relative; }
+    .nav-links a::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:1px; background:var(--gold); transition:width .3s; }
+    .nav-links a:hover { color:var(--cream); }
+    .nav-links a:hover::after { width:100%; }
+    .nav-cta { border:1px solid var(--gold-dim) !important; color:var(--gold-lt) !important; padding:.38rem 1.2rem; }
+    .nav-cta::after { display:none !important; }
+    @media(max-width:760px){ .nav-links { display:none; } }
+
+    #proj-header { position:relative; z-index:1; padding:130px 6% 60px; background:var(--deep); border-bottom:1px solid var(--rule); }
+    .proj-breadcrumb { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-dim); margin-bottom:1.4rem; display:flex; align-items:center; gap:.6rem; }
+    .proj-breadcrumb a { color:var(--gold-dim); text-decoration:none; transition:color .2s; }
+    .proj-breadcrumb a:hover { color:var(--gold-lt); }
+    .proj-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,3.5vw,3rem); font-weight:300; line-height:1.1; color:var(--white); margin-bottom:1rem; max-width:860px; }
+    .proj-title em { font-style:italic; color:var(--blue-lt); }
+    .proj-meta { display:flex; flex-wrap:wrap; gap:1.8rem; margin-bottom:1.8rem; }
+    .proj-meta-item { display:flex; flex-direction:column; gap:.25rem; }
+    .proj-meta-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gold-dim); }
+    .proj-meta-val { font-family:'Jost',serif; font-size:.88rem; font-weight:400; color:var(--mist); }
+    .proj-abstract { font-size:.97rem; font-weight:300; color:var(--mist); max-width:820px; line-height:1.85; padding:1.4rem 0 1.4rem 1.4rem; border-left:2px solid var(--gold-dim); margin-top:.8rem; }
+
+    .toc-strip { position:relative; z-index:1; background:var(--surface); border-bottom:1px solid var(--rule); padding:1rem 6%; display:flex; flex-wrap:wrap; gap:.6rem 1.4rem; align-items:center; }
+    .toc-label { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-dim); margin-right:.4rem; }
+    .toc-link { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; color:var(--slate); text-decoration:none; padding:.28rem .7rem; border:1px solid var(--rule); transition:border-color .2s, color .2s; }
+    .toc-link:hover { border-color:var(--gold-dim); color:var(--gold-lt); }
+
+    .proj-body { position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:0 6% 80px; }
+    .analysis-section { padding:72px 0 56px; border-bottom:1px solid var(--rule); }
+    .analysis-section:last-of-type { border-bottom:none; }
+
+    .sec-eyebrow { display:flex; align-items:center; gap:1rem; margin-bottom:1rem; }
+    .sec-num { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); border:1px solid var(--gold-dim); padding:.25rem .7rem; }
+    .sec-method { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.2em; text-transform:uppercase; color:var(--slate); }
+    .sec-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.4rem,2.5vw,2rem); font-weight:400; color:var(--white); line-height:1.2; margin-bottom:1.2rem; }
+    .sec-title em { font-style:italic; color:var(--blue-lt); }
+    .sec-rule { width:48px; height:1px; background:linear-gradient(90deg,var(--gold),transparent); margin-bottom:1.6rem; }
+    .sec-body { font-size:.95rem; font-weight:300; color:var(--mist); line-height:1.9; max-width:760px; }
+    .sec-body p { margin-bottom:1rem; }
+    .sec-body strong { color:var(--cream); font-weight:400; }
+
+    .eq-block { background:var(--card); border:1px solid var(--rule); border-left:2px solid var(--gold-dim); padding:1.4rem 1.8rem; margin:1.6rem 0; overflow-x:auto; }
+    .eq-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-dim); margin-bottom:.7rem; display:block; }
+
+    .data-table-wrap { margin:2rem 0; overflow-x:auto; }
+    .data-table-title { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:.8rem; display:flex; align-items:center; gap:.8rem; }
+    .data-table-title::before { content:''; width:4px; height:4px; background:var(--gold); transform:rotate(45deg); flex-shrink:0; }
+    table.styled { width:100%; border-collapse:collapse; font-family:'Jost',sans-serif; font-size:.85rem; }
+    table.styled thead tr { border-bottom:1px solid var(--gold-dim); }
+    table.styled th { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold-dim); font-weight:400; padding:.65rem .9rem; text-align:left; }
+    table.styled td { padding:.6rem .9rem; color:var(--mist); font-weight:300; border-bottom:1px solid rgba(34,40,64,.6); }
+    table.styled tbody tr:hover td { background:rgba(184,154,90,.04); }
+    .val-hi { color:var(--cream); font-weight:400; }
+    .val-lo { color:var(--slate); }
+    .val-red { color:#e07070; font-weight:400; }
+
+    .figure-row { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin:2.4rem 0; align-items:start; }
+    .figure-panel { background:var(--card); border:1px solid var(--rule); overflow:hidden; }
+    .figure-panel img { width:100%; display:block; }
+    .figure-caption { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.16em; text-transform:uppercase; color:var(--slate); padding:.7rem 1rem; border-top:1px solid var(--rule); text-align:center; }
+    .figure-full { background:var(--card); border:1px solid var(--rule); margin:2.4rem 0; overflow:hidden; }
+    .figure-full img { width:100%; display:block; }
+
+    .finding { background:rgba(184,154,90,.06); border:1px solid rgba(184,154,90,.18); border-left:3px solid var(--gold); padding:1.2rem 1.6rem; margin:1.8rem 0; }
+    .finding-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:.5rem; display:block; }
+    .finding p { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:400; color:var(--cream); line-height:1.6; font-style:italic; margin:0; }
+
+    #methods, #references { padding:72px 0; border-top:1px solid var(--rule); }
+    .ref-list { list-style:none; display:flex; flex-direction:column; gap:.9rem; margin-top:1.4rem; }
+    .ref-list li { font-size:.88rem; font-weight:300; color:var(--mist); line-height:1.7; padding-left:1.2rem; position:relative; }
+    .ref-list li::before { content:'—'; position:absolute; left:0; color:var(--gold-dim); font-size:.75rem; }
+    .ref-list em { font-style:italic; color:var(--cream); }
+
+    footer { position:relative; z-index:1; background:var(--surface); border-top:1px solid var(--rule); padding:2.4rem 6%; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; }
+    .footer-logo { font-family:'Cinzel',serif; font-size:.75rem; font-weight:600; letter-spacing:.28em; text-transform:uppercase; color:var(--cream); }
+    .footer-logo em { font-style:normal; color:var(--gold); }
+    footer p { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.18em; color:var(--slate); text-transform:uppercase; }
+    .footer-links { display:flex; gap:2rem; list-style:none; }
+    .footer-links a { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.2em; color:var(--slate); text-decoration:none; text-transform:uppercase; transition:color .25s; }
+    .footer-links a:hover { color:var(--gold-lt); }
+
+    .fade-in { opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease; }
+    .fade-in.visible { opacity:1; transform:none; }
+
+    @media(max-width:700px){ .figure-row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../index.html" class="nav-logo">L. <em>Maharaj</em></a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../about.html">About Me</a></li>
+    <li><a href="../../index.html#specializations">Projects</a></li>
+    <li><a href="../../outside-data.html" class="nav-cta">Outside Data</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HEADER ══ -->
+<section id="proj-header">
+  <div class="proj-breadcrumb">
+    <a href="../../index.html">Home</a> ›
+    <a href="../../index.html#specializations">Projects</a> ›
+    <span style="color:var(--mist)">Safety Net and Ethnic Stratification</span>
+  </div>
+  <h1 class="proj-title">
+    Safety Net<br/>
+    <em>and Ethnic Stratification</em>
+  </h1>
+  <div class="proj-meta">
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Author</span>
+      <span class="proj-meta-val">L. Maharaj</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Date</span>
+      <span class="proj-meta-val">2025</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Data Sources</span>
+      <span class="proj-meta-val">BLS CPS · USDA FNS · Census CPS ASEC · HHS/ACF · SSA · HUD · CBPP</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Coverage</span>
+      <span class="proj-meta-val">5 Racial/Ethnic Groups · 6 Federal Programs · 2000–2023</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Category</span>
+      <span class="proj-meta-val">Labor Economics · Social Policy · Racial Stratification</span>
+    </div>
+  </div>
+  <p class="proj-abstract">
+    The U.S. safety net was designed as a universal floor — a set of income supports, nutritional benefits, and health guarantees available to all Americans in need. In practice, its utilization patterns are deeply stratified by race and ethnicity. Black and American Indian/Alaska Native households draw government transfers at more than twice the rate of white households as a share of income. Black households are overrepresented in federal housing assistance by a factor of 3.3 relative to population share. These differentials are not arbitrary: they trace to compounding structural disadvantages in unemployment, wealth accumulation, educational attainment, and occupational distribution that have persisted across generations. This analysis moves from the raw labor market gaps to the program-by-program enrollment picture, from the transfer income calculus to a composite dependency index, and finally to the structural and historical drivers that explain why the safety net catches different groups at such different rates.
+  </p>
+</section>
+
+<!-- ══ TOC ══ -->
+<div class="toc-strip">
+  <span class="toc-label">Sections</span>
+  <a href="#s1" class="toc-link">I. Unemployment Gaps</a>
+  <a href="#s2" class="toc-link">II. SNAP &amp; Food Assistance</a>
+  <a href="#s3" class="toc-link">III. Transfer Programs</a>
+  <a href="#s4" class="toc-link">IV. Dependency &amp; Structure</a>
+  <a href="#methods" class="toc-link">Methods</a>
+  <a href="#references" class="toc-link">References</a>
+</div>
+
+<div class="proj-body">
+
+  <!-- ══ SECTION I ══ -->
+  <div class="analysis-section fade-in" id="s1">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section I</span>
+      <span class="sec-method">BLS Current Population Survey · 2000–2023 · Monthly Seasonally Adjusted</span>
+    </div>
+    <h2 class="sec-title">The Labor Market Foundation — <em>Persistent Unemployment Gaps</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>Before any program-level analysis, the underlying labor market tells the essential story. In 2023, with the U.S. unemployment rate at a generational low of <strong>3.6%</strong>, the headline figure concealed pronounced variation across racial and ethnic groups. White non-Hispanic workers faced a 3.3% rate; Asian workers 3.1%. Black or African American workers faced a rate of <strong>5.4%</strong> — 1.6 times the white rate. American Indian and Alaska Native workers faced a rate of <strong>7.4%</strong> — more than twice the white rate. These gaps are not cyclical artifacts: they have persisted through every expansion and recession since at least the 1970s.</p>
+      <p>The trend chart beginning in 2000 captures two recessions and two recoveries. In every state of the cycle, the Black–White unemployment ratio has remained between 1.8 and 2.4. The 2007–09 recession pushed Black unemployment above 16% and Hispanic unemployment above 12%, while white unemployment peaked near 9%. The COVID-19 shock in 2020 produced the sharpest single-quarter spike in modern history — all groups spiked simultaneously — but recovery was uneven, with minority unemployment rates recovering more slowly in the trailing months.</p>
+      <p>Youth unemployment compounds the story. Among workers aged 16–24, Black youth unemployment in 2023 stood at <strong>17.3%</strong> — a 3.2× multiple of the corresponding adult rate (5.4%) and nearly double the white youth rate of 8.7%. This matters for safety net analysis because prolonged early-career unemployment reduces lifetime earnings, pension accumulation, and wealth building — increasing the probability of program enrollment later in life. Long-term unemployment (27+ weeks) follows the same racial gradient and is the immediate gateway to UI exhaustion, SNAP enrollment, and Medicaid eligibility.</p>
+    </div>
+
+    <div class="figure-row fade-in">
+      <div class="figure-panel">
+        <img src="fig01_unemp_trend.png" alt="Unemployment trend by race 2000–2023" />
+        <div class="figure-caption">Fig 1 — Unemployment rate trends by race/ethnicity, 2000–2023</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig02_unemp_ratio.png" alt="Black-White unemployment ratio over time" />
+        <div class="figure-caption">Fig 2 — Black–White unemployment ratio, 2000–2023</div>
+      </div>
+    </div>
+
+    <div class="data-table-wrap fade-in">
+      <div class="data-table-title">Unemployment Rate by Race/Ethnicity and Gender, 2023</div>
+      <table class="styled">
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>Overall</th>
+            <th>Men</th>
+            <th>Women</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>White (non-Hispanic)</td><td>3.3%</td><td>3.4%</td><td>3.1%</td></tr>
+          <tr><td>Black or African American</td><td class="val-hi">5.4%</td><td class="val-hi">5.8%</td><td class="val-hi">5.1%</td></tr>
+          <tr><td>Hispanic or Latino</td><td>4.4%</td><td>4.6%</td><td>4.2%</td></tr>
+          <tr><td>Asian</td><td class="val-lo">3.1%</td><td class="val-lo">3.0%</td><td>3.2%</td></tr>
+          <tr><td>American Indian / Alaska Native</td><td class="val-red">7.4%</td><td class="val-red">7.8%</td><td class="val-red">7.0%</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>3.6%</strong></td><td><strong>3.7%</strong></td><td><strong>3.4%</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="figure-row fade-in">
+      <div class="figure-panel">
+        <img src="fig03_unemp_2023_gender.png" alt="2023 unemployment by race and gender" />
+        <div class="figure-caption">Fig 3 — 2023 unemployment by race and gender</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig04_youth_unemp.png" alt="Youth vs adult unemployment by race" />
+        <div class="figure-caption">Fig 4 — Youth (16–24) vs. adult unemployment by race</div>
+      </div>
+    </div>
+
+    <div class="figure-row fade-in">
+      <div class="figure-panel">
+        <img src="fig05_longterm_unemp.png" alt="Long-term unemployment by race" />
+        <div class="figure-caption">Fig 5 — Long-term unemployment (27+ weeks) by race</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig06_covid_recovery.png" alt="COVID-19 unemployment shock and recovery by race" />
+        <div class="figure-caption">Fig 6 — COVID-19 unemployment shock and uneven recovery</div>
+      </div>
+    </div>
+
+    <div class="finding fade-in">
+      <span class="finding-label">Key Finding</span>
+      <p>The Black–White unemployment gap has persisted at roughly 2:1 through every business cycle since 2000 — recession and recovery alike. American Indian/Alaska Native workers face the highest rates of all, exceeding 7% even in the strongest labor markets. These gaps are the primary structural driver of differential safety net enrollment.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION II ══ -->
+  <div class="analysis-section fade-in" id="s2">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section II</span>
+      <span class="sec-method">USDA Food and Nutrition Service · Census CPS ASEC · State-Level SNAP Data</span>
+    </div>
+    <h2 class="sec-title">Food Assistance — <em>SNAP Enrollment and Overrepresentation</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>The Supplemental Nutrition Assistance Program (SNAP) is the largest means-tested benefit program in the United States by enrollment, covering approximately 42 million participants in a typical year. Its racial and ethnic composition reveals a sharp divergence between population share and program share. White non-Hispanic households account for <strong>59.3%</strong> of the U.S. population but only <strong>36.8%</strong> of SNAP participants — an underrepresentation ratio of 0.62. Black or African American households represent <strong>13.6%</strong> of the population but <strong>25.6%</strong> of SNAP participants — an overrepresentation ratio of <strong>1.88</strong>. American Indian/Alaska Native households are overrepresented at a ratio of <strong>1.85</strong>.</p>
+      <p>The SNAP overrepresentation chart (Fig 9) maps these ratios visually: any bar exceeding 1.0 indicates that a group receives a larger share of SNAP benefits than its population share would predict. The magnitude for Black and AIAN households is not marginal — it reflects systematically higher rates of poverty, lower median income, and higher unemployment rates that create eligibility. A benefit takeup rate chart (Fig 10) adds the necessary nuance: even conditional on eligibility, Hispanic households have historically had lower SNAP takeup rates than Black households, driven by documentation concerns, language barriers, and stigma — meaning the observed enrollment gaps understate the underlying need gap for Hispanic families.</p>
+      <p>SNAP characteristics data reveals further texture. Hispanic SNAP households have the largest average household size (2.9 persons) and the highest average monthly benefit ($228), consistent with larger family units with more dependents. Black SNAP households have the highest share of recipients with children (50.2%) and disabled members (31.2%). White SNAP households have the highest elderly share (22.4%), consistent with rural white elderly poverty concentrated in Appalachia and the Deep South. The state geographic distribution (Fig 12) shows SNAP receipt rates exceeding 15% in Mississippi, Louisiana, New Mexico, and West Virginia — states combining high poverty with limited labor market opportunity.</p>
+    </div>
+
+    <div class="data-table-wrap fade-in">
+      <div class="data-table-title">SNAP Enrollment vs. Population Share by Race/Ethnicity</div>
+      <table class="styled">
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>SNAP Share</th>
+            <th>Population Share</th>
+            <th>Overrepresentation Ratio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>White (non-Hispanic)</td><td>36.8%</td><td>59.3%</td><td class="val-lo">0.62</td></tr>
+          <tr><td>Black or African American</td><td class="val-hi">25.6%</td><td>13.6%</td><td class="val-red">1.88</td></tr>
+          <tr><td>Hispanic or Latino</td><td>19.1%</td><td>18.9%</td><td>1.01</td></tr>
+          <tr><td>Asian / Pacific Islander</td><td>3.1%</td><td>6.2%</td><td class="val-lo">0.50</td></tr>
+          <tr><td>American Indian / Alaska Native</td><td>2.4%</td><td>1.3%</td><td class="val-red">1.85</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="figure-row fade-in">
+      <div class="figure-panel">
+        <img src="fig07_snap_trend.png" alt="SNAP enrollment trend over time" />
+        <div class="figure-caption">Fig 7 — SNAP enrollment trend, 2000–2023</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig08_snap_race_share.png" alt="SNAP enrollment share by race" />
+        <div class="figure-caption">Fig 8 — SNAP enrollment share vs. population share by race</div>
+      </div>
+    </div>
+
+    <div class="figure-row fade-in">
+      <div class="figure-panel">
+        <img src="fig09_snap_overrep.png" alt="SNAP overrepresentation ratios" />
+        <div class="figure-caption">Fig 9 — SNAP overrepresentation ratios by race/ethnicity</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig10_snap_takeup.png" alt="SNAP takeup rates by race" />
+        <div class="figure-caption">Fig 10 — SNAP takeup rates among eligible households</div>
+      </div>
+    </div>
+
+    <div class="figure-row fade-in">
+      <div class="figure-panel">
+        <img src="fig11_snap_characteristics.png" alt="SNAP household characteristics by race" />
+        <div class="figure-caption">Fig 11 — SNAP household characteristics by race/ethnicity</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig12_state_snap_rates.png" alt="State-level SNAP receipt rates" />
+        <div class="figure-caption">Fig 12 — State-level SNAP receipt rates</div>
+      </div>
+    </div>
+
+    <div class="finding fade-in">
+      <span class="finding-label">Key Finding</span>
+      <p>Black households are enrolled in SNAP at 1.88× their population share; American Indian/Alaska Native households at 1.85×. Hispanic families — despite higher poverty rates than Asian households — show lower-than-proportional SNAP takeup, suggesting a substantial unmet need gap driven by access barriers rather than lower eligibility.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION III ══ -->
+  <div class="analysis-section fade-in" id="s3">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section III</span>
+      <span class="sec-method">Census CPS ASEC · HHS/ACF · SSA · HUD · 2023 Program Data</span>
+    </div>
+    <h2 class="sec-title">The Full Transfer Picture — <em>UI, Medicaid, TANF, Housing, and Income</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>Beyond SNAP, the U.S. safety net encompasses unemployment insurance (UI), Medicaid, Temporary Assistance for Needy Families (TANF), Supplemental Security Income (SSI), and federal housing assistance. When these programs are examined together, a consistent pattern emerges: programs designed as temporary bridges — UI, TANF — exhibit the highest racial differentials, while universal programs — Medicaid — show lower but still meaningful disparities.</p>
+      <p>Unemployment insurance reveals a paradox. Despite higher unemployment rates, Black workers have a lower UI recipiency rate (22.4%) than white workers (29.5%). The replacement rate — weekly benefit as a percentage of prior wages — is also lower for Black workers (38.5%) than white workers (44.2%). This occurs because UI benefit formulas are tied to prior wages, and the wage gap means lower absolute benefits; additionally, more Black workers are in jobs with irregular hours, short tenure, or contractor status that may not qualify for UI. American Indian/Alaska Native workers have the lowest UI recipiency (19.8%) and lowest average weekly benefit ($298) of any tracked group.</p>
+      <p>Medicaid enrollment shows overrepresentation for Black (1.38×) and Hispanic (1.50×) households relative to population share, driven by lower employer-sponsored insurance coverage in lower-wage occupations. TANF — the cash welfare program — shows the starkest racial concentration: Black families represent <strong>37.7%</strong> of TANF caseloads despite being 13.6% of the population, an overrepresentation ratio of <strong>2.77</strong>. Federal housing assistance (Section 8 vouchers, public housing) shows the most extreme disparity: Black households account for <strong>44.8%</strong> of housing assistance recipients against a 13.6% population share — a ratio of <strong>3.29</strong>.</p>
+      <p>Transfer income as a share of household income captures the aggregate dependency picture. For Black households, government transfers (UI, SNAP, TANF, SSI, Medicaid imputed, housing subsidies) average <strong>$9,180 annually</strong>, representing <strong>18.8%</strong> of median household income. For white non-Hispanic households, transfers average $5,420 — <strong>7.2%</strong> of median income. For Asian households — with the highest median income of any group ($104,780) — transfers average $3,850, representing just 3.7% of income. The stacked bar chart (Fig 15) disaggregates these transfers by program type, revealing that Medicaid and housing are the largest components for Black and AIAN households, while UI and Social Security retirement (not means-tested) dominate for white households.</p>
+    </div>
+
+    <div class="eq-block fade-in">
+      <span class="eq-label">Transfer Dependency Measure</span>
+      $$\text{Transfer Share}_i = \frac{\sum_p T_{ip}}{\text{Median HH Income}_i}$$
+      <p style="font-family:'Jost',sans-serif;font-size:.82rem;color:var(--slate);margin-top:.7rem;">
+        Where $T_{ip}$ is mean annual transfer income from program $p$ for racial group $i$. Programs $p$ include UI, SNAP, TANF, SSI, Medicaid (imputed), and housing assistance.
+      </p>
+    </div>
+
+    <div class="data-table-wrap fade-in">
+      <div class="data-table-title">Government Transfer Income by Race/Ethnicity</div>
+      <table class="styled">
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>Mean Transfer Income</th>
+            <th>Median HH Income</th>
+            <th>Transfers as % of Income</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>White (non-Hispanic)</td><td>$5,420</td><td>$74,990</td><td>7.2%</td></tr>
+          <tr><td>Black or African American</td><td class="val-red">$9,180</td><td>$48,710</td><td class="val-red">18.8%</td></tr>
+          <tr><td>Hispanic or Latino</td><td>$7,340</td><td>$57,980</td><td>12.7%</td></tr>
+          <tr><td>Asian</td><td class="val-lo">$3,850</td><td class="val-hi">$104,780</td><td class="val-lo">3.7%</td></tr>
+          <tr><td>American Indian / Alaska Native</td><td class="val-red">$8,920</td><td>$48,710</td><td class="val-red">18.3%</td></tr>
+          <tr><td>All races</td><td>$6,250</td><td>$74,580</td><td>8.4%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="figure-row fade-in">
+      <div class="figure-panel">
+        <img src="fig13_ui_by_race.png" alt="UI recipiency and benefit levels by race" />
+        <div class="figure-caption">Fig 13 — UI recipiency rates and weekly benefits by race</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig14_overrep_all_programs.png" alt="Overrepresentation across all safety net programs" />
+        <div class="figure-caption">Fig 14 — Overrepresentation ratios across all federal programs</div>
+      </div>
+    </div>
+
+    <div class="figure-full fade-in">
+      <img src="fig15_transfer_stacked.png" alt="Stacked transfer income by program and race" />
+      <div class="figure-caption" style="padding:.7rem 1rem; border-top:1px solid var(--rule); text-align:center; font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.16em; text-transform:uppercase; color:var(--slate);">Fig 15 — Transfer income composition by program type and racial group</div>
+    </div>
+
+    <div class="figure-row fade-in">
+      <div class="figure-panel">
+        <img src="fig16_transfer_income.png" alt="Transfer income share of household income by race" />
+        <div class="figure-caption">Fig 16 — Government transfers as % of household income</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig17_tanf_housing.png" alt="TANF and housing assistance enrollment by race" />
+        <div class="figure-caption">Fig 17 — TANF and housing assistance overrepresentation</div>
+      </div>
+    </div>
+
+    <div class="data-table-wrap fade-in">
+      <div class="data-table-title">Program Overrepresentation by Race — Medicaid, TANF, Housing (2023)</div>
+      <table class="styled">
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>Medicaid Overrep.</th>
+            <th>TANF Overrep.</th>
+            <th>Housing Overrep.</th>
+            <th>UI Recipiency Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>White (non-Hispanic)</td><td class="val-lo">0.69</td><td class="val-lo">0.47</td><td class="val-lo">0.55</td><td>29.5%</td></tr>
+          <tr><td>Black or African American</td><td class="val-red">1.38</td><td class="val-red">2.77</td><td class="val-red">3.29</td><td class="val-lo">22.4%</td></tr>
+          <tr><td>Hispanic or Latino</td><td class="val-hi">1.50</td><td>1.13</td><td>0.75</td><td class="val-lo">18.2%</td></tr>
+          <tr><td>Asian / Pacific Islander</td><td class="val-lo">0.77</td><td class="val-lo">0.48</td><td class="val-lo">0.56</td><td class="val-hi">31.2%</td></tr>
+          <tr><td>American Indian / Alaska Native</td><td>1.23</td><td>1.85</td><td>1.15</td><td class="val-lo">19.8%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding fade-in">
+      <span class="finding-label">Key Finding</span>
+      <p>Black households are overrepresented in housing assistance at 3.29× their population share — the highest ratio of any program-group pairing in the analysis. Despite higher unemployment, Black workers have lower UI recipiency than white workers, because benefit formulas and eligibility rules are calibrated to wage histories that disadvantage lower-wage workers.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION IV ══ -->
+  <div class="analysis-section fade-in" id="s4">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section IV</span>
+      <span class="sec-method">Composite Index · Census ACS · Federal Reserve SCF · Historical Analysis</span>
+    </div>
+    <h2 class="sec-title">Dependency, Structure, and History — <em>Why the Gaps Persist</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>A composite safety net dependency index synthesizes the program-by-program analysis into a single measure across five dimensions: unemployment rate, share of households on SNAP, share on Medicaid, transfer income as a percentage of household income, and share receiving any government transfer. Each component is min-max normalized across groups and averaged. The result places <strong>American Indian/Alaska Native</strong> households at an index value of <strong>98.7</strong> (near the maximum), <strong>Black</strong> households at <strong>85.6</strong>, Hispanic households at <strong>55.4</strong>, white households at <strong>17.2</strong>, and Asian households at <strong>0.0</strong> (the minimum reference point). The radar chart (Fig 19) visualizes this across all five dimensions simultaneously, making clear that AIAN and Black households are not elevated on one or two dimensions but across the full profile.</p>
+      <p>The structural drivers table reveals why these patterns compound. Black households have a median wealth of <strong>$44,900</strong> — just 15.8 cents for every dollar of white median wealth ($285,000). Hispanic households have $61,600, representing 21.6 cents on the dollar. Wealth is the crucial buffer: households with financial assets can weather unemployment spells without SNAP enrollment, cover medical costs without Medicaid, and absorb rent shocks without housing assistance. When wealth is near zero, every income disruption becomes a program enrollment event. Asian households have median wealth above the white level ($320,200) and the lowest safety net dependency — a direct consequence.</p>
+      <p>Educational attainment and occupational composition explain additional variance. Among adults 25 and older, <strong>56.9%</strong> of Asian Americans hold a college degree versus <strong>35.5%</strong> of white, <strong>26.3%</strong> of Black, <strong>18.7%</strong> of Hispanic, and <strong>15.9%</strong> of AIAN adults. Professional and managerial occupation rates follow the same order: 52.4% for Asian, 42.3% for white, 31.1% for Black, 23.8% for Hispanic, and 25.6% for AIAN. Poverty rates for Black and Hispanic households both stand at <strong>17.1%</strong> — exactly double the white rate of 8.6%.</p>
+      <p>The policy timeline (Fig 23) contextualizes these disparities historically. The exclusion of agricultural and domestic workers — occupations disproportionately held by Black and Hispanic workers — from the original Social Security Act (1935) and the National Labor Relations Act (1935) denied decades of pension and labor rights accumulation. FHA redlining (1934–1968) systematically denied mortgage access to Black neighborhoods, foreclosing the primary wealth-building mechanism of the postwar middle class. The War on Poverty programs of the 1960s expanded the safety net but also, via the 1996 welfare reform's time limits and work requirements, restricted the cash assistance that had served as the floor for the poorest Black and AIAN households. These structural and historical factors are not background context — they are the mechanism. The disparities in the safety net today are the compounded consequence of compounded policy exclusions over decades.</p>
+    </div>
+
+    <div class="figure-row fade-in">
+      <div class="figure-panel">
+        <img src="fig18_dependency_index.png" alt="Composite safety net dependency index by race" />
+        <div class="figure-caption">Fig 18 — Composite safety net dependency index by race</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig19_radar_dependency.png" alt="Radar chart of dependency dimensions by race" />
+        <div class="figure-caption">Fig 19 — Dependency profile across five dimensions (radar)</div>
+      </div>
+    </div>
+
+    <div class="data-table-wrap fade-in">
+      <div class="data-table-title">Structural Drivers of Safety Net Dependency by Race/Ethnicity</div>
+      <table class="styled">
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>Median HH Income</th>
+            <th>Poverty Rate</th>
+            <th>% College Degree</th>
+            <th>% Professional Occ.</th>
+            <th>Homeownership Rate</th>
+            <th>Gini (Within-Group)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>White (non-Hispanic)</td><td>$75,000</td><td>8.6%</td><td>35.5%</td><td>42.3%</td><td>72.5%</td><td>0.458</td></tr>
+          <tr><td>Black or African American</td><td>$48,700</td><td class="val-red">17.1%</td><td>26.3%</td><td>31.1%</td><td class="val-lo">44.0%</td><td>0.488</td></tr>
+          <tr><td>Hispanic or Latino</td><td>$58,000</td><td class="val-red">17.1%</td><td class="val-lo">18.7%</td><td class="val-lo">23.8%</td><td>47.5%</td><td>0.471</td></tr>
+          <tr><td>Asian</td><td class="val-hi">$104,800</td><td>9.7%</td><td class="val-hi">56.9%</td><td class="val-hi">52.4%</td><td>60.9%</td><td class="val-lo">0.441</td></tr>
+          <tr><td>American Indian / Alaska Native</td><td>$48,700</td><td class="val-red">24.3%</td><td class="val-lo">15.9%</td><td>25.6%</td><td>51.7%</td><td class="val-red">0.497</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="figure-row fade-in">
+      <div class="figure-panel">
+        <img src="fig20_structural_drivers.png" alt="Structural drivers visualization" />
+        <div class="figure-caption">Fig 20 — Structural drivers of safety net enrollment</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig21_wealth_gap.png" alt="Racial wealth gap" />
+        <div class="figure-caption">Fig 21 — Median and mean wealth by race/ethnicity</div>
+      </div>
+    </div>
+
+    <div class="data-table-wrap fade-in">
+      <div class="data-table-title">Racial Wealth Gap (Federal Reserve Survey of Consumer Finances)</div>
+      <table class="styled">
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>Median Wealth</th>
+            <th>Mean Wealth</th>
+            <th>Wealth Gap Ratio (vs. White)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>White (non-Hispanic)</td><td class="val-hi">$285,000</td><td class="val-hi">$1,220,000</td><td>1.00</td></tr>
+          <tr><td>Black or African American</td><td class="val-red">$44,900</td><td>$212,000</td><td class="val-red">0.158</td></tr>
+          <tr><td>Hispanic or Latino</td><td>$61,600</td><td>$302,000</td><td class="val-red">0.216</td></tr>
+          <tr><td>Asian</td><td class="val-hi">$320,200</td><td>$1,030,000</td><td class="val-hi">1.124</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="figure-row fade-in">
+      <div class="figure-panel">
+        <img src="fig22_poverty_program_scatter.png" alt="Poverty rate vs program enrollment scatter" />
+        <div class="figure-caption">Fig 22 — Poverty rate vs. program enrollment by group</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig23_policy_timeline.png" alt="Policy timeline of safety net exclusions" />
+        <div class="figure-caption">Fig 23 — Historical policy timeline: inclusion and exclusion</div>
+      </div>
+    </div>
+
+    <div class="finding fade-in">
+      <span class="finding-label">Key Finding</span>
+      <p>Black households hold just 15.8 cents in median wealth for every dollar held by white households. American Indian/Alaska Native households carry the highest within-group Gini coefficient (0.497) and the highest poverty rate (24.3%) of any group — a combination of deep material deprivation and extreme internal inequality. The safety net catches what history built: compounded exclusions from asset-building programs over eight decades of federal policy.</p>
+    </div>
+  </div>
+
+  <!-- ══ METHODS ══ -->
+  <div id="methods" class="fade-in">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Methods</span>
+      <span class="sec-method">Data Sources · Analytical Approach · Limitations</span>
+    </div>
+    <h2 class="sec-title">Data Sources <em>and Methodology</em></h2>
+    <div class="sec-rule"></div>
+    <div class="sec-body">
+      <p><strong>Unemployment data</strong> come from the BLS Current Population Survey (CPS), monthly seasonally adjusted series, 2000–2023. Racial/ethnic categories follow BLS classifications. The Black–White ratio is computed as the ratio of seasonally adjusted monthly rates.</p>
+      <p><strong>SNAP data</strong> come from USDA Food and Nutrition Service administrative records and Census Bureau CPS ASEC microdata. Population shares use Census Bureau national estimates. Overrepresentation ratios are computed as (program share) ÷ (population share). Takeup rates are CBPP estimates based on eligible population modeling against CPS ASEC responses.</p>
+      <p><strong>Transfer program data</strong> (UI, Medicaid, TANF, SSI, housing) come from HHS/ACF annual caseload reports, Social Security Administration (SSI enrollment), and HUD annual public housing and voucher reports. All program enrollment shares are matched to CPS ASEC population denominators for comparability.</p>
+      <p><strong>Transfer income figures</strong> come from Census Bureau CPS ASEC variable-level extracts, which separate earned income, Social Security retirement, SSI, TANF, SNAP (imputed value), housing subsidy (imputed), and UI. Mean transfer income excludes Social Security retirement (not means-tested) to isolate safety net programs.</p>
+      <p><strong>Structural drivers</strong> (income, poverty, education, occupation, homeownership, Gini) come from Census Bureau American Community Survey 5-year estimates (2022 ACS). Wealth data come from the Federal Reserve Survey of Consumer Finances (2022 wave), which oversamples high-wealth households and is the gold standard for wealth measurement.</p>
+      <p><strong>Composite dependency index</strong> components are min-max normalized across the five racial/ethnic groups (Asian as min, AIAN as max for most components), then averaged equally. This is a descriptive ranking tool, not an absolute measure.</p>
+      <p><strong>Limitations:</strong> The "American Indian/Alaska Native" category has small CPS sample sizes that reduce precision. Hispanic takeup rates are likely understated due to undocumented population exclusion. The composite index weights all five components equally, which is arbitrary; alternative weights could reorder the middle groups. Historical exclusion analysis is descriptive, not causal — it is not possible to isolate the counterfactual effect of any single policy with this observational design.</p>
+    </div>
+  </div>
+
+  <!-- ══ REFERENCES ══ -->
+  <div id="references" class="fade-in">
+    <div class="sec-eyebrow">
+      <span class="sec-num">References</span>
+    </div>
+    <h2 class="sec-title"><em>Key Literature</em></h2>
+    <div class="sec-rule"></div>
+    <ul class="ref-list">
+      <li>Rothstein, R. (2017). <em>The Color of Law: A Forgotten History of How Our Government Segregated America.</em> Liveright Publishing. — FHA redlining and wealth exclusion.</li>
+      <li>Moffitt, R. A. (2015). The Deserving Poor, the Family, and the U.S. Welfare System. <em>Demography,</em> 52(3), 729–749.</li>
+      <li>Hoynes, H., & Schanzenbach, D. W. (2016). U.S. Food and Nutrition Programs. In <em>Economics of Means-Tested Transfer Programs</em> (Vol. 1). University of Chicago Press.</li>
+      <li>Chetty, R., Hendren, N., Jones, M. R., & Porter, S. R. (2020). Race and Economic Opportunity in the United States: An Intergenerational Perspective. <em>Quarterly Journal of Economics,</em> 135(2), 711–783.</li>
+      <li>Darity, W. A., & Mullen, A. K. (2020). <em>From Here to Equality: Reparations for Black Americans in the Twenty-First Century.</em> UNC Press.</li>
+      <li>Bitler, M., & Hoynes, H. (2016). The More Things Change, the More They Stay the Same? The Safety Net and Poverty in the Great Recession. <em>Journal of Labor Economics,</em> 34(S1), S403–S444.</li>
+      <li>Gould, E. (2020). <em>State of Working America Wages 2019.</em> Economic Policy Institute. Washington, DC.</li>
+      <li>Board of Governors of the Federal Reserve. (2023). <em>Changes in U.S. Family Finances: Evidence from the Survey of Consumer Finances, 2019–2022.</em> Federal Reserve Bulletin.</li>
+      <li>U.S. Department of Agriculture, Food and Nutrition Service. (2023). <em>Characteristics of SNAP Households: Fiscal Year 2022.</em></li>
+      <li>U.S. Department of Health and Human Services. (2023). <em>TANF Caseload Data.</em> HHS Office of Family Assistance.</li>
+    </ul>
+  </div>
+
+</div><!-- /proj-body -->
+
+<footer>
+  <span class="footer-logo">L. <em>Maharaj</em></span>
+  <p>© 2025 · Economics Research</p>
+  <ul class="footer-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../about.html">About</a></li>
+    <li><a href="../../outside-data.html">Outside Data</a></li>
+  </ul>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
