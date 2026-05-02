@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>L. Maharaj — Data Scientist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #0b0d14;
+      --deep:     #0e1119;
+      --surface:  #121520;
+      --card:     #161a27;
+      --rule:     #222840;
+      --gold:     #b89a5a;
+      --gold-lt:  #d4b97a;
+      --gold-dim: #7a6332;
+      --navy:     #1a2a4a;
+      --blue:     #2a4a8a;
+      --blue-mid: #3b6abf;
+      --blue-lt:  #6b96d6;
+      --slate:    #6b7a96;
+      --mist:     #a0aabf;
+      --cream:    #dde2ec;
+      --white:    #eef1f8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ink);
+      color: var(--cream);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* subtle noise texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 180px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6%;
+      height: 72px;
+      background: rgba(11, 13, 20, .92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .nav-logo {
+      font-family: 'Cinzel', serif;
+      font-size: .95rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-logo em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.8rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Cinzel', serif;
+      font-size: .68rem;
+      font-weight: 400;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--slate);
+      text-decoration: none;
+      transition: color .25s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width .3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--cream); }
+    .nav-links a:hover::after,
+    .nav-links a.active::after { width: 100%; }
+
+    .nav-cta {
+      border: 1px solid var(--gold-dim) !important;
+      color: var(--gold-lt) !important;
+      padding: .38rem 1.2rem;
+      letter-spacing: .22em !important;
+      transition: background .25s, color .25s, border-color .25s !important;
+    }
+
+    .nav-cta::after { display: none !important; }
+    .nav-cta:hover {
+      background: rgba(184,154,90,.1) !important;
+      border-color: var(--gold) !important;
+      color: var(--gold-lt) !important;
+    }
+
+    /* ── THIN RULE UTILITY ── */
+    .rule {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      color: var(--gold-dim);
+      font-family: 'Cinzel', serif;
+      font-size: .6rem;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      margin-bottom: 1.6rem;
+    }
+
+    .rule::before,
+    .rule::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--rule));
+    }
+
+    .rule::after {
+      background: linear-gradient(90deg, var(--rule), transparent);
+    }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 100px 6% 80px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    /* layered overlay: heavy dark left → fades to reveal image on right, plus bottom fade */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right,  rgba(11,13,20,.97) 0%, rgba(11,13,20,.88) 38%, rgba(11,13,20,.45) 65%, rgba(11,13,20,.15) 100%),
+        linear-gradient(to bottom, rgba(11,13,20,.25) 0%, transparent 30%, transparent 65%, rgba(11,13,20,.9) 100%);
+    }
+
+    .hero-left { position: relative; z-index: 1; max-width: 580px; }
+
+    .hero-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: .65rem;
+      font-weight: 500;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 36px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.2rem, 5.5vw, 5rem);
+      font-weight: 300;
+      line-height: 1.08;
+      letter-spacing: -.01em;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+
+    h1 .italic-line {
+      font-style: italic;
+      color: var(--blue-lt);
+      font-weight: 300;
+    }
+
+    .hero-divider {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin: 1.6rem 0;
+    }
+
+    .hero-sub {
+      font-family: 'Jost', sans-serif;
+      font-size: .97rem;
+      font-weight: 300;
+      color: var(--mist);
+      line-height: 1.85;
+      max-width: 440px;
+      margin-bottom: 2.4rem;
+    }
+
+    .hero-sub strong {
+      color: var(--cream);
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .btn-gold {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold-lt);
+      font-family: 'Cinzel', serif;
+      font-size: .65rem;
+      font-weight: 500;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      padding: .85rem 1.8rem;
+      text-decoration: none;
+      transition: background .25s, color .25s, box-shadow .25s;
+    }
+
+    .btn-gold:hover {
+      background: rgba(184,154,90,.12);
+      color: var(--white);
+      box-shadow: 0 0 24px rgba(184,154,90,.12);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      background: transparent;
+      border: 1px solid var(--rule);
+      color: var(--slate);
+      font-family: 'Cinzel', serif;
+      font-size: .65rem;
+      font-weight: 400;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      padding: .85rem 1.8rem;
+      text-decoration: none;
+      transition: border-color .25s, color .25s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--slate);
+      color: var(--cream);
+    }
+
+    .hero-social {
+      display: flex;
+      gap: .8rem;
+      margin-top: 1.2rem;
+    }
+
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      border: 1px solid var(--rule);
+      background: transparent;
+      color: var(--slate);
+      font-family: 'Cinzel', serif;
+      font-size: .62rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      padding: .5rem 1rem;
+      text-decoration: none;
+      transition: border-color .25s, color .25s, box-shadow .25s;
+    }
+
+    .social-btn:hover {
+      border-color: var(--gold-dim);
+      color: var(--gold-lt);
+      box-shadow: 0 0 14px rgba(184,154,90,.1);
+    }
+
+    /* ── HERO RIGHT — MONOGRAM PANEL ── */
+    .hero-right {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 420px;
+    }
+
+    .monogram-ring {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ring-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      animation: rotate-ring 28s linear infinite;
+    }
+
+    @keyframes rotate-ring { to { transform: rotate(360deg); } }
+
+    .ring-svg-inner {
+      position: absolute;
+      inset: 24px;
+      width: calc(100% - 48px);
+      height: calc(100% - 48px);
+      animation: rotate-ring 18s linear infinite reverse;
+    }
+
+    .monogram-core {
+      width: 200px;
+      height: 200px;
+      border: 1px solid rgba(184,154,90,.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(22, 26, 39, .8);
+      backdrop-filter: blur(8px);
+      position: relative;
+    }
+
+    .monogram-core::before, .monogram-core::after {
+      content: '';
+      position: absolute;
+      width: 18px; height: 18px;
+      border-color: var(--gold-dim);
+      border-style: solid;
+    }
+    .monogram-core::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+    .monogram-core::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+    .mono-initials {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      font-weight: 300;
+      letter-spacing: .1em;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .mono-initials em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    .mono-title {
+      font-family: 'Cinzel', serif;
+      font-size: .55rem;
+      letter-spacing: .28em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-top: .6rem;
+    }
+
+    /* ── STATS ── */
+    #stats {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .stat-item {
+      padding: 2.2rem 1.5rem;
+      text-align: center;
+      border-right: 1px solid var(--rule);
+      background: var(--deep);
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-roman {
+      font-family: 'Cinzel', serif;
+      font-size: .55rem;
+      letter-spacing: .28em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: .5rem;
+    }
+
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: .35rem;
+    }
+
+    .stat-rule {
+      width: 28px;
+      height: 1px;
+      background: var(--gold-dim);
+      margin: .5rem auto;
+    }
+
+    .stat-label {
+      font-family: 'Cinzel', serif;
+      font-size: .58rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--slate);
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 96px 6%;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-roman {
+      font-family: 'Cinzel', serif;
+      font-size: .6rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .8rem;
+      display: block;
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3.2vw, 3rem);
+      font-weight: 300;
+      letter-spacing: .01em;
+      color: var(--white);
+      margin-bottom: .6rem;
+    }
+
+    h2 em {
+      font-style: italic;
+      color: var(--blue-lt);
+    }
+
+    .section-sub {
+      font-size: .93rem;
+      font-weight: 300;
+      color: var(--mist);
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .8rem;
+      color: var(--gold-dim);
+      margin: 1.2rem 0;
+      font-size: .8rem;
+    }
+
+    .ornament::before, .ornament::after {
+      content: '';
+      width: 48px;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    /* ── SPEC CARDS ── */
+    .specialty-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1px;
+      max-width: 1080px;
+      margin: 0 auto;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+
+    .spec-card {
+      background: var(--card);
+      padding: 2.4rem 2rem;
+      position: relative;
+      transition: background .3s;
+    }
+
+    .spec-card:hover { background: #1a1f30; }
+
+    .spec-symbol {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.4rem;
+      opacity: .18;
+      transition: opacity .3s;
+      pointer-events: none;
+    }
+
+    .spec-card:hover .spec-symbol { opacity: .38; }
+
+    .spec-label {
+      font-family: 'Cinzel', serif;
+      font-size: .55rem;
+      letter-spacing: .28em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+    }
+
+    .spec-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: .8rem;
+      letter-spacing: .01em;
+    }
+
+    .spec-divider {
+      width: 32px;
+      height: 1px;
+      background: var(--gold-dim);
+      margin-bottom: .9rem;
+    }
+
+    .spec-card p {
+      font-size: .88rem;
+      font-weight: 300;
+      color: var(--mist);
+      line-height: 1.75;
+    }
+
+    /* ── TOOLS ── */
+    #tools { background: var(--deep); }
+
+    .tools-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .5rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .tool-chip {
+      display: inline-block;
+      border: 1px solid var(--rule);
+      color: var(--mist);
+      font-family: 'Cinzel', serif;
+      font-size: .58rem;
+      font-weight: 400;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      padding: .42rem 1rem;
+      background: var(--card);
+      transition: border-color .25s, color .25s;
+    }
+
+    .tool-chip:hover {
+      border-color: var(--gold-dim);
+      color: var(--gold-lt);
+    }
+
+    /* ── FEATURED PROJECT ── */
+    .project-frame {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--rule);
+    }
+
+    .project-info {
+      padding: 3rem 2.8rem;
+      border-right: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .project-type {
+      font-family: 'Cinzel', serif;
+      font-size: .6rem;
+      letter-spacing: .28em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .project-info h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+
+    .project-info p {
+      font-size: .9rem;
+      font-weight: 300;
+      color: var(--mist);
+      line-height: 1.8;
+      margin-bottom: 1.6rem;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-bottom: 2rem;
+    }
+
+    .tag {
+      border: 1px solid var(--rule);
+      color: var(--slate);
+      font-family: 'Cinzel', serif;
+      font-size: .55rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: .25rem .7rem;
+    }
+
+    /* Chart panel */
+    .project-visual {
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem;
+      min-height: 300px;
+      position: relative;
+    }
+
+    .chart-wrap { width: 100%; max-width: 260px; }
+
+    .chart-label {
+      font-family: 'Cinzel', serif;
+      font-size: .55rem;
+      letter-spacing: .22em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 130px;
+      border-bottom: 1px solid var(--rule);
+      padding: 0 4px;
+    }
+
+    .c-bar {
+      flex: 1;
+      background: linear-gradient(to top, var(--blue) 0%, var(--blue-mid) 70%);
+      opacity: .7;
+      transform-origin: bottom;
+      animation: rise .9s ease-out forwards;
+      transform: scaleY(0);
+    }
+
+    .c-bar:nth-child(4) {
+      background: linear-gradient(to top, var(--gold-dim), var(--gold));
+      opacity: .8;
+    }
+
+    @keyframes rise { to { transform: scaleY(1); } }
+    .c-bar:nth-child(1) { height:52%; animation-delay:.1s; }
+    .c-bar:nth-child(2) { height:76%; animation-delay:.18s; }
+    .c-bar:nth-child(3) { height:58%; animation-delay:.26s; }
+    .c-bar:nth-child(4) { height:91%; animation-delay:.34s; }
+    .c-bar:nth-child(5) { height:67%; animation-delay:.42s; }
+    .c-bar:nth-child(6) { height:82%; animation-delay:.5s; }
+    .c-bar:nth-child(7) { height:48%; animation-delay:.58s; }
+
+    .chart-footnote {
+      font-family: 'Cinzel', serif;
+      font-size: .52rem;
+      letter-spacing: .16em;
+      color: var(--slate);
+      text-align: center;
+      margin-top: .7rem;
+    }
+
+    /* ── PAGE CARDS ── */
+    #navigate { background: var(--deep); }
+
+    .pages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      max-width: 960px;
+      margin: 0 auto;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+
+    .page-card {
+      background: var(--card);
+      padding: 2.2rem 2rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      transition: background .3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-card:hover { background: #1a1f30; }
+
+    .page-card .pg-num {
+      font-family: 'Cinzel', serif;
+      font-size: .55rem;
+      letter-spacing: .28em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: .3rem;
+    }
+
+    .page-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--white);
+      letter-spacing: .02em;
+    }
+
+    .page-card .pg-rule {
+      width: 24px;
+      height: 1px;
+      background: var(--gold-dim);
+      margin: .3rem 0;
+      transition: width .3s;
+    }
+
+    .page-card:hover .pg-rule { width: 48px; }
+
+    .page-card p {
+      font-size: .85rem;
+      font-weight: 300;
+      color: var(--mist);
+      line-height: 1.65;
+    }
+
+    .page-card .pg-arrow {
+      font-family: 'Cinzel', serif;
+      font-size: .58rem;
+      letter-spacing: .2em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-top: .6rem;
+      transition: color .25s, letter-spacing .25s;
+    }
+
+    .page-card:hover .pg-arrow {
+      color: var(--gold-lt);
+      letter-spacing: .3em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      background: var(--ink);
+      border-top: 1px solid var(--rule);
+      padding: 2.4rem 6%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: 'Cinzel', serif;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--cream);
+    }
+
+    .footer-logo em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    footer p {
+      font-family: 'Cinzel', serif;
+      font-size: .58rem;
+      letter-spacing: .18em;
+      color: var(--slate);
+      text-transform: uppercase;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-family: 'Cinzel', serif;
+      font-size: .6rem;
+      letter-spacing: .2em;
+      color: var(--slate);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color .25s;
+    }
+
+    .footer-links a:hover { color: var(--gold-lt); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      #hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      #stats { grid-template-columns: repeat(2, 1fr); }
+      .project-frame { grid-template-columns: 1fr; }
+      .project-info { border-right: none; border-bottom: 1px solid var(--rule); }
+      .pages-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+
+      /* darken the hero overlay on mobile so text is fully readable */
+      .hero-bg::after {
+        background:
+          rgba(11,13,20,.88),
+          linear-gradient(to bottom, rgba(11,13,20,.3) 0%, transparent 30%, transparent 70%, rgba(11,13,20,.95) 100%);
+      }
+
+      .hero-left {
+        max-width: 100%;
+        padding: 0 .5rem;
+      }
+
+      h1 { font-size: clamp(2rem, 8vw, 3rem); }
+
+      .hero-sub { font-size: .9rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">L. <em>Maharaj</em></a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="about.html">About Me</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="outside-data.html" class="nav-cta">Outside Data</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <img src="index_photo.PNG" alt="L. Maharaj" />
+  </div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">Data Scientist &amp; Economist</div>
+
+    <h1>
+      Data Scientist<br />
+      <span class="italic-line">/ Economist</span>
+    </h1>
+
+    <div class="hero-divider"></div>
+
+    <p class="hero-sub">
+      <strong>L. Maharaj</strong> specializes in the quantitative study of
+      <strong>economic</strong> and <strong>sociological</strong> systems.
+      Building models that reveal the patterns behind economic and social
+      changes of the past and present. The captivation of both sociological
+      and economic storylines displays how the world worked previously,
+      how it works now, and a glimpse of the future. All projects and research
+      presented here are <strong>entirely personal and independent</strong> —
+      unaffiliated with and not representative of any institution, agency, or employer.
+    </p>
+
+    <div class="hero-actions">
+      <a href="projects.html" class="btn-gold">
+        View Projects
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="about.html" class="btn-ghost">About Me</a>
+    </div>
+    <div class="hero-social">
+      <a href="https://www.linkedin.com/in/lamaemaharaj/" target="_blank" rel="noopener" class="social-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/shaanjahan" target="_blank" rel="noopener" class="social-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- SPECIALIZATIONS -->
+<section id="specializations">
+  <div class="section-header">
+    <span class="section-roman">I. Expertise</span>
+    <h2>Where Data Meets <em>Society</em></h2>
+    <div class="ornament">✦</div>
+    <p class="section-sub">
+      Work positioned at the intersection of quantitative methods and social inquiry —
+      finding structure in systems that govern everyday life.
+    </p>
+  </div>
+  <div class="specialty-grid">
+    <!-- Economics: rising bar chart (gold) -->
+    <a class="spec-card" href="projects/tic/index.html" style="text-decoration:none;color:inherit;display:block;">
+      <div class="spec-symbol"><svg width="52" height="44" viewBox="0 0 52 44" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="28" width="8" height="14" fill="#b89a5a"/><rect x="14" y="20" width="8" height="22" fill="#b89a5a"/><rect x="26" y="12" width="8" height="30" fill="#b89a5a"/><rect x="38" y="4" width="8" height="38" fill="#b89a5a"/><polyline points="6,28 18,20 30,12 42,4" stroke="#d4b97a" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></div>
+      <div class="spec-label">Economics</div>
+      <h3>Foreign Holdings of U.S. Securities from a Structural Standpoint</h3>
+      <div class="spec-divider"></div>
+      <p>A structural analysis of international holdings of U.S. securities, exploring the implications for capital flows and financial stability.</p>
+    </a>
+    <a class="spec-card" href="projects/gdp-gdi/index.html" style="text-decoration:none;color:inherit;display:block;">
+      <div class="spec-symbol"><svg width="52" height="44" viewBox="0 0 52 44" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="28" width="8" height="14" fill="#b89a5a"/><rect x="14" y="20" width="8" height="22" fill="#b89a5a"/><rect x="26" y="12" width="8" height="30" fill="#b89a5a"/><rect x="38" y="4" width="8" height="38" fill="#b89a5a"/><polyline points="6,28 18,20 30,12 42,4" stroke="#d4b97a" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></div>
+      <div class="spec-label">Economics</div>
+      <h3>Optimal Weight GDP GDI Project</h3>
+      <div class="spec-divider"></div>
+      <p>An examination of optimally weighted measures of GDP and GDI to produce a more accurate composite indicator of economic output.</p>
+    </a>
+    <a class="spec-card" href="projects/oil-breaks/index.html" style="text-decoration:none;color:inherit;display:block;">
+      <div class="spec-symbol"><svg width="52" height="44" viewBox="0 0 52 44" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="2,38 10,22 18,30 26,8 34,26 42,14 50,20" stroke="#b89a5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="18" y1="4" x2="18" y2="40" stroke="#7a6332" stroke-width="1" stroke-dasharray="3,3"/><line x1="34" y1="4" x2="34" y2="40" stroke="#7a6332" stroke-width="1" stroke-dasharray="3,3"/><circle cx="18" cy="30" r="3" fill="#d4b97a"/><circle cx="34" cy="26" r="3" fill="#d4b97a"/></svg></div>
+      <div class="spec-label">Economics</div>
+      <h3>Structural Breaks in Global Oil Prices</h3>
+      <div class="spec-divider"></div>
+      <p>Pinpointing regime shifts in WTI and Brent crude from geopolitical and macroeconomic shocks using the Bai-Perron multiple structural change framework, 1990–2024.</p>
+    </a>
+    <!-- Sociology: network nodes (blue) -->
+    <a class="spec-card" href="projects/hindu-profile/index.html" style="text-decoration:none;color:inherit;display:block;">
+      <div class="spec-symbol"><svg width="52" height="44" viewBox="0 0 52 44" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="26" cy="22" r="5" fill="#3b6abf"/><circle cx="8" cy="8" r="4" fill="#3b6abf" opacity=".8"/><circle cx="44" cy="8" r="4" fill="#3b6abf" opacity=".8"/><circle cx="8" cy="36" r="4" fill="#3b6abf" opacity=".8"/><circle cx="44" cy="36" r="4" fill="#3b6abf" opacity=".8"/><line x1="26" y1="22" x2="8" y2="8" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="26" y1="22" x2="44" y2="8" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="26" y1="22" x2="8" y2="36" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="26" y1="22" x2="44" y2="36" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="8" y1="8" x2="44" y2="8" stroke="#6b96d6" stroke-width=".8" opacity=".3"/><line x1="8" y1="36" x2="44" y2="36" stroke="#6b96d6" stroke-width=".8" opacity=".3"/></svg></div>
+      <div class="spec-label">Sociology</div>
+      <h3>The Hindu American Profile: Education, Income and Crime</h3>
+      <div class="spec-divider"></div>
+      <p>A data-driven sociological profile of Hindu Americans, examining attainment in education and income alongside statistical crime patterns within the community.</p>
+    </a>
+    <a class="spec-card" href="projects/ethnic-mobility/index.html" style="text-decoration:none;color:inherit;display:block;">
+      <div class="spec-symbol"><svg width="52" height="44" viewBox="0 0 52 44" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="26" cy="22" r="5" fill="#3b6abf"/><circle cx="8" cy="8" r="4" fill="#3b6abf" opacity=".8"/><circle cx="44" cy="8" r="4" fill="#3b6abf" opacity=".8"/><circle cx="8" cy="36" r="4" fill="#3b6abf" opacity=".8"/><circle cx="44" cy="36" r="4" fill="#3b6abf" opacity=".8"/><line x1="26" y1="22" x2="8" y2="8" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="26" y1="22" x2="44" y2="8" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="26" y1="22" x2="8" y2="36" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="26" y1="22" x2="44" y2="36" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="8" y1="8" x2="44" y2="8" stroke="#6b96d6" stroke-width=".8" opacity=".3"/><line x1="8" y1="36" x2="44" y2="36" stroke="#6b96d6" stroke-width=".8" opacity=".3"/></svg></div>
+      <div class="spec-label">Sociology</div>
+      <h3>Ethnic Mobility and Income Stratification in the U.S.</h3>
+      <div class="spec-divider"></div>
+      <p>A quantitative examination of ethnic group mobility across income brackets, tracing generational shifts in economic stratification across the United States.</p>
+    </a>
+    <!-- Tariffs: trade arrows (gold) -->
+    <a class="spec-card" href="projects/tariffs/index.html" style="text-decoration:none;color:inherit;display:block;">
+      <div class="spec-symbol"><svg width="54" height="44" viewBox="0 0 54 44" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="8" width="14" height="10" rx="1" stroke="#b89a5a" stroke-width="1.5" fill="none"/><rect x="38" y="26" width="14" height="10" rx="1" stroke="#b89a5a" stroke-width="1.5" fill="none"/><line x1="16" y1="13" x2="34" y2="13" stroke="#b89a5a" stroke-width="1.4"/><polyline points="30,9 34,13 30,17" stroke="#b89a5a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="38" y1="31" x2="20" y2="31" stroke="#7a6332" stroke-width="1.4"/><polyline points="24,27 20,31 24,35" stroke="#7a6332" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="27" y1="4" x2="27" y2="40" stroke="#d4b97a" stroke-width="1" stroke-dasharray="3,3" opacity=".5"/></svg></div>
+      <div class="spec-label">Economics</div>
+      <h3>Second Term Tariffs 2.0: What Does the Data Say?</h3>
+      <div class="spec-divider"></div>
+      <p>A data-driven analysis of Trump's second-term tariffs on U.S. trade with China, Mexico, and Canada — tracking import shifts, trade diversion, and price effects through October 2025.</p>
+    </a>
+    <!-- Anthropology: branching evolutionary tree (warm brown) -->
+    <a class="spec-card" href="projects/religion-modernization/index.html" style="text-decoration:none;color:inherit;display:block;">
+      <div class="spec-symbol"><svg width="48" height="52" viewBox="0 0 48 52" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="24" y1="50" x2="24" y2="30" stroke="#8a7040" stroke-width="2" stroke-linecap="round"/><line x1="24" y1="30" x2="10" y2="18" stroke="#8a7040" stroke-width="1.6" stroke-linecap="round"/><line x1="24" y1="30" x2="38" y2="18" stroke="#8a7040" stroke-width="1.6" stroke-linecap="round"/><line x1="24" y1="30" x2="24" y2="14" stroke="#8a7040" stroke-width="1.6" stroke-linecap="round"/><line x1="10" y1="18" x2="4" y2="8" stroke="#8a7040" stroke-width="1.1" stroke-linecap="round"/><line x1="10" y1="18" x2="14" y2="8" stroke="#8a7040" stroke-width="1.1" stroke-linecap="round"/><line x1="38" y1="18" x2="34" y2="8" stroke="#8a7040" stroke-width="1.1" stroke-linecap="round"/><line x1="38" y1="18" x2="44" y2="8" stroke="#8a7040" stroke-width="1.1" stroke-linecap="round"/><line x1="24" y1="14" x2="20" y2="4" stroke="#8a7040" stroke-width="1.1" stroke-linecap="round"/><line x1="24" y1="14" x2="28" y2="4" stroke="#8a7040" stroke-width="1.1" stroke-linecap="round"/><circle cx="4" cy="7" r="2" fill="#8a7040"/><circle cx="14" cy="7" r="2" fill="#8a7040"/><circle cx="20" cy="3" r="2" fill="#8a7040"/><circle cx="28" cy="3" r="2" fill="#8a7040"/><circle cx="34" cy="7" r="2" fill="#8a7040"/><circle cx="44" cy="7" r="2" fill="#8a7040"/></svg></div>
+      <div class="spec-label">Anthropology</div>
+      <h3>Religion, Modernization and Social Values</h3>
+      <div class="spec-divider"></div>
+      <p>An anthropological data study examining how modernization and urbanization influence religious participation and the evolution of social values across cultures.</p>
+    </a>
+    <!-- Political Science: scales of justice (steel blue) -->
+    <a class="spec-card" href="projects/economic-anxiety/index.html" style="text-decoration:none;color:inherit;display:block;">
+      <div class="spec-symbol"><svg width="52" height="50" viewBox="0 0 52 50" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="26" y1="4" x2="26" y2="46" stroke="#4a6890" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="14" x2="44" y2="14" stroke="#4a6890" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="14" x2="4" y2="28" stroke="#4a6890" stroke-width="1.1"/><line x1="8" y1="14" x2="12" y2="28" stroke="#4a6890" stroke-width="1.1"/><path d="M2,28 Q8,35 14,28" stroke="#4a6890" stroke-width="1.6" fill="none"/><line x1="44" y1="14" x2="40" y2="30" stroke="#4a6890" stroke-width="1.1"/><line x1="44" y1="14" x2="48" y2="30" stroke="#4a6890" stroke-width="1.1"/><path d="M38,30 Q44,37 50,30" stroke="#4a6890" stroke-width="1.6" fill="none"/><circle cx="26" cy="4" r="2.5" fill="#4a6890"/><line x1="20" y1="46" x2="32" y2="46" stroke="#4a6890" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+      <div class="spec-label">Political Science</div>
+      <h3>Economic Anxiety and Voting Behavior</h3>
+      <div class="spec-divider"></div>
+      <p>A political science analysis investigating how economic uncertainty and income anxiety correlate with shifts in voting patterns and electoral outcomes across regions.</p>
+    </a>
+    <!-- Criminology: magnifying glass (deep red) -->
+    <a class="spec-card" href="projects/hate-crime-geography/index.html" style="text-decoration:none;color:inherit;display:block;">
+      <div class="spec-symbol"><svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="14" stroke="#8a3838" stroke-width="1.8"/><circle cx="20" cy="20" r="7" stroke="#8a3838" stroke-width=".8" opacity=".45"/><line x1="20" y1="11" x2="20" y2="29" stroke="#8a3838" stroke-width=".8" opacity=".4"/><line x1="11" y1="20" x2="29" y2="20" stroke="#8a3838" stroke-width=".8" opacity=".4"/><line x1="30" y1="30" x2="46" y2="46" stroke="#8a3838" stroke-width="2.8" stroke-linecap="round"/></svg></div>
+      <div class="spec-label">Criminology</div>
+      <h3>Hate Crime Geography</h3>
+      <div class="spec-divider"></div>
+      <p>A geographic and statistical mapping of hate crime incidence across the United States, identifying spatial patterns and correlations with socioeconomic and political variables.</p>
+    </a>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools">
+  <div class="section-header">
+    <span class="section-roman">II. Toolkit</span>
+    <h2>Stack &amp; <em>Frameworks</em></h2>
+    <div class="ornament">✦</div>
+    <p class="section-sub">A rigorous technical stack built for reproducible, peer-grade analysis.</p>
+  </div>
+  <div class="tools-grid">
+    <span class="tool-chip">Python</span>
+    <span class="tool-chip">R</span>
+    <span class="tool-chip">SQL</span>
+    <span class="tool-chip">Pandas</span>
+    <span class="tool-chip">Scikit-Learn</span>
+    <span class="tool-chip">TensorFlow</span>
+    <span class="tool-chip">Stata</span>
+    <span class="tool-chip">SPSS</span>
+    <span class="tool-chip">Tableau</span>
+    <span class="tool-chip">Power BI</span>
+    <span class="tool-chip">Jupyter</span>
+    <span class="tool-chip">Git</span>
+    <span class="tool-chip">Apache Spark</span>
+    <span class="tool-chip">dbt</span>
+    <span class="tool-chip">NLTK / spaCy</span>
+  </div>
+</section>
+
+<!-- FEATURED PROJECT -->
+<section id="work">
+  <div class="section-header">
+    <span class="section-roman">III. Featured Work</span>
+    <h2>Recent <em>Research</em></h2>
+    <div class="ornament">✦</div>
+    <p class="section-sub">A snapshot of ongoing analysis — full project write-ups available in Projects.</p>
+  </div>
+  <div class="project-frame">
+    <div class="project-info">
+      <div class="project-type">Economics · Labor Markets</div>
+      <h3>Wage Divergence &amp; Structural Unemployment in Post-Pandemic Economies</h3>
+      <p>A multi-country regression study examining how remote work adoption reshaped wage distributions across income quintiles between 2020 and 2024.</p>
+      <div class="project-tags">
+        <span class="tag">Python</span>
+        <span class="tag">Panel Data</span>
+        <span class="tag">OLS / Fixed Effects</span>
+        <span class="tag">OECD Dataset</span>
+      </div>
+      <a href="projects.html" class="btn-ghost" style="align-self:flex-start">
+        All Projects
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="project-visual">
+      <div class="chart-wrap">
+        <div class="chart-label">Wage Index — 2020 to 2024</div>
+        <div class="chart-bars">
+          <div class="c-bar"></div>
+          <div class="c-bar"></div>
+          <div class="c-bar"></div>
+          <div class="c-bar"></div>
+          <div class="c-bar"></div>
+          <div class="c-bar"></div>
+          <div class="c-bar"></div>
+        </div>
+        <div class="chart-footnote">Quintile Distribution · OECD Data</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NAVIGATE -->
+<section id="navigate">
+  <div class="section-header">
+    <span class="section-roman">IV. Explore</span>
+    <h2>Dive <em>Deeper</em></h2>
+    <div class="ornament">✦</div>
+    <p class="section-sub">Navigate the site to explore background, research, and interests beyond the numbers.</p>
+  </div>
+  <div class="pages-grid">
+    <a href="about.html" class="page-card">
+      <div class="pg-num">Page I</div>
+      <h3>About Me</h3>
+      <div class="pg-rule"></div>
+      <p>Background, education, philosophy, and the path that led here.</p>
+      <div class="pg-arrow">Enter ›</div>
+    </a>
+    <a href="projects.html" class="page-card">
+      <div class="pg-num">Page II</div>
+      <h3>Projects</h3>
+      <div class="pg-rule"></div>
+      <p>Full case studies, datasets, and methodologies behind each analysis.</p>
+      <div class="pg-arrow">Enter ›</div>
+    </a>
+    <a href="outside-data.html" class="page-card">
+      <div class="pg-num">Page III</div>
+      <h3>Outside Data</h3>
+      <div class="pg-rule"></div>
+      <p>Interests and the life that exists beyond spreadsheets and models.</p>
+      <div class="pg-arrow">Enter ›</div>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">L. <em>Maharaj</em> — Data Scientist</div>
+  <p style="max-width:480px; line-height:1.7; font-size:.58rem; letter-spacing:.12em; font-style:italic; color:var(--slate);">
+    None of my personal projects reflect the views of any institution I work for. This work is entirely private and unattached to any of my employers.
+  </p>
+  <p>© 2026 L. Maharaj. All Rights Reserved.</p>
+  <ul class="footer-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="outside-data.html">Outside Data</a></li>
+  </ul>
+</footer>
+
+<script>
+  /* Subtle fade-in on scroll */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: .12 });
+
+  document.querySelectorAll('.spec-card, .page-card, .project-frame, .stat-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(18px)';
+    el.style.transition = 'opacity .6s ease, transform .6s ease';
+    observer.observe(el);
+  });
+
+  /* Nav border on scroll */
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.borderBottomColor = window.scrollY > 40
+      ? 'rgba(184,154,90,.2)'
+      : 'rgba(34,40,64,1)';
+  });
+</script>
+</body>
+</html>

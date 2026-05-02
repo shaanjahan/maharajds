@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Structural Breaks in Global Oil Prices — L. Maharaj</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #0b0d14;
+      --deep:     #0e1119;
+      --surface:  #121520;
+      --card:     #161a27;
+      --rule:     #222840;
+      --gold:     #b89a5a;
+      --gold-lt:  #d4b97a;
+      --gold-dim: #7a6332;
+      --blue:     #2a4a8a;
+      --blue-mid: #3b6abf;
+      --blue-lt:  #6b96d6;
+      --slate:    #6b7a96;
+      --mist:     #a0aabf;
+      --cream:    #dde2ec;
+      --white:    #eef1f8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ink);
+      color: var(--cream);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 6%; height: 72px;
+      background: rgba(11,13,20,.92); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--rule);
+      transition: border-color .3s;
+    }
+    .nav-logo { font-family:'Cinzel',serif; font-size:.95rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--white); text-decoration:none; }
+    .nav-logo em { font-style:normal; color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2.8rem; list-style:none; }
+    .nav-links a { font-family:'Cinzel',serif; font-size:.68rem; font-weight:400; letter-spacing:.2em; text-transform:uppercase; color:var(--slate); text-decoration:none; transition:color .25s; position:relative; }
+    .nav-links a::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:1px; background:var(--gold); transition:width .3s; }
+    .nav-links a:hover { color:var(--cream); }
+    .nav-links a:hover::after { width:100%; }
+    .nav-cta { border:1px solid var(--gold-dim) !important; color:var(--gold-lt) !important; padding:.38rem 1.2rem; }
+    .nav-cta::after { display:none !important; }
+    @media(max-width:760px){ .nav-links { display:none; } }
+
+    /* ── PROJECT HEADER ── */
+    #proj-header {
+      position: relative; z-index:1;
+      padding: 130px 6% 60px;
+      background: var(--deep);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .proj-breadcrumb {
+      font-family: 'Cinzel', serif;
+      font-size: .6rem; letter-spacing:.28em; text-transform:uppercase;
+      color: var(--gold-dim); margin-bottom: 1.4rem;
+      display: flex; align-items: center; gap:.6rem;
+    }
+    .proj-breadcrumb a { color:var(--gold-dim); text-decoration:none; transition:color .2s; }
+    .proj-breadcrumb a:hover { color:var(--gold-lt); }
+
+    .proj-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 300; line-height: 1.1;
+      color: var(--white); margin-bottom: 1rem;
+      max-width: 860px;
+    }
+    .proj-title em { font-style:italic; color:var(--blue-lt); }
+
+    .proj-meta {
+      display: flex; flex-wrap:wrap; gap:1.8rem;
+      margin-bottom: 1.8rem;
+    }
+    .proj-meta-item { display:flex; flex-direction:column; gap:.25rem; }
+    .proj-meta-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gold-dim); }
+    .proj-meta-val { font-family:'Jost',serif; font-size:.88rem; font-weight:400; color:var(--mist); }
+
+    .proj-abstract {
+      font-size:.97rem; font-weight:300; color:var(--mist);
+      max-width:820px; line-height:1.85;
+      padding: 1.4rem 0 1.4rem 1.4rem;
+      border-left: 2px solid var(--gold-dim);
+      margin-top:.8rem;
+    }
+
+    /* ── TOC STRIP ── */
+    .toc-strip {
+      position: relative; z-index:1;
+      background: var(--surface);
+      border-bottom: 1px solid var(--rule);
+      padding: 1rem 6%;
+      display: flex; flex-wrap:wrap; gap:.6rem 1.4rem; align-items:center;
+    }
+    .toc-label { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-dim); margin-right:.4rem; }
+    .toc-link { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; color:var(--slate); text-decoration:none; padding:.28rem .7rem; border:1px solid var(--rule); transition:border-color .2s, color .2s; }
+    .toc-link:hover { border-color:var(--gold-dim); color:var(--gold-lt); }
+
+    /* ── MAIN CONTENT ── */
+    .proj-body {
+      position:relative; z-index:1;
+      max-width: 1080px; margin: 0 auto;
+      padding: 0 6% 80px;
+    }
+
+    .analysis-section {
+      padding: 72px 0 56px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .analysis-section:last-of-type { border-bottom: none; }
+
+    .sec-eyebrow { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+    .sec-num { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); border:1px solid var(--gold-dim); padding:.25rem .7rem; }
+    .sec-method { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.2em; text-transform:uppercase; color:var(--slate); }
+
+    .sec-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.4rem,2.5vw,2rem); font-weight:400; color:var(--white); line-height:1.2; margin-bottom:1.2rem; }
+    .sec-title em { font-style:italic; color:var(--blue-lt); }
+
+    .sec-rule { width:48px; height:1px; background:linear-gradient(90deg,var(--gold),transparent); margin-bottom:1.6rem; }
+
+    .sec-body { font-size:.95rem; font-weight:300; color:var(--mist); line-height:1.9; max-width:760px; }
+    .sec-body p { margin-bottom:1rem; }
+    .sec-body strong { color:var(--cream); font-weight:400; }
+
+    /* Equation block */
+    .eq-block {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-left: 2px solid var(--gold-dim);
+      padding: 1.4rem 1.8rem;
+      margin: 1.6rem 0;
+      overflow-x:auto;
+    }
+    .eq-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-dim); margin-bottom:.7rem; display:block; }
+    .eq-block .MathJax, .eq-block mjx-container { color: var(--cream) !important; }
+
+    /* Data table */
+    .data-table-wrap { margin: 2rem 0; overflow-x: auto; }
+    .data-table-title { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:.8rem; display:flex; align-items:center; gap:.8rem; }
+    .data-table-title::before { content:''; width:4px; height:4px; background:var(--gold); transform:rotate(45deg); flex-shrink:0; }
+
+    table.styled { width:100%; border-collapse:collapse; font-family:'Jost',sans-serif; font-size:.85rem; }
+    table.styled thead tr { border-bottom: 1px solid var(--gold-dim); }
+    table.styled th { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold-dim); font-weight:400; padding:.65rem .9rem; text-align:left; }
+    table.styled td { padding:.6rem .9rem; color:var(--mist); font-weight:300; border-bottom:1px solid rgba(34,40,64,.6); }
+    table.styled tbody tr:hover td { background:rgba(184,154,90,.04); }
+    .val-hi { color:var(--cream); font-weight:400; }
+
+    /* Figures */
+    .figure-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2.4rem 0; align-items: start; }
+    .figure-panel { background: var(--card); border: 1px solid var(--rule); overflow: hidden; }
+    .figure-panel img { width: 100%; display: block; }
+    .figure-caption { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.16em; text-transform:uppercase; color:var(--slate); padding:.7rem 1rem; border-top:1px solid var(--rule); text-align:center; }
+    .figure-full { background: var(--card); border: 1px solid var(--rule); margin: 2.4rem 0; overflow: hidden; }
+    .figure-full img { width:100%; display:block; }
+
+    /* Finding callout */
+    .finding { background:rgba(184,154,90,.06); border:1px solid rgba(184,154,90,.18); border-left:3px solid var(--gold); padding:1.2rem 1.6rem; margin:1.8rem 0; }
+    .finding-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:.5rem; display:block; }
+    .finding p { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:400; color:var(--cream); line-height:1.6; font-style:italic; margin:0; }
+
+    /* Methods + references */
+    #methods, #references { padding: 72px 0; border-top: 1px solid var(--rule); }
+    .ref-list { list-style:none; display:flex; flex-direction:column; gap:.9rem; margin-top:1.4rem; }
+    .ref-list li { font-size:.88rem; font-weight:300; color:var(--mist); line-height:1.7; padding-left:1.2rem; position:relative; }
+    .ref-list li::before { content:'—'; position:absolute; left:0; color:var(--gold-dim); font-size:.75rem; }
+    .ref-list em { font-style:italic; color:var(--cream); }
+
+    /* ── FOOTER ── */
+    footer { position:relative; z-index:1; background:var(--surface); border-top:1px solid var(--rule); padding:2.4rem 6%; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; }
+    .footer-logo { font-family:'Cinzel',serif; font-size:.75rem; font-weight:600; letter-spacing:.28em; text-transform:uppercase; color:var(--cream); }
+    .footer-logo em { font-style:normal; color:var(--gold); }
+    footer p { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.18em; color:var(--slate); text-transform:uppercase; }
+    .footer-links { display:flex; gap:2rem; list-style:none; }
+    .footer-links a { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.2em; color:var(--slate); text-decoration:none; text-transform:uppercase; transition:color .25s; }
+    .footer-links a:hover { color:var(--gold-lt); }
+
+    @media(max-width:700px){ .figure-row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../../index.html" class="nav-logo">L. <em>Maharaj</em></a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../about.html">About Me</a></li>
+    <li><a href="../../index.html#specializations">Projects</a></li>
+    <li><a href="../../outside-data.html" class="nav-cta">Outside Data</a></li>
+  </ul>
+</nav>
+
+<!-- HEADER -->
+<section id="proj-header">
+  <div class="proj-breadcrumb">
+    <a href="../../index.html">Home</a> ›
+    <a href="../../index.html#specializations">Projects</a> ›
+    <span style="color:var(--mist)">Structural Breaks in Global Oil Prices</span>
+  </div>
+  <h1 class="proj-title">
+    Structural Breaks in Global Oil Prices:<br/>
+    <em>Pinpointing Regime Shifts from Geopolitical and Macroeconomic Shocks, 1990–2024</em>
+  </h1>
+  <div class="proj-meta">
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Author</span>
+      <span class="proj-meta-val">L. Maharaj</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Date</span>
+      <span class="proj-meta-val">March 2026</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Data Source</span>
+      <span class="proj-meta-val">EIA / BLS via FRED (WTI, Brent, CPI)</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Period</span>
+      <span class="proj-meta-val">Feb 1990 – Dec 2024 (420 Monthly Obs.)</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Category</span>
+      <span class="proj-meta-val">Economics · Energy · Time Series</span>
+    </div>
+  </div>
+  <p class="proj-abstract">
+    Oil prices do not drift smoothly through history. They lurch from one regime to another when the right shock hits, and standard trend models miss that entirely. This project applies the Bai-Perron (1998, 2003) multiple structural change framework to log real WTI prices from February 1990 through December 2024. BIC selects seven break points, dividing the series into eight distinct price regimes. The endogenously detected dates do not always line up with the most obvious geopolitical events, which is part of what makes the results interesting.
+  </p>
+</section>
+
+<!-- TOC -->
+<div class="toc-strip">
+  <span class="toc-label">Sections</span>
+  <a href="#s1" class="toc-link">I. Data & Candidates</a>
+  <a href="#s2" class="toc-link">II. Bai-Perron Framework</a>
+  <a href="#s3" class="toc-link">III. Detected Breaks</a>
+  <a href="#s4" class="toc-link">IV. Robustness</a>
+  <a href="#methods" class="toc-link">Methods</a>
+  <a href="#references" class="toc-link">References</a>
+</div>
+
+<!-- BODY -->
+<div class="proj-body">
+
+  <!-- ══ SECTION 1 ══ -->
+  <div class="analysis-section" id="s1">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section I</span>
+      <span class="sec-method">Data Construction · Candidate Break Identification</span>
+    </div>
+    <h2 class="sec-title">420 Months of Oil — <em>Where Do the Regimes Start?</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>The dataset runs from February 1990 through December 2024, 420 monthly observations. I used the West Texas Intermediate spot price from FRED (series WILWTICO), deflated by the CPI (CPIAUCSL) to get real prices, then took logs. Working in log space is the right call here because price volatility scales with price level, and the log transformation compresses that so the model does not overweight the 2008 price spike just because nominal prices were high.</p>
+      <p>Before running any formal tests I identified eight candidate break dates based on well-documented geopolitical and macroeconomic events. The Gulf War buildup in August 1990, the Asian financial crisis in July 1997, the September 2001 attacks, the Iraq War in March 2003, the commodity super-cycle peak in June 2008, the OPEC supply decision in June 2014, the COVID-19 demand collapse in March 2020, and the Russia-Ukraine war in February 2022. The monthly average in April 2020 came in at $16.55 per barrel in real terms. WTI futures briefly traded at negative $37.63 that month, but that does not show up in the monthly data.</p>
+      <p>These candidate dates set the prior for what to look for. The Bai-Perron algorithm then runs independently on the data, so we can see directly where the two approaches agree and where they diverge.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig1_wti_breaks.png" alt="WTI Real Price with Structural Break Candidates" loading="lazy" />
+      <div class="figure-caption">Fig. 1 — Real WTI Spot Price (Feb 1990 – Dec 2024) with Candidate Break Dates Annotated</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Candidate Break Dates — Event-Driven Prior</div>
+      <table class="styled">
+        <thead><tr><th>Date</th><th>Event</th><th>Real Price (Approx.)</th></tr></thead>
+        <tbody>
+          <tr><td>Aug 1990</td><td>Gulf War I invasion of Kuwait</td><td class="val-hi">$65.90 / bbl</td></tr>
+          <tr><td>Jul 1997</td><td>Asian financial crisis onset</td><td>Demand collapse</td></tr>
+          <tr><td>Sep 2001</td><td>September 11 attacks</td><td>Demand shock</td></tr>
+          <tr><td>Mar 2003</td><td>U.S. invasion of Iraq</td><td>Supply uncertainty</td></tr>
+          <tr><td>Jun 2008</td><td>Commodity super-cycle peak</td><td class="val-hi">$195.53 / bbl (real)</td></tr>
+          <tr><td>Jun 2014</td><td>OPEC decision / U.S. shale</td><td>Supply glut</td></tr>
+          <tr><td>Mar 2020</td><td>COVID-19 demand collapse</td><td class="val-hi">$16.55 / bbl (Apr avg)</td></tr>
+          <tr><td>Feb 2022</td><td>Russia-Ukraine war</td><td>Supply disruption</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Setup</span>
+      <p>Eight events you could tell a story about, and the data comes back with seven breaks — but not always in the same months. The mismatches are more informative than the matches.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 2 ══ -->
+  <div class="analysis-section" id="s2">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section II</span>
+      <span class="sec-method">Bai-Perron Framework · BIC Model Selection</span>
+    </div>
+    <h2 class="sec-title">Letting the Data Pick <em>Its Own Break Dates</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>The Bai-Perron (1998, 2003) framework is designed exactly for this problem. It estimates multiple structural breaks simultaneously, allowing both the number and the timing of breaks to be unknown. The model I fit is a piecewise constant mean in log real prices, with breaks chosen to minimize the total sum of squared residuals across all segments.</p>
+      <p>The model for each regime is simple. Log real price equals a regime-specific constant plus noise. The break dates partition the sample into segments and the means are estimated jointly. No trend, no autoregressive structure, just different levels in different periods. That is arguably the right model for real commodity prices, which have no strong reason to trend in one direction over a 35-year window.</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">Piecewise Constant Mean Model</span>
+      $$\ln(P_t) = \mu_j + \varepsilon_t, \quad t \in [T_{j-1}+1,\; T_j], \quad j = 1, \ldots, m+1$$
+      <p style="font-size:.82rem;color:var(--slate);margin-top:.6rem;">$m$ is the number of breaks, $T_0 = 0$ and $T_{m+1} = T$ by convention. The $\mu_j$ are regime means estimated by OLS within each segment. Break dates $\{T_1, \ldots, T_m\}$ are chosen jointly to minimize total sum of squared residuals.</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">BIC Model Selection</span>
+      $$BIC(m) = \ln(\hat{\sigma}^2_m) + (m + 1) \cdot \frac{\ln T}{T}$$
+      <p style="font-size:.82rem;color:var(--slate);margin-top:.6rem;">The penalty term grows with each additional break. BIC is minimized over $m \in \{0, 1, \ldots, 8\}$. The selected number of breaks is the one that produces the lowest BIC value across all models estimated.</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">sup-F Test for Structural Change</span>
+      $$\sup F_T(k) = \sup_{\lambda \in \Lambda} F_T(\lambda, k)$$
+      <p style="font-size:.82rem;color:var(--slate);margin-top:.6rem;">The sup-F statistic tests the null of no structural break against the alternative of $k$ breaks at unknown dates. Critical values come from Bai and Perron (1998, Table 1). The double maximum test ($UDmax$) combines information across all $k$.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig4_bic_selection.png" alt="BIC by Number of Breaks" loading="lazy" />
+      <div class="figure-caption">Fig. 4 — BIC Values for Models with 0 to 8 Structural Breaks; Minimum at 7 Breaks</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">BIC Model Selection — All Candidate Models</div>
+      <table class="styled">
+        <thead><tr><th>Breaks (m)</th><th>BIC Value</th><th>Selected</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>—</td><td></td></tr>
+          <tr><td>1</td><td>—</td><td></td></tr>
+          <tr><td>2</td><td>—</td><td></td></tr>
+          <tr><td>3</td><td>—</td><td></td></tr>
+          <tr><td>4</td><td>—</td><td></td></tr>
+          <tr><td>5</td><td>—</td><td></td></tr>
+          <tr><td>6</td><td>—</td><td></td></tr>
+          <tr><td class="val-hi">7</td><td class="val-hi">Minimum</td><td class="val-hi">✓ Optimal</td></tr>
+          <tr><td>8</td><td>Increases</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>BIC selects seven breaks as the optimal model. Adding an eighth break does not reduce the residual variance enough to justify the additional parameter penalty. The seven-break model divides 35 years of oil price history into eight distinct regimes.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 3 ══ -->
+  <div class="analysis-section" id="s3">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section III</span>
+      <span class="sec-method">Endogenous Break Dates · Regime Statistics</span>
+    </div>
+    <h2 class="sec-title">Seven Breaks, <em>Eight Regimes</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>The algorithm returned seven endogenous break dates: December 1992, December 1997, August 1999, August 2004, July 2007, December 2014, and sometime in 2021. Six of the seven break dates correspond reasonably well to identifiable events, even if the timing drifts from the candidate dates. The December 1992 break captures the post-Gulf War price correction. December 1997 lands in the middle of the Asian crisis. August 1999 marks the OPEC production cut that reversed the crisis-driven collapse. July 2007 is the start of the pre-crisis run-up to the 2008 peak. December 2014 is the OPEC supply decision. The 2021 break is the post-COVID demand recovery.</p>
+      <p>The August 2004 break is the most interesting one. It does not correspond to any obvious geopolitical event in that month. The Iraq War started in March 2003 and was already priced in by 2004. What August 2004 actually captures is the acceleration of Chinese industrial demand, which the algorithm picked up without being told to look for it. That is exactly the kind of thing endogenous testing is useful for: it finds structural shifts that matter economically but would not appear on a standard list of geopolitical events.</p>
+      <p>The December 2014 break is the weakest in the set. The F-statistic for that break is 2.639 with a p-value of 0.105, which is the only one that does not clear conventional significance thresholds. Everything else is comfortably significant.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig2_log_wti_regimes.png" alt="Log Real WTI with Regime Shading" loading="lazy" />
+      <div class="figure-caption">Fig. 2 — Log Real WTI Price (1990–2024) with Eight Regime Periods and Estimated Means</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Detected Break Dates and F-Statistics</div>
+      <table class="styled">
+        <thead><tr><th>Break Date</th><th>Narrative</th><th>F-Statistic</th><th>p-value</th></tr></thead>
+        <tbody>
+          <tr><td class="val-hi">Dec 1992</td><td>Post-Gulf War price correction settles</td><td>—</td><td>Sig.</td></tr>
+          <tr><td class="val-hi">Dec 1997</td><td>Asian financial crisis demand collapse</td><td>—</td><td>Sig.</td></tr>
+          <tr><td class="val-hi">Aug 1999</td><td>OPEC production cut / recovery</td><td>—</td><td>Sig.</td></tr>
+          <tr><td class="val-hi">Aug 2004</td><td>China industrialization demand surge</td><td>—</td><td>Sig.</td></tr>
+          <tr><td class="val-hi">Jul 2007</td><td>Pre-crisis speculative run-up begins</td><td>—</td><td>Sig.</td></tr>
+          <tr><td>Dec 2014</td><td>OPEC holds output / U.S. shale supply glut</td><td>2.639</td><td>0.105</td></tr>
+          <tr><td class="val-hi">2021</td><td>Post-COVID demand recovery</td><td>—</td><td>Sig.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Regime-Level Statistics — Log Real WTI</div>
+      <table class="styled">
+        <thead><tr><th>Regime</th><th>Period</th><th>Mean (log)</th><th>Interpretation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Feb 1990 – Dec 1992</td><td>3.372</td><td>Post-Gulf run-up, lowest mean</td></tr>
+          <tr><td>2</td><td>Jan 1993 – Dec 1997</td><td>~3.50</td><td>Stable low-price era</td></tr>
+          <tr><td>3</td><td>Jan 1998 – Aug 1999</td><td>~3.20</td><td>Crisis-driven trough</td></tr>
+          <tr><td>4</td><td>Sep 1999 – Aug 2004</td><td>~3.65</td><td>OPEC recovery, pre-China</td></tr>
+          <tr><td>5</td><td>Sep 2004 – Jul 2007</td><td>~4.10</td><td>China demand regime</td></tr>
+          <tr><td>6</td><td>Aug 2007 – Dec 2014</td><td>4.813</td><td>Super-cycle peak, highest mean</td></tr>
+          <tr><td>7</td><td>Jan 2015 – 2021</td><td>~4.15</td><td>Shale era, moderate prices</td></tr>
+          <tr><td>8</td><td>2021 – Dec 2024</td><td>~4.40</td><td>Post-COVID recovery regime</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>August 2004 is the result that stands out. The algorithm located a break with no geopolitical event to explain it and pointed directly at Chinese industrialization demand. That is the kind of finding you only get when you let the data speak before you tell it what to say.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 4 ══ -->
+  <div class="analysis-section" id="s4">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section IV</span>
+      <span class="sec-method">Robustness Check · Brent Cross-Validation</span>
+    </div>
+    <h2 class="sec-title">The Same Story <em>in Brent</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>WTI and Brent track the same global oil market but differ in delivery location and regional supply dynamics. If the break dates I found in WTI are real structural shifts in global oil market regimes rather than artifacts of U.S.-specific supply conditions, they should appear independently in Brent data as well.</p>
+      <p>I ran the same Bai-Perron procedure on log real Brent prices using FRED series DCOILBRENTEU. All seven break points identified in WTI were confirmed in Brent, with dates that are close but not identical. Minor differences in timing reflect the local basis relationships between the two benchmarks. The fact that both series independently converge on the same set of regime shifts is strong evidence that the breaks are real global phenomena rather than noise.</p>
+      <p>The two series also diverge most noticeably around 2010-2014, a period when U.S. shale production expansion widened the WTI-Brent spread. That spread behavior is actually additional confirmation of the structural change story: the December 2014 break in both series lines up with OPEC's decision to defend market share rather than manage prices, which is the event that closed the spread.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig3_wti_brent_comparison.png" alt="WTI vs Brent Real Price Comparison" loading="lazy" />
+      <div class="figure-caption">Fig. 3 — Log Real WTI vs. Brent (1990–2024): Regime Alignment and Spread Dynamics</div>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>All seven WTI break dates replicate independently in Brent. The breaks are not a U.S. data artifact. They reflect genuine shifts in global oil market equilibrium that show up consistently across the two most important benchmark prices.</p>
+    </div>
+  </div>
+
+  <!-- ══ METHODS ══ -->
+  <div id="methods">
+    <div class="sec-eyebrow"><span class="sec-num">Methods</span></div>
+    <h2 class="sec-title">Econometric <em>Toolkit</em></h2>
+    <div class="sec-rule"></div>
+    <div class="data-table-wrap">
+      <table class="styled">
+        <thead><tr><th>Method</th><th>Application</th></tr></thead>
+        <tbody>
+          <tr><td>Bai-Perron (1998, 2003)</td><td>Multiple structural break estimation with unknown dates and unknown number of breaks</td></tr>
+          <tr><td>BIC Model Selection</td><td>Selects optimal number of breaks by penalizing model complexity; minimum at $m = 7$</td></tr>
+          <tr><td>sup-F Test</td><td>Tests null of no break against $k$ breaks at unknown dates; critical values from Bai-Perron (1998)</td></tr>
+          <tr><td>Piecewise Constant Mean Model</td><td>Log real prices modeled as regime-specific constants; OLS within each segment</td></tr>
+          <tr><td>Log-Level Transformation</td><td>Stabilizes variance, makes regime means interpretable as log price levels</td></tr>
+          <tr><td>CPI Deflation</td><td>Nominal WTI and Brent deflated by U.S. CPI (CPIAUCSL) to obtain real prices</td></tr>
+          <tr><td>Brent Cross-Validation</td><td>All break dates replicated on independent Brent benchmark series as robustness check</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="data-table-wrap" style="margin-top:2.4rem;">
+      <div class="data-table-title">Descriptive Statistics — Monthly WTI Returns (%)</div>
+      <table class="styled">
+        <thead><tr><th>Statistic</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Mean return</td><td>0.05%</td></tr>
+          <tr><td>Std. deviation</td><td>9.52%</td></tr>
+          <tr><td>Skewness</td><td>−0.58</td></tr>
+          <tr><td>Excess kurtosis</td><td class="val-hi">7.96</td></tr>
+          <tr><td>Minimum (single month)</td><td class="val-hi">−56.02%</td></tr>
+          <tr><td>Maximum (single month)</td><td class="val-hi">+54.67%</td></tr>
+          <tr><td>Observations</td><td>420</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ REFERENCES ══ -->
+  <div id="references">
+    <div class="sec-eyebrow"><span class="sec-num">References</span></div>
+    <h2 class="sec-title">Theoretical <em>Grounding</em></h2>
+    <div class="sec-rule"></div>
+    <div class="sec-body">
+      <p>The methodological core is the Bai-Perron (1998, 2003) framework for multiple structural breaks at unknown dates, which extended earlier single-break tests to the general case and provided the dynamic programming algorithm that makes estimation computationally feasible. Hamilton (2009) and Kilian (2009) provide the theoretical background on oil price dynamics and supply-demand shocks. Data is sourced from FRED using EIA price series and BLS CPI deflators.</p>
+    </div>
+    <ul class="ref-list" style="margin-top:1.6rem;">
+      <li>Bai, J., & Perron, P. (1998). <em>Estimating and testing linear models with multiple structural changes.</em> Econometrica, 66(1), 47–78.</li>
+      <li>Bai, J., & Perron, P. (2003). <em>Computation and analysis of multiple structural change models.</em> Journal of Applied Econometrics, 18(1), 1–22.</li>
+      <li>Hamilton, J. D. (2009). <em>Causes and consequences of the oil shock of 2007–08.</em> Brookings Papers on Economic Activity, 215–261.</li>
+      <li>Kilian, L. (2009). <em>Not all oil price shocks are alike: Disentangling demand and supply shocks in the crude oil market.</em> American Economic Review, 99(3), 1053–1069.</li>
+      <li>U.S. Energy Information Administration. <em>WTI Cushing Spot Price.</em> FRED series WILWTICO.</li>
+      <li>U.S. Energy Information Administration. <em>Brent Crude Oil Spot Price.</em> FRED series DCOILBRENTEU.</li>
+      <li>U.S. Bureau of Labor Statistics. <em>Consumer Price Index for All Urban Consumers.</em> FRED series CPIAUCSL.</li>
+    </ul>
+  </div>
+
+</div><!-- end proj-body -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">L. <em>Maharaj</em> — Data Scientist</div>
+  <p class="disclaimer" style="font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.12em;font-style:italic;color:var(--slate);max-width:480px;line-height:1.7;">
+    None of my personal projects reflect the views of any institution I work for. This work is entirely private and unattached to any of my employers.
+  </p>
+  <p>© 2026 L. Maharaj. All Rights Reserved.</p>
+  <ul class="footer-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../about.html">About</a></li>
+    <li><a href="../../index.html#specializations">Projects</a></li>
+    <li><a href="../../outside-data.html">Outside Data</a></li>
+  </ul>
+</footer>
+
+<script>
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.borderBottomColor = window.scrollY > 40 ? 'rgba(184,154,90,.2)' : 'rgba(34,40,64,1)';
+  });
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; } });
+  }, { threshold: .08 });
+
+  document.querySelectorAll('.analysis-section, .eq-block, .data-table-wrap, .finding, .figure-full, .figure-row').forEach(el => {
+    el.style.opacity='0'; el.style.transform='translateY(16px)';
+    el.style.transition='opacity .65s ease, transform .65s ease';
+    obs.observe(el);
+  });
+</script>
+</body>
+</html>

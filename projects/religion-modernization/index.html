@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Religion, Modernization & Social Values — L. Maharaj</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #0b0d14;
+      --deep:     #0e1119;
+      --surface:  #121520;
+      --card:     #161a27;
+      --rule:     #222840;
+      --gold:     #b89a5a;
+      --gold-lt:  #d4b97a;
+      --gold-dim: #7a6332;
+      --blue:     #2a4a8a;
+      --blue-mid: #3b6abf;
+      --blue-lt:  #6b96d6;
+      --slate:    #6b7a96;
+      --mist:     #a0aabf;
+      --cream:    #dde2ec;
+      --white:    #eef1f8;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background:var(--ink); color:var(--cream); font-family:'Jost',sans-serif; font-weight:300; line-height:1.7; overflow-x:hidden; }
+
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 6%; height:72px; background:rgba(11,13,20,.92); backdrop-filter:blur(20px); border-bottom:1px solid var(--rule); transition:border-color .3s; }
+    .nav-logo { font-family:'Cinzel',serif; font-size:.95rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--white); text-decoration:none; }
+    .nav-logo em { font-style:normal; color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2.8rem; list-style:none; }
+    .nav-links a { font-family:'Cinzel',serif; font-size:.68rem; font-weight:400; letter-spacing:.2em; text-transform:uppercase; color:var(--slate); text-decoration:none; transition:color .25s; position:relative; }
+    .nav-links a::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:1px; background:var(--gold); transition:width .3s; }
+    .nav-links a:hover { color:var(--cream); }
+    .nav-links a:hover::after { width:100%; }
+    .nav-cta { border:1px solid var(--gold-dim) !important; color:var(--gold-lt) !important; padding:.38rem 1.2rem; }
+    .nav-cta::after { display:none !important; }
+    @media(max-width:760px){ .nav-links { display:none; } }
+
+    #proj-header { position:relative; z-index:1; padding:130px 6% 60px; background:var(--deep); border-bottom:1px solid var(--rule); }
+    .proj-breadcrumb { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-dim); margin-bottom:1.4rem; display:flex; align-items:center; gap:.6rem; }
+    .proj-breadcrumb a { color:var(--gold-dim); text-decoration:none; transition:color .2s; }
+    .proj-breadcrumb a:hover { color:var(--gold-lt); }
+    .proj-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,3.5vw,3rem); font-weight:300; line-height:1.1; color:var(--white); margin-bottom:1rem; max-width:860px; }
+    .proj-title em { font-style:italic; color:var(--blue-lt); }
+    .proj-meta { display:flex; flex-wrap:wrap; gap:1.8rem; margin-bottom:1.8rem; }
+    .proj-meta-item { display:flex; flex-direction:column; gap:.25rem; }
+    .proj-meta-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gold-dim); }
+    .proj-meta-val { font-family:'Jost',serif; font-size:.88rem; font-weight:400; color:var(--mist); }
+    .proj-abstract { font-size:.97rem; font-weight:300; color:var(--mist); max-width:820px; line-height:1.85; padding:1.4rem 0 1.4rem 1.4rem; border-left:2px solid var(--gold-dim); margin-top:.8rem; }
+
+    .toc-strip { position:relative; z-index:1; background:var(--surface); border-bottom:1px solid var(--rule); padding:1rem 6%; display:flex; flex-wrap:wrap; gap:.6rem 1.4rem; align-items:center; }
+    .toc-label { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-dim); margin-right:.4rem; }
+    .toc-link { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; color:var(--slate); text-decoration:none; padding:.28rem .7rem; border:1px solid var(--rule); transition:border-color .2s, color .2s; }
+    .toc-link:hover { border-color:var(--gold-dim); color:var(--gold-lt); }
+
+    .proj-body { position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:0 6% 80px; }
+    .analysis-section { padding:72px 0 56px; border-bottom:1px solid var(--rule); }
+    .analysis-section:last-of-type { border-bottom:none; }
+
+    .sec-eyebrow { display:flex; align-items:center; gap:1rem; margin-bottom:1rem; }
+    .sec-num { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); border:1px solid var(--gold-dim); padding:.25rem .7rem; }
+    .sec-method { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.2em; text-transform:uppercase; color:var(--slate); }
+    .sec-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.4rem,2.5vw,2rem); font-weight:400; color:var(--white); line-height:1.2; margin-bottom:1.2rem; }
+    .sec-title em { font-style:italic; color:var(--blue-lt); }
+    .sec-rule { width:48px; height:1px; background:linear-gradient(90deg,var(--gold),transparent); margin-bottom:1.6rem; }
+    .sec-body { font-size:.95rem; font-weight:300; color:var(--mist); line-height:1.9; max-width:760px; }
+    .sec-body p { margin-bottom:1rem; }
+    .sec-body strong { color:var(--cream); font-weight:400; }
+
+    .eq-block { background:var(--card); border:1px solid var(--rule); border-left:2px solid var(--gold-dim); padding:1.4rem 1.8rem; margin:1.6rem 0; overflow-x:auto; }
+    .eq-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-dim); margin-bottom:.7rem; display:block; }
+
+    .data-table-wrap { margin:2rem 0; overflow-x:auto; }
+    .data-table-title { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:.8rem; display:flex; align-items:center; gap:.8rem; }
+    .data-table-title::before { content:''; width:4px; height:4px; background:var(--gold); transform:rotate(45deg); flex-shrink:0; }
+    table.styled { width:100%; border-collapse:collapse; font-family:'Jost',sans-serif; font-size:.85rem; }
+    table.styled thead tr { border-bottom:1px solid var(--gold-dim); }
+    table.styled th { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold-dim); font-weight:400; padding:.65rem .9rem; text-align:left; }
+    table.styled td { padding:.6rem .9rem; color:var(--mist); font-weight:300; border-bottom:1px solid rgba(34,40,64,.6); }
+    table.styled tbody tr:hover td { background:rgba(184,154,90,.04); }
+    .val-hi { color:var(--cream); font-weight:400; }
+    .val-lo { color:var(--slate); }
+
+    .figure-row { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin:2.4rem 0; align-items:start; }
+    .figure-panel { background:var(--card); border:1px solid var(--rule); overflow:hidden; }
+    .figure-panel img { width:100%; display:block; }
+    .figure-caption { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.16em; text-transform:uppercase; color:var(--slate); padding:.7rem 1rem; border-top:1px solid var(--rule); text-align:center; }
+    .figure-full { background:var(--card); border:1px solid var(--rule); margin:2.4rem 0; overflow:hidden; }
+    .figure-full img { width:100%; display:block; }
+
+    .finding { background:rgba(184,154,90,.06); border:1px solid rgba(184,154,90,.18); border-left:3px solid var(--gold); padding:1.2rem 1.6rem; margin:1.8rem 0; }
+    .finding-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:.5rem; display:block; }
+    .finding p { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:400; color:var(--cream); line-height:1.6; font-style:italic; margin:0; }
+
+    #methods, #references { padding:72px 0; border-top:1px solid var(--rule); }
+    .ref-list { list-style:none; display:flex; flex-direction:column; gap:.9rem; margin-top:1.4rem; }
+    .ref-list li { font-size:.88rem; font-weight:300; color:var(--mist); line-height:1.7; padding-left:1.2rem; position:relative; }
+    .ref-list li::before { content:'—'; position:absolute; left:0; color:var(--gold-dim); font-size:.75rem; }
+    .ref-list em { font-style:italic; color:var(--cream); }
+
+    footer { position:relative; z-index:1; background:var(--surface); border-top:1px solid var(--rule); padding:2.4rem 6%; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; }
+    .footer-logo { font-family:'Cinzel',serif; font-size:.75rem; font-weight:600; letter-spacing:.28em; text-transform:uppercase; color:var(--cream); }
+    .footer-logo em { font-style:normal; color:var(--gold); }
+    footer p { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.18em; color:var(--slate); text-transform:uppercase; }
+    .footer-links { display:flex; gap:2rem; list-style:none; }
+    .footer-links a { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.2em; color:var(--slate); text-decoration:none; text-transform:uppercase; transition:color .25s; }
+    .footer-links a:hover { color:var(--gold-lt); }
+
+    @media(max-width:700px){ .figure-row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../index.html" class="nav-logo">L. <em>Maharaj</em></a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../about.html">About Me</a></li>
+    <li><a href="../../index.html#specializations">Projects</a></li>
+    <li><a href="../../outside-data.html" class="nav-cta">Outside Data</a></li>
+  </ul>
+</nav>
+
+<section id="proj-header">
+  <div class="proj-breadcrumb">
+    <a href="../../index.html">Home</a> ›
+    <a href="../../index.html#specializations">Projects</a> ›
+    <span style="color:var(--mist)">Religion, Modernization &amp; Social Values</span>
+  </div>
+  <h1 class="proj-title">
+    Religion, Modernization<br/>
+    <em>and Social Values</em>
+  </h1>
+  <div class="proj-meta">
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Author</span>
+      <span class="proj-meta-val">L. Maharaj</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Date</span>
+      <span class="proj-meta-val">2025</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Data Sources</span>
+      <span class="proj-meta-val">WVS Waves 1–7 · World Bank · UN HDI · Pew Global Religion</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Coverage</span>
+      <span class="proj-meta-val">53 Countries · 1981–2022</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Category</span>
+      <span class="proj-meta-val">Anthropology · Sociology · Comparative Politics</span>
+    </div>
+  </div>
+  <p class="proj-abstract">
+    Four decades of World Values Survey data across 53 countries tell a clear story at the cross-national level: wealthier, more urban, more secure societies are less religious. But that headline masks extraordinary heterogeneity. The United States is the most religious high-income democracy on earth. South Korea's religiosity has collapsed. China's has grown. India barely moves. This paper examines the mechanisms — existential security, urbanization, intergenerational replacement, and the supply-side structure of religious markets — and tests how far they explain both the secular trend and the persistent exceptions. The picture that emerges is not one of simple secularization but of differentiated modernization paths shaped by cultural inheritance, demographic momentum, and the sociology of trust.
+  </p>
+</section>
+
+<div class="toc-strip">
+  <span class="toc-label">Sections</span>
+  <a href="#s1" class="toc-link">I. Secularization Trends</a>
+  <a href="#s2" class="toc-link">II. Values &amp; Generations</a>
+  <a href="#s3" class="toc-link">III. Urbanization</a>
+  <a href="#s4" class="toc-link">IV. Trust &amp; Civic Life</a>
+  <a href="#methods" class="toc-link">Methods</a>
+  <a href="#references" class="toc-link">References</a>
+</div>
+
+<div class="proj-body">
+
+  <!-- ══ SECTION 1 ══ -->
+  <div class="analysis-section" id="s1">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section I</span>
+      <span class="sec-method">WVS Wave 7 · World Bank · UN HDI · Inglehart-Welzel Cultural Zones</span>
+    </div>
+    <h2 class="sec-title">Wealth, Security, and the <em>Secularization Gradient</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>The foundational empirical claim of the secularization thesis — that modernization erodes religious belief — is strongly supported in cross-sectional data. Plotting log GDP per capita against the share of the population who say religion is "very important" across 53 countries yields a steep negative relationship. Sweden reports 9% importance of religion with a per-capita income of $54,837; Nigeria reports over 90% at $2,100. The correlation is one of the most robust in comparative social science.</p>
+      <p>The Norris-Inglehart "existential security" mechanism offers the most coherent theoretical account: when people face existential risk — disease, poverty, violent crime, food insecurity — religion offers psychological security and community support that secular institutions cannot replicate. As states develop welfare systems, public health infrastructure, and institutional trust, the functional demand for religion contracts. The HDI scatter confirms this: countries above an HDI of 0.85 cluster below 20% on religious importance, with only the United States and Ireland sitting above that threshold among the high-development group.</p>
+      <p>Cultural zone analysis reveals that the secularization gradient operates at very different levels across civilizational blocs. Protestant Europe sits at the extreme secular end: the Nordic countries average 9–11% religious importance and 65–72% nonbelief. Confucian societies — Japan, China, South Korea — record low institutional religiosity but exhibit complex patterns of private spiritual practice not fully captured by survey responses about "religion." Latin American and African countries cluster at the highly religious end even when controlling for income, suggesting cultural floor effects that income growth alone does not erode quickly. West and South Asian societies show robust religiosity that has remained stable across all WVS waves.</p>
+      <p>The American exception deserves its own panel. Among countries with GDP per capita above $20,000, the United States is a striking outlier: 53% of Americans say religion is very important, 44% attend services monthly, and the nonbelief rate is only 18% — closer to Catholic Poland than to any comparable wealthy democracy. The supply-side theory of religious economies (Stark and Finke) offers a partial explanation: the deregulated American religious market, with no established church and intense denominational competition, sustains participation through quality-differentiated offerings in ways that state-church monopolies in Europe cannot. The frontier settlement hypothesis — that voluntary religious organization served as the primary civil institution in the absence of state capacity — provides a longer historical account of the same phenomenon.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig01_gdp_vs_religion.png" alt="Secularization Gradient: Wealth vs. Religious Importance" loading="lazy" />
+      <div class="figure-caption">Fig. 1 — The Secularization Gradient: GDP Per Capita vs. Share Reporting Religion as Very Important, 53 Countries. The negative relationship is steep and robust. Source: WVS Wave 7 (2017–2022); Pew Global Attitudes; World Bank.</div>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="fig03_cultural_zone_boxplot.png" alt="Religious Importance by Cultural Zone" loading="lazy" />
+        <div class="figure-caption">Fig. 2 — Religious Importance by Cultural Zone (Inglehart-Welzel classification). Protestant Europe and Confucian societies at the low end; Africa and South Asia at the high end. Source: WVS Wave 7.</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig04_nonbelief_by_zone.png" alt="Rates of Non-Belief by Cultural Zone" loading="lazy" />
+        <div class="figure-caption">Fig. 3 — Rates of Non-Belief by Cultural Zone. Protestant Europe leads at 60–72%; Sub-Saharan Africa near zero. Source: WVS Wave 7 / Pew Global Attitudes.</div>
+      </div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig05_hdi_vs_religion.png" alt="Existential Security Hypothesis: HDI vs. Religious Importance" loading="lazy" />
+      <div class="figure-caption">Fig. 4 — Existential Security Hypothesis: Human Development Index vs. Religious Importance, 2022 Data. Countries above HDI 0.85 cluster below 20% religious importance, with the U.S. and Ireland as notable high-income exceptions. Source: UN HDI; WVS Wave 7.</div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig06_american_exception.png" alt="The American Religious Exception Among High-Income Nations" loading="lazy" />
+      <div class="figure-caption">Fig. 5 — The American Religious Exception Among High-Income Nations (GDP > $20,000 per capita). The U.S. sits far above the secular norm for its income level — closer to Catholic Europe or Latin America than to its peer democracies. Source: WVS Wave 7 / Pew.</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Cross-National Religiosity — Selected Countries, WVS Wave 7</div>
+      <table class="styled">
+        <thead><tr><th>Country</th><th>Religion Important</th><th>Attend Monthly</th><th>Nonbelief %</th><th>Cultural Zone</th><th>GDP Per Capita</th></tr></thead>
+        <tbody>
+          <tr><td class="val-lo">Sweden</td><td class="val-lo">9%</td><td class="val-lo">8%</td><td class="val-hi">71%</td><td>Protestant Europe</td><td>$54,837</td></tr>
+          <tr><td class="val-lo">Germany</td><td class="val-lo">15%</td><td class="val-lo">14%</td><td class="val-hi">52%</td><td>Protestant Europe</td><td>$50,507</td></tr>
+          <tr><td class="val-lo">Japan</td><td class="val-lo">10%</td><td class="val-lo">6%</td><td class="val-hi">64%</td><td>Confucian</td><td>$34,066</td></tr>
+          <tr><td>South Korea</td><td>22%</td><td>18%</td><td>46%</td><td>Confucian</td><td>$34,822</td></tr>
+          <tr><td class="val-hi">United States</td><td class="val-hi">53%</td><td class="val-hi">44%</td><td>18%</td><td>English-speaking</td><td>$76,657</td></tr>
+          <tr><td>Poland</td><td>43%</td><td>52%</td><td>23%</td><td>Catholic Europe</td><td>$18,891</td></tr>
+          <tr><td class="val-hi">Brazil</td><td class="val-hi">72%</td><td class="val-hi">55%</td><td>12%</td><td>Latin America</td><td>$9,281</td></tr>
+          <tr><td class="val-hi">India</td><td class="val-hi">84%</td><td>—</td><td>&lt;5%</td><td>South Asia</td><td>$2,389</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>The secularization gradient is real and statistically robust across 53 countries, but the United States is the most powerful exception in the data. Among all nations with per-capita income above $20,000, the U.S. is an outlier in religious importance (53%), monthly attendance (44%), and low nonbelief (18%) — outcomes consistent with market-based religious pluralism rather than the state-church monopoly structures that characterize secular European democracies.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 2 ══ -->
+  <div class="analysis-section" id="s2">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section II</span>
+      <span class="sec-method">WVS Waves 1–7 · 1981–2022 · Emancipative Values · Generational Replacement</span>
+    </div>
+    <h2 class="sec-title">Forty Years of Value Change — <em>Tolerance, Gender, and Generation</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>The World Values Survey has run seven waves from 1981 to 2022, covering the same countries across four decades. The longitudinal record allows a test of whether value change is real and persistent rather than a cross-sectional artifact. The answer is clearly yes — but the direction and pace differ sharply by country and by value domain. Religious importance has remained almost flat in the United States (56% in 1981, 53% in 2019) and in Brazil (~70% throughout), while South Korea has seen a dramatic collapse from 42% to 22% over the same period. India and Nigeria have barely moved. China is a counter-trend case: religious importance has risen from 4% to 15%, reflecting the partial rehabilitation of religious expression after the Cultural Revolution era.</p>
+      <p>The Inglehart-Welzel Cultural Map plots countries on two axes: traditional vs. secular-rational values (vertical) and survival vs. self-expression values (horizontal). The map is not merely descriptive — it encodes a theory of modernization as movement from the lower-left corner (poor, religious, survival-focused) toward the upper-right (wealthy, secular, self-expressive). The trajectory is remarkably consistent across waves: every country that has experienced sustained economic growth has moved toward secular-rational and self-expressive values, regardless of its starting position on the religious spectrum.</p>
+      <p>Social tolerance — measured by the share reporting that homosexuality, divorce, or abortion is justifiable — has risen substantially in every Western country across all seven waves. The U.S. moved from 27% tolerant in 1981 to 72% in 2019, a shift larger than any European country in absolute percentage points. Sweden was already at 71% in 1981 and has plateaued near 93%. South Korea moved from 18% to 55%. The striking non-movers are Nigeria (3% in 1981, 3% in 2019) and India (4% to 12%), confirming that tolerance liberalization is not automatic but depends on the interaction of modernization level, generational replacement, and elite norm-setting.</p>
+      <p>Gender equality attitudes — measured by the share agreeing that men have more right to jobs than women — show a parallel liberalization in the same countries, with the same geographic pattern of exception. The generational gradient chart is the most theoretically important visualization: in every cultural zone except Sub-Saharan Africa and South Asia, younger cohorts report substantially lower religious importance than older cohorts. This generational replacement mechanism — older religious cohorts dying and younger secular cohorts entering adulthood — is the primary driver of aggregate secularization in Western Europe and East Asia. In countries where intergenerational transmission of religiosity remains strong, the aggregate trend is flat regardless of economic modernization.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig08_inglehart_welzel_map.png" alt="Inglehart-Welzel Cultural Map, WVS Wave 7" loading="lazy" />
+      <div class="figure-caption">Fig. 6 — Inglehart-Welzel Cultural Map, WVS Wave 7 (2017–2022), 52 Countries. Countries cluster by cultural heritage and move toward secular-rational / self-expressive values as income rises. Source: WVS Wave 7.</div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig09_religion_over_waves.png" alt="Religious Importance Across Seven WVS Waves, 1981–2022" loading="lazy" />
+      <div class="figure-caption">Fig. 7 — Religious Importance Across Seven Waves of the WVS, 1981–2022. South Korea declines sharply; the U.S. is essentially flat; China rises from near-zero; India and Nigeria are stable near the top. Source: WVS Waves 1–7.</div>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="fig10_tolerance_over_waves.png" alt="Social Tolerance Across WVS Waves, 1981–2022" loading="lazy" />
+        <div class="figure-caption">Fig. 8 — Social Tolerance as Emancipative Value, 1981–2022. The U.S. shows the largest absolute gain (+45 pp); Nigeria and India remain stationary near zero. Source: WVS Waves 1–7.</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig11_gender_equality_waves.png" alt="Gender Equality Values Across WVS Waves" loading="lazy" />
+        <div class="figure-caption">Fig. 9 — Gender Equality Values: Declining Traditional Attitudes, 1981–2022. The share agreeing that men have more right to jobs has fallen in every Western and East Asian country. Source: WVS Waves 1–7.</div>
+      </div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig12_value_change_summary.png" alt="Value Change Summary: Religion, Tolerance, Gender Equality, Wave 1 to Wave 7" loading="lazy" />
+      <div class="figure-caption">Fig. 10 — Value Change Summary: Religion, Tolerance, and Gender Equality Indices, WVS Wave 1 (1981) vs. Wave 7 (2019–2022). The divergence between converging Western values and stable non-Western values is clearly visible. Source: WVS Waves 1–7.</div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig13_generational_gradient.png" alt="Generational Gradient in Religious Importance by Cultural Zone" loading="lazy" />
+      <div class="figure-caption">Fig. 11 — Generational Gradient in Religious Importance by Cultural Zone, WVS Wave 7. In Protestant Europe and Confucian zones, younger cohorts are dramatically less religious than older ones — the engine of aggregate secularization. In Africa and South Asia, the gradient is shallow or absent. Source: WVS Wave 7.</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Religious Importance by WVS Wave — Selected Countries (% Very Important)</div>
+      <table class="styled">
+        <thead><tr><th>Country</th><th>1981</th><th>1990</th><th>2000</th><th>2011</th><th>2019</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td class="val-hi">United States</td><td>56%</td><td>55%</td><td>59%</td><td>57%</td><td class="val-hi">53%</td><td>−3 pp</td></tr>
+          <tr><td class="val-lo">Sweden</td><td>14%</td><td>13%</td><td>11%</td><td>9%</td><td class="val-lo">9%</td><td>−5 pp</td></tr>
+          <tr><td>South Korea</td><td>42%</td><td>40%</td><td>32%</td><td>25%</td><td>22%</td><td class="val-hi">−20 pp</td></tr>
+          <tr><td class="val-lo">Germany</td><td>18%</td><td>17%</td><td>15%</td><td>15%</td><td class="val-lo">15%</td><td>−3 pp</td></tr>
+          <tr><td class="val-hi">Brazil</td><td>72%</td><td>70%</td><td>73%</td><td>74%</td><td class="val-hi">72%</td><td>0 pp</td></tr>
+          <tr><td class="val-hi">Nigeria</td><td>92%</td><td>91%</td><td>93%</td><td>93%</td><td class="val-hi">93%</td><td>+1 pp</td></tr>
+          <tr><td>China</td><td>4%</td><td>5%</td><td>5%</td><td>6%</td><td>15%</td><td class="val-hi">+11 pp</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>Forty years of WVS data show that value liberalization — rising tolerance, declining traditional gender attitudes — is near-universal among societies that have experienced sustained modernization, even when religious importance itself barely moves. The generational gradient is the mechanism: younger cohorts in Western and East Asian societies enter adulthood with fundamentally different value profiles than their parents. Where intergenerational transmission of religiosity is strong, as in Nigeria and India, neither aggregate secularization nor tolerance liberalization follows from income growth alone.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 3 ══ -->
+  <div class="analysis-section" id="s3">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section III</span>
+      <span class="sec-method">World Bank Urbanization Data · Within-Country OLS · Country Fixed Effects · 1990–2022</span>
+    </div>
+    <h2 class="sec-title">The Urban–Rural Religious Divide — <em>Causal or Compositional?</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>Urbanization is theoretically central to the secularization thesis: cities expose individuals to diversity, weaken community-based religious surveillance, offer secular alternatives to religious social life, and concentrate educated populations who are more likely to be non-religious. But identifying a causal effect of urbanization on religiosity is hard, because countries urbanize as they develop, and both urbanization and secularization are consequences of the same underlying modernization process. The within-country analysis attempts to isolate the urbanization channel by using country fixed effects and examining changes over time within the same society.</p>
+      <p>The within-country OLS slopes tell a heterogeneous story. India shows the strongest and most statistically significant negative relationship between urbanization and religiosity (slope = −0.48, r = −0.93, p = 0.007 across six WVS waves): as India has urbanized, religious importance has declined within the country. South Korea shows a similar pattern (slope = −0.65, r = −0.73), with a steeper slope reflecting how rapid urbanization accompanied the collapse in religious importance documented in the longitudinal chart. Germany shows a moderate negative slope (−0.51). The United States shows a near-zero slope (+0.08, p = 0.80) — urbanization has had no detectable within-country effect on American religiosity, consistent with the supply-side argument that the U.S. religious market is sufficiently competitive to retain participation across the urban-rural divide. Nigeria's slightly positive slope reflects continued religious growth in rapidly urbanizing megacities.</p>
+      <p>The urban-rural gap chart shows that within-country differences in religious importance between urban and rural populations are largest in middle-income countries undergoing active urbanization, and smallest in both the most secular (where both urban and rural populations are already largely secular) and most religious (where urban religious practice remains strong due to institutional density and community networks). The regional comparison confirms that the urbanization-religiosity relationship operated most strongly in East Asia and parts of Europe since 1990, while Sub-Saharan Africa and South Asia show no meaningful urbanization-driven secularization over the same period.</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">Within-Country Fixed-Effects Model</span>
+      $$R_{it} = \alpha_i + \beta \cdot U_{it} + \varepsilon_{it}$$
+      <p style="font-size:.82rem;color:var(--slate);margin-top:.6rem;">$R_{it}$ is the share reporting religion as very important in country $i$ at wave $t$; $U_{it}$ is the urbanization rate; $\alpha_i$ is a country fixed effect absorbing all time-invariant country characteristics. $\hat{\beta} < 0$ for most Western and East Asian countries; near zero or positive for the U.S., Nigeria, and Brazil.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig14_urbanization_trends.png" alt="Urbanization Trajectories, 1970–2022" loading="lazy" />
+      <div class="figure-caption">Fig. 12 — Urbanization Trajectories by Region, 1970–2022. East Asia and Latin America urbanized fastest; Sub-Saharan Africa lags but is accelerating rapidly. Source: World Bank SP.URB.TOTL.IN.ZS.</div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig15_within_country_scatter.png" alt="Within-Country Urbanization vs. Religiosity Scatters" loading="lazy" />
+      <div class="figure-caption">Fig. 13 — Within-Country Urbanization vs. Religiosity Scatters, Selected Countries. India (r = −0.93) and South Korea (r = −0.73) show strong negative relationships; the U.S. is flat (r = +0.12); China's positive slope reflects post-Cultural Revolution religious recovery. Source: WVS Waves 1–7; World Bank.</div>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="fig16_urbanization_slopes.png" alt="Within-Country Effect of Urbanization on Religiosity" loading="lazy" />
+        <div class="figure-caption">Fig. 14 — Within-Country OLS Slopes: Urbanization → Religiosity. Negative = more urban, less religious. India and South Korea show the strongest negative effects; U.S. is near zero. Source: WVS Waves 1–7; World Bank.</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig17_urban_rural_gap.png" alt="Urban-Rural Gap in Religious Importance by Country" loading="lazy" />
+        <div class="figure-caption">Fig. 15 — Urban–Rural Gap in Religious Importance by Country, WVS Wave 7. Middle-income countries show the widest divide; highly secular and highly religious countries show smaller gaps. Source: WVS Wave 7.</div>
+      </div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig18_urbanization_religion_regions.png" alt="Did Urbanization Reduce Religiosity? Change 1990-2022 by Region" loading="lazy" />
+      <div class="figure-caption">Fig. 16 — Did Urbanization Reduce Religiosity? Change in Urbanization Rate vs. Change in Religiosity, 1990–2022, by World Region. East Asia and Protestant Europe show the expected negative association; Africa and South Asia do not. Source: World Bank; WVS.</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Within-Country OLS — Urbanization → Religiosity (Selected Countries)</div>
+      <table class="styled">
+        <thead><tr><th>Country</th><th>Slope (β̂)</th><th>Correlation (r)</th><th>p-value</th><th>Interpretation</th></tr></thead>
+        <tbody>
+          <tr><td class="val-hi">India</td><td class="val-hi">−0.48</td><td class="val-hi">−0.93</td><td class="val-hi">0.007</td><td>Strong negative — significant</td></tr>
+          <tr><td>South Korea</td><td>−0.65</td><td>−0.73</td><td>0.100</td><td>Strong negative — marginal significance</td></tr>
+          <tr><td>Germany</td><td>−0.51</td><td>−0.68</td><td>0.135</td><td>Moderate negative</td></tr>
+          <tr><td>Sweden</td><td>−0.97</td><td>−0.72</td><td>0.066</td><td>Strong negative — marginal significance</td></tr>
+          <tr><td class="val-lo">United States</td><td class="val-lo">+0.08</td><td class="val-lo">+0.12</td><td class="val-lo">0.800</td><td>Near zero — no effect</td></tr>
+          <tr><td>Nigeria</td><td>+0.11</td><td>+0.67</td><td>0.144</td><td>Slightly positive — urban religiosity rising</td></tr>
+          <tr><td>China</td><td>+0.25</td><td>+0.79</td><td>0.062</td><td>Positive — post-Cultural Revolution recovery</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>Urbanization significantly predicts declining religiosity within India (p = 0.007, r = −0.93) and shows strong negative trends in South Korea, Germany, and Sweden. But the United States is again the critical exception: a near-zero within-country slope confirms that the American religious market sustains participation across the urban-rural spectrum in ways that comparably rich and urban European societies do not. The urbanization-secularization link is real in much of the world, but it is not a universal law.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 4 ══ -->
+  <div class="analysis-section" id="s4">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section IV</span>
+      <span class="sec-method">WVS Wave 7 · Putnam Social Capital Framework · Bonding vs. Bridging Trust</span>
+    </div>
+    <h2 class="sec-title">The Trust Paradox — <em>Religion and Social Capital Across Scales</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>Durkheim's foundational argument was that religion is the original source of social solidarity — the mechanism by which individuals are bound into collective life and moral communities. If he was right, more religious societies should exhibit higher social trust. The WVS data tells a more complicated story: at the cross-national level, more religious countries have <em>lower</em> generalized social trust. The scatter of religiosity against the share of people who believe "most people can be trusted" shows a negative relationship: Sweden leads at 68% trust and 9% religiosity; Poland sits at 22% trust and 43% religiosity; the U.S. is at 38% trust and 53% religiosity.</p>
+      <p>This is the trust paradox, and it has a standard resolution. Robert Putnam's distinction between "bonding" and "bridging" social capital clarifies what religion produces: it generates strong in-group bonds and dense internal networks, but those same community structures can reduce generalized trust toward out-group members. Highly religious societies may have strong internal community ties precisely while exhibiting lower trust toward strangers, institutions, and outgroups. The Putnam paradox at the within-U.S. level reinforces this: states with higher religious attendance show higher social capital measures (volunteering, civic participation, charitable giving) — but this is largely the bonding form of social capital operating within homogeneous communities.</p>
+      <p>Institutional confidence in the church itself is — unsurprisingly — strongly positively correlated with religiosity. What is more interesting is the relationship between religiosity and confidence in secular institutions: government, courts, the media. Highly religious societies are not uniformly high in institutional trust overall; the pattern depends on whether religious and civic institutions are aligned or in tension. In Catholic European societies where institutional religion has been in cultural retreat, church confidence has fallen while civic trust has remained moderate. In Confucian East Asia — particularly China — government confidence is high (73%) while church confidence is low (28%), consistent with a statist civic structure that does not route social solidarity through religion.</p>
+      <p>The civic engagement chart examines the Putnam framework directly: comparing religious vs. secular volunteering rates. Religious organizations remain the single largest organizational context for voluntary action in the United States, accounting for more volunteer hours than all secular civic organizations combined. This religious volunteering is overwhelmingly bonding in character — directed toward co-religionists, church maintenance, and religious outreach. Secular volunteering is more weakly organized but broader in its beneficiary scope. The implication is that declining religious participation in Western societies will not be automatically offset by equivalent secular civic engagement — the organizational infrastructure is different.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig19_religion_vs_trust.png" alt="The Trust Paradox: Cross-National Religiosity vs. Social Trust" loading="lazy" />
+      <div class="figure-caption">Fig. 17 — The Trust Paradox: Cross-National Religiosity vs. Generalized Social Trust, WVS Wave 7. Higher religiosity predicts lower generalized trust at the cross-national level. Sweden: 9% religious, 68% trust. U.S.: 53% religious, 38% trust. Source: WVS Wave 7.</div>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="fig20_putnam_paradox.png" alt="The Putnam Paradox: Religious Attendance and Social Capital Within the U.S." loading="lazy" />
+        <div class="figure-caption">Fig. 18 — The Putnam Paradox: Within U.S. States, Religious Attendance Positively Predicts Social Capital. The bonding effect is strong domestically even as bridging trust is low globally. Source: WVS Wave 7; Putnam Social Capital Index.</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig21_church_confidence.png" alt="Religiosity and Institutional Confidence in Church" loading="lazy" />
+        <div class="figure-caption">Fig. 19 — Religiosity and Institutional Confidence in the Church, WVS Wave 7. The strong positive correlation is expected; the divergence between church confidence and secular institutional trust is the more theoretically interesting pattern. Source: WVS Wave 7.</div>
+      </div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig22_institutional_trust_zones.png" alt="Institutional Trust and Social Trust by Cultural Zone" loading="lazy" />
+      <div class="figure-caption">Fig. 20 — Institutional Trust and Social Trust by Cultural Zone, WVS Wave 7. Confucian societies combine high government confidence with low church trust; Catholic Europe shows the inverse; Protestant Europe leads in generalized social trust. Source: WVS Wave 7.</div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig23_civic_engagement.png" alt="Religion and Civic Engagement: Religious vs. Secular Volunteering" loading="lazy" />
+      <div class="figure-caption">Fig. 21 — Religion and Civic Engagement: Religious vs. Secular Volunteering Rates, WVS Wave 7. Religious organizations remain the dominant context for voluntary civic action in the U.S. Declining participation creates a social capital gap that secular organizations have not filled. Source: WVS Wave 7.</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Religion, Trust, and Institutional Confidence — Selected Countries, WVS Wave 7</div>
+      <table class="styled">
+        <thead><tr><th>Country</th><th>Generalized Trust</th><th>Govt. Confidence</th><th>Church Confidence</th><th>Religion Important</th></tr></thead>
+        <tbody>
+          <tr><td class="val-hi">Sweden</td><td class="val-hi">68%</td><td>52%</td><td>28%</td><td class="val-lo">9%</td></tr>
+          <tr><td class="val-hi">Norway</td><td class="val-hi">73%</td><td>55%</td><td>30%</td><td class="val-lo">10%</td></tr>
+          <tr><td>Germany</td><td>45%</td><td>43%</td><td>35%</td><td class="val-lo">15%</td></tr>
+          <tr><td>United States</td><td>38%</td><td>36%</td><td class="val-hi">58%</td><td class="val-hi">53%</td></tr>
+          <tr><td>Poland</td><td class="val-lo">22%</td><td>42%</td><td class="val-hi">72%</td><td class="val-hi">43%</td></tr>
+          <tr><td>Italy</td><td class="val-lo">28%</td><td>24%</td><td>55%</td><td>36%</td></tr>
+          <tr><td class="val-hi">China</td><td class="val-hi">62%</td><td class="val-hi">73%</td><td class="val-lo">28%</td><td class="val-lo">15%</td></tr>
+          <tr><td>South Korea</td><td class="val-lo">30%</td><td>24%</td><td>45%</td><td>22%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>The cross-national trust paradox — more religious countries show lower generalized trust — resolves through Putnam's bonding vs. bridging distinction. Religion generates dense in-group social capital that shows up as civic engagement within communities, while simultaneously depressing the generalized, out-group trust that drives the high-trust scores of Scandinavian social democracies. The implication for secular transition is uncomfortable: as religious participation declines in Western societies, the organizational infrastructure for civic engagement it provided is not automatically replaced.</p>
+    </div>
+  </div>
+
+  <!-- ══ METHODS ══ -->
+  <div id="methods">
+    <div class="sec-eyebrow"><span class="sec-num">Methods</span></div>
+    <h2 class="sec-title">Data &amp; <em>Analytical Framework</em></h2>
+    <div class="sec-rule"></div>
+    <div class="sec-body">
+      <p>The primary data source is the World Values Survey (WVS), aggregated across Waves 1–7 (1981–2022) for up to 53 countries. Country-level modernization proxies (GDP per capita, urbanization rate, education index) come from the World Bank World Development Indicators. HDI data are from UNDP. Religious composition denominators for per-capita calculations use Pew Global Religion 2010 and 2020. Cross-national regressions use OLS with robust standard errors. Within-country panel regressions use OLS with country fixed effects. The Inglehart-Welzel cultural zone classification follows the mapping in Inglehart and Welzel (2005) and the WVS methodological documentation. All income figures in constant 2015 USD.</p>
+    </div>
+    <div class="data-table-wrap" style="margin-top:1.6rem;">
+      <table class="styled">
+        <thead><tr><th>Data Source</th><th>Coverage</th><th>Use in This Paper</th></tr></thead>
+        <tbody>
+          <tr><td class="val-hi">World Values Survey (Waves 1–7)</td><td>53 countries · 1981–2022</td><td>Religiosity, tolerance, gender equality, trust, civic engagement across all sections</td></tr>
+          <tr><td class="val-hi">World Bank WDI</td><td>180+ countries · 1970–2022</td><td>GDP per capita, urbanization rate, education index for modernization proxies</td></tr>
+          <tr><td class="val-hi">UN Human Development Index</td><td>189 countries · 1990–2022</td><td>HDI for existential security hypothesis test (Section I)</td></tr>
+          <tr><td class="val-hi">Pew Global Religion</td><td>232 countries · 2010, 2020</td><td>Religious composition denominators; cross-national religiosity benchmarks</td></tr>
+          <tr><td class="val-hi">IHME Global Burden of Disease</td><td>204 countries · 1990–2019</td><td>Health security controls in secularization regressions</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ REFERENCES ══ -->
+  <div id="references">
+    <div class="sec-eyebrow"><span class="sec-num">References</span></div>
+    <h2 class="sec-title">Theoretical <em>Grounding</em></h2>
+    <div class="sec-rule"></div>
+    <div class="sec-body">
+      <p>This paper engages four major theoretical traditions: the classical secularization thesis (Berger, Bruce), the existential security hypothesis (Norris and Inglehart), the supply-side religious economy model (Stark and Finke), and the Inglehart-Welzel cultural change framework. The trust and civic engagement analysis draws on Putnam's social capital theory and the bonding vs. bridging distinction. Weber's Protestant ethic thesis provides historical context for the correlation between religious culture and modernization pathway.</p>
+    </div>
+    <ul class="ref-list" style="margin-top:1.6rem;">
+      <li>Berger, P. L. (1967). <em>The Sacred Canopy: Elements of a Sociological Theory of Religion.</em> Doubleday.</li>
+      <li>Bruce, S. (2002). <em>God is Dead: Secularization in the West.</em> Blackwell Publishers.</li>
+      <li>Inglehart, R., &amp; Welzel, C. (2005). <em>Modernization, Cultural Change, and Democracy: The Human Development Sequence.</em> Cambridge University Press.</li>
+      <li>Norris, P., &amp; Inglehart, R. (2004). <em>Sacred and Secular: Religion and Politics Worldwide.</em> Cambridge University Press.</li>
+      <li>Stark, R., &amp; Finke, R. (2000). <em>Acts of Faith: Explaining the Human Side of Religion.</em> University of California Press.</li>
+      <li>Putnam, R. D. (2000). <em>Bowling Alone: The Collapse and Revival of American Community.</em> Simon &amp; Schuster.</li>
+      <li>Durkheim, É. (1912). <em>The Elementary Forms of Religious Life.</em> (Trans. Swain, J. W., 1915). Free Press.</li>
+      <li>Weber, M. (1905). <em>The Protestant Ethic and the Spirit of Capitalism.</em> (Trans. Parsons, T., 1930). Routledge.</li>
+      <li>Inglehart, R. (2021). <em>Religion's Sudden Decline: What's Causing It, and What Comes Next?</em> Oxford University Press.</li>
+      <li>Halikiopoulou, D. (2011). <em>Patterns of Secularization: Church, State and Nation in Greece and the Republic of Ireland.</em> Ashgate.</li>
+      <li>World Values Survey Association. (2022). <em>World Values Survey Wave 7 (2017–2022): Cross-National Data-Set.</em> www.worldvaluessurvey.org.</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo">L. <em>Maharaj</em> — Data Scientist</div>
+  <p class="disclaimer" style="font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.12em;font-style:italic;color:var(--slate);max-width:480px;line-height:1.7;">
+    None of my personal projects reflect the views of any institution I work for. This work is entirely private and unattached to any of my employers.
+  </p>
+  <p>© 2026 L. Maharaj. All Rights Reserved.</p>
+  <ul class="footer-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../about.html">About</a></li>
+    <li><a href="../../index.html#specializations">Projects</a></li>
+    <li><a href="../../outside-data.html">Outside Data</a></li>
+  </ul>
+</footer>
+
+<script>
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.borderBottomColor = window.scrollY > 40 ? 'rgba(184,154,90,.2)' : 'rgba(34,40,64,1)';
+  });
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; } });
+  }, { threshold: .08 });
+
+  document.querySelectorAll('.analysis-section, .eq-block, .data-table-wrap, .finding, .figure-full, .figure-row').forEach(el => {
+    el.style.opacity='0'; el.style.transform='translateY(16px)';
+    el.style.transition='opacity .65s ease, transform .65s ease';
+    obs.observe(el);
+  });
+</script>
+</body>
+</html>
