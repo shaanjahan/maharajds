@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Who Pays? The U.S. Tax Burden by Income Level — L. Maharaj</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #0b0d14;
+      --deep:     #0e1119;
+      --surface:  #121520;
+      --card:     #161a27;
+      --rule:     #222840;
+      --gold:     #b89a5a;
+      --gold-lt:  #d4b97a;
+      --gold-dim: #7a6332;
+      --blue:     #2a4a8a;
+      --blue-mid: #3b6abf;
+      --blue-lt:  #6b96d6;
+      --slate:    #6b7a96;
+      --mist:     #a0aabf;
+      --cream:    #dde2ec;
+      --white:    #eef1f8;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background:var(--ink); color:var(--cream); font-family:'Jost',sans-serif; font-weight:300; line-height:1.7; overflow-x:hidden; }
+
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 6%; height:72px; background:rgba(11,13,20,.92); backdrop-filter:blur(20px); border-bottom:1px solid var(--rule); }
+    .nav-logo { font-family:'Cinzel',serif; font-size:.95rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--white); text-decoration:none; }
+    .nav-logo em { font-style:normal; color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2.8rem; list-style:none; }
+    .nav-links a { font-family:'Cinzel',serif; font-size:.68rem; font-weight:400; letter-spacing:.2em; text-transform:uppercase; color:var(--slate); text-decoration:none; transition:color .25s; position:relative; }
+    .nav-links a::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:1px; background:var(--gold); transition:width .3s; }
+    .nav-links a:hover { color:var(--cream); }
+    .nav-links a:hover::after { width:100%; }
+    .nav-cta { border:1px solid var(--gold-dim) !important; color:var(--gold-lt) !important; padding:.38rem 1.2rem; }
+    .nav-cta::after { display:none !important; }
+    @media(max-width:760px){ .nav-links { display:none; } }
+
+    #proj-header { position:relative; z-index:1; padding:130px 6% 60px; background:var(--deep); border-bottom:1px solid var(--rule); }
+    .proj-breadcrumb { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-dim); margin-bottom:1.4rem; display:flex; align-items:center; gap:.6rem; }
+    .proj-breadcrumb a { color:var(--gold-dim); text-decoration:none; transition:color .2s; }
+    .proj-breadcrumb a:hover { color:var(--gold-lt); }
+    .proj-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,3.5vw,3rem); font-weight:300; line-height:1.1; color:var(--white); margin-bottom:1rem; max-width:860px; }
+    .proj-title em { font-style:italic; color:var(--blue-lt); }
+    .proj-meta { display:flex; flex-wrap:wrap; gap:1.8rem; margin-bottom:1.8rem; }
+    .proj-meta-item { display:flex; flex-direction:column; gap:.25rem; }
+    .proj-meta-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gold-dim); }
+    .proj-meta-val { font-family:'Jost',serif; font-size:.88rem; font-weight:400; color:var(--mist); }
+    .proj-abstract { font-size:.97rem; font-weight:300; color:var(--mist); max-width:820px; line-height:1.85; padding:1.4rem 0 1.4rem 1.4rem; border-left:2px solid var(--gold-dim); margin-top:.8rem; }
+
+    .toc-strip { position:relative; z-index:1; background:var(--surface); border-bottom:1px solid var(--rule); padding:1rem 6%; display:flex; flex-wrap:wrap; gap:.6rem 1.4rem; align-items:center; }
+    .toc-label { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-dim); margin-right:.4rem; }
+    .toc-link { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; color:var(--slate); text-decoration:none; padding:.28rem .7rem; border:1px solid var(--rule); transition:border-color .2s, color .2s; }
+    .toc-link:hover { border-color:var(--gold-dim); color:var(--gold-lt); }
+
+    .proj-body { position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:0 6% 80px; }
+    .analysis-section { padding:72px 0 56px; border-bottom:1px solid var(--rule); }
+    .analysis-section:last-of-type { border-bottom:none; }
+
+    .sec-eyebrow { display:flex; align-items:center; gap:1rem; margin-bottom:1rem; }
+    .sec-num { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); border:1px solid var(--gold-dim); padding:.25rem .7rem; }
+    .sec-method { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.2em; text-transform:uppercase; color:var(--slate); }
+    .sec-title { font-family:'Cormorant Garamond',serif; font-size:clamp(1.4rem,2.5vw,2rem); font-weight:400; color:var(--white); line-height:1.2; margin-bottom:1.2rem; }
+    .sec-title em { font-style:italic; color:var(--blue-lt); }
+    .sec-rule { width:48px; height:1px; background:linear-gradient(90deg,var(--gold),transparent); margin-bottom:1.6rem; }
+    .sec-body { font-size:.95rem; font-weight:300; color:var(--mist); line-height:1.9; max-width:760px; }
+    .sec-body p { margin-bottom:1rem; }
+    .sec-body strong { color:var(--cream); font-weight:400; }
+
+    .eq-block { background:var(--card); border:1px solid var(--rule); border-left:2px solid var(--gold-dim); padding:1.4rem 1.8rem; margin:1.6rem 0; overflow-x:auto; }
+    .eq-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-dim); margin-bottom:.7rem; display:block; }
+
+    .data-table-wrap { margin:2rem 0; overflow-x:auto; }
+    .data-table-title { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:.8rem; display:flex; align-items:center; gap:.8rem; }
+    .data-table-title::before { content:''; width:4px; height:4px; background:var(--gold); transform:rotate(45deg); flex-shrink:0; }
+    table.styled { width:100%; border-collapse:collapse; font-family:'Jost',sans-serif; font-size:.85rem; }
+    table.styled thead tr { border-bottom:1px solid var(--gold-dim); }
+    table.styled th { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold-dim); font-weight:400; padding:.65rem .9rem; text-align:left; }
+    table.styled td { padding:.6rem .9rem; color:var(--mist); font-weight:300; border-bottom:1px solid rgba(34,40,64,.6); }
+    table.styled tbody tr:hover td { background:rgba(184,154,90,.04); }
+    .val-hi { color:var(--cream); font-weight:400; }
+    .val-lo { color:var(--slate); }
+    .val-prog { color:#5b8cd6; font-weight:400; }
+    .val-reg  { color:#c05858; font-weight:400; }
+
+    .figure-row { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin:2.4rem 0; align-items:start; }
+    .figure-panel { background:var(--card); border:1px solid var(--rule); overflow:hidden; }
+    .figure-panel img { width:100%; display:block; }
+    .figure-caption { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.16em; text-transform:uppercase; color:var(--slate); padding:.7rem 1rem; border-top:1px solid var(--rule); text-align:center; }
+    .figure-full { background:var(--card); border:1px solid var(--rule); margin:2.4rem 0; overflow:hidden; }
+    .figure-full img { width:100%; display:block; }
+
+    .figure-trio { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; margin:2.4rem 0; align-items:start; }
+
+    .finding { background:rgba(184,154,90,.06); border:1px solid rgba(184,154,90,.18); border-left:3px solid var(--gold); padding:1.2rem 1.6rem; margin:1.8rem 0; }
+    .finding-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:.5rem; display:block; }
+    .finding p { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:400; color:var(--cream); line-height:1.6; font-style:italic; margin:0; }
+
+    .stat-row { display:flex; flex-wrap:wrap; gap:1rem; margin:2rem 0; }
+    .stat-card { background:var(--card); border:1px solid var(--rule); padding:1.2rem 1.6rem; flex:1; min-width:160px; }
+    .stat-num { font-family:'Cormorant Garamond',serif; font-size:1.9rem; font-weight:400; color:var(--gold-lt); line-height:1; margin-bottom:.4rem; }
+    .stat-label { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.2em; text-transform:uppercase; color:var(--slate); }
+    .stat-sub { font-size:.78rem; color:var(--mist); margin-top:.3rem; }
+
+    #methods, #references { padding:72px 0; border-top:1px solid var(--rule); }
+    .ref-list { list-style:none; display:flex; flex-direction:column; gap:.9rem; margin-top:1.4rem; }
+    .ref-list li { font-size:.88rem; font-weight:300; color:var(--mist); line-height:1.7; padding-left:1.2rem; position:relative; }
+    .ref-list li::before { content:'—'; position:absolute; left:0; color:var(--gold-dim); font-size:.75rem; }
+    .ref-list em { font-style:italic; color:var(--cream); }
+
+    footer { position:relative; z-index:1; background:var(--surface); border-top:1px solid var(--rule); padding:2.4rem 6%; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; }
+    .footer-logo { font-family:'Cinzel',serif; font-size:.75rem; font-weight:600; letter-spacing:.28em; text-transform:uppercase; color:var(--cream); }
+    .footer-logo em { font-style:normal; color:var(--gold); }
+    footer p { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.18em; color:var(--slate); text-transform:uppercase; }
+    .footer-links { display:flex; gap:2rem; list-style:none; }
+    .footer-links a { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.2em; color:var(--slate); text-decoration:none; text-transform:uppercase; transition:color .25s; }
+    .footer-links a:hover { color:var(--gold-lt); }
+
+    @media(max-width:700px){ .figure-row { grid-template-columns:1fr; } .figure-trio { grid-template-columns:1fr; } .stat-row { flex-direction:column; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../index.html" class="nav-logo">L. <em>Maharaj</em></a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../about.html">About Me</a></li>
+    <li><a href="../../index.html#specializations">Projects</a></li>
+    <li><a href="../../outside-data.html" class="nav-cta">Outside Data</a></li>
+  </ul>
+</nav>
+
+<section id="proj-header">
+  <div class="proj-breadcrumb">
+    <a href="../../index.html">Home</a> ›
+    <a href="../../index.html#specializations">Projects</a> ›
+    <span style="color:var(--mist)">Tax Burden by Income Level</span>
+  </div>
+  <h1 class="proj-title">
+    Who Pays?<br/>
+    <em>The U.S. Tax Burden by Income Level</em>
+  </h1>
+  <div class="proj-meta">
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Author</span>
+      <span class="proj-meta-val">L. Maharaj</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Date</span>
+      <span class="proj-meta-val">2025</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Data Sources</span>
+      <span class="proj-meta-val">IRS SOI 2022 · CBO (2024) · OMB · Tax Policy Center · OECD</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Coverage</span>
+      <span class="proj-meta-val">All Income Groups · FY2022 · Historical 1950–2024</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Category</span>
+      <span class="proj-meta-val">Public Finance · Tax Policy · Income Distribution</span>
+    </div>
+  </div>
+  <p class="proj-abstract">
+    Debates about who pays taxes in the United States frequently conflate different tax types, different income measures, and different definitions of burden. The top 1% pays 40% of federal income taxes — a fact often cited to argue the system is already sufficiently progressive. But income taxes are only one piece. Payroll taxes — which fund Social Security and Medicare — are structurally regressive, falling harder on middle earners than on the wealthy. Excise taxes on gasoline and tobacco take a larger share of a low-income household's budget than a high-income one. Corporate taxes flow mostly to capital owners concentrated at the top. This analysis brings all of those threads together: income taxes, payroll taxes, corporate tax incidence, and excise taxes, measuring the effective burden each imposes on households at every income level. The system, when viewed in full, is progressive — but less so than income tax data alone suggests. It also traces how the federal revenue mix has shifted over 70 years, compares U.S. tax levels to other wealthy nations, and shows what redistribution through the tax-and-transfer system actually accomplishes for households at each income level.
+  </p>
+</section>
+
+<div class="toc-strip">
+  <span class="toc-label">Sections</span>
+  <a href="#s1"  class="toc-link">I. Income Tax</a>
+  <a href="#s2"  class="toc-link">II. All Tax Types</a>
+  <a href="#s3"  class="toc-link">III. Combined Burden</a>
+  <a href="#s4"  class="toc-link">IV. Redistribution</a>
+  <a href="#s5"  class="toc-link">V. International Context</a>
+  <a href="#methods"    class="toc-link">Methods</a>
+  <a href="#references" class="toc-link">References</a>
+</div>
+
+<div class="proj-body">
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- SECTION I: FEDERAL INCOME TAX -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <section class="analysis-section" id="s1">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section I</span>
+      <span class="sec-method">IRS Statistics of Income · 2022</span>
+    </div>
+    <h2 class="sec-title">Federal Income Tax: <em>Who Contributes and How Much</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>The federal income tax is the largest single source of federal revenue, generating $2.3 trillion in FY2022 — more than half of all federal receipts. It is also the most progressive component of the tax system: statutory marginal rates rise from 10% to 37% as income climbs, and the effective rate paid by the top 1% is seven times higher than the rate paid by households in the bottom half.</p>
+      <p>The figures below draw on IRS Statistics of Income (SOI) data for tax year 2022. The SOI is the most comprehensive administrative dataset available on individual income tax filing, covering 153 million returns and reporting income, deductions, and tax liability by AGI bracket.</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-num">40.4%</div>
+        <div class="stat-label">Top 1% share of income taxes</div>
+        <div class="stat-sub">On 22.4% of all adjusted gross income</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">2.3%</div>
+        <div class="stat-label">Bottom 50% share of income taxes</div>
+        <div class="stat-sub">On 14.8% of all adjusted gross income</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">25.9%</div>
+        <div class="stat-label">Top 1% effective income tax rate</div>
+        <div class="stat-sub">Statutory marginal rate: 37%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">3.7%</div>
+        <div class="stat-label">Bottom 50% effective income tax rate</div>
+        <div class="stat-sub">After deductions, credits, and EITC</div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>The top 1% pays a larger share of income taxes (40.4%) than their share of income (22.4%). The bottom 50% pays a smaller share of taxes (2.3%) than their share of income (14.8%). The income tax system redistributes the tax burden upward relative to income.</p>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="figures/fig01_share_income_tax.png" alt="Income tax share vs AGI share by bracket" />
+        <div class="figure-caption">Fig. 1 — Tax share vs. income share by bracket, 2022</div>
+      </div>
+      <div class="figure-panel">
+        <img src="figures/fig02_effective_rate_by_group.png" alt="Effective income tax rate by income group" />
+        <div class="figure-caption">Fig. 2 — Effective income tax rate by income group, 2022</div>
+      </div>
+    </div>
+
+    <div class="sec-body">
+      <p>A key distinction in understanding progressive taxation is the gap between statutory marginal rates and effective rates actually paid. A household in the 37% bracket does not pay 37% of all income in federal taxes — it pays 37% only on dollars above the top threshold. Deductions, credits, and lower rates on capital gains compress effective rates well below their statutory counterparts.</p>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="figures/fig03_marginal_vs_effective.png" alt="Statutory marginal rate vs effective rate" />
+        <div class="figure-caption">Fig. 3 — Marginal rate vs. effective rate by bracket, 2022</div>
+      </div>
+      <div class="figure-panel">
+        <img src="figures/fig06_agi_vs_tax_share.png" alt="AGI share vs income tax share" />
+        <div class="figure-caption">Fig. 6 — AGI share vs. income tax share by group, 2022</div>
+      </div>
+    </div>
+
+    <div class="figure-full">
+      <img src="figures/fig04_returns_agi_by_bracket.png" alt="Returns, AGI, and tax liability by bracket" />
+      <div class="figure-caption" style="text-align:center; padding:.8rem 1rem;">Fig. 4 — Number of returns, total AGI, and tax liability by AGI bracket, 2022</div>
+    </div>
+
+    <div class="sec-body">
+      <p>The top marginal rate has varied enormously over the past century — from 7% at the income tax's founding in 1913, to 94% during World War II, down to 28% after the Tax Reform Act of 1986, and back to 37% today. Understanding that history matters for interpreting current rate debates.</p>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="figures/fig05_top_marginal_history.png" alt="Top marginal rate 1913-2024" />
+        <div class="figure-caption">Fig. 5 — Top marginal income tax rate, 1913–2024</div>
+      </div>
+      <div class="figure-panel">
+        <img src="figures/fig07_income_tax_gdp_trend.png" alt="Federal income tax as percent of GDP" />
+        <div class="figure-caption">Fig. 7 — Federal income tax revenue as % of GDP, 1950–2024</div>
+      </div>
+    </div>
+
+    <div class="figure-full">
+      <img src="figures/fig08_summary_table.png" alt="Summary statistics by income bracket" />
+      <div class="figure-caption" style="text-align:center; padding:.8rem 1rem;">Fig. 8 — Summary: Income tax statistics by bracket, 2022</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Income Tax by Group — Key Statistics, 2022</div>
+      <table class="styled">
+        <thead>
+          <tr>
+            <th>Income Group</th>
+            <th>AGI Range</th>
+            <th>Share of Returns</th>
+            <th>Share of AGI</th>
+            <th>Share of Tax</th>
+            <th>Effective Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="val-hi">Top 1%</td><td>$548K+</td><td>1%</td><td class="val-hi">22.4%</td><td class="val-hi">40.4%</td><td class="val-hi">25.9%</td></tr>
+          <tr><td>Next 4%</td><td>$183K–$548K</td><td>4%</td><td>16.3%</td><td>20.0%</td><td>19.8%</td></tr>
+          <tr><td>Next 5%</td><td>$138K–$183K</td><td>5%</td><td>10.4%</td><td>11.2%</td><td>15.6%</td></tr>
+          <tr><td>Next 15%</td><td>$79K–$138K</td><td>15%</td><td>18.2%</td><td>15.8%</td><td>11.4%</td></tr>
+          <tr><td>Next 25%</td><td>$34K–$79K</td><td>25%</td><td>17.9%</td><td>9.8%</td><td>8.2%</td></tr>
+          <tr><td class="val-lo">Bottom 50%</td><td>Under $34K</td><td>50%</td><td class="val-lo">14.8%</td><td class="val-lo">2.3%</td><td class="val-lo">3.7%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- SECTION II: ALL TAX TYPES -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <section class="analysis-section" id="s2">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section II</span>
+      <span class="sec-method">CBO (2024) · Tax Policy Center · OMB</span>
+    </div>
+    <h2 class="sec-title">Beyond Income Tax: <em>Payroll, Corporate, and Excise Burdens</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>Income tax data alone gives a misleading picture of the overall distribution of tax burdens. The federal government collects revenue through four main channels: the individual income tax (54% of receipts in FY2022), payroll taxes (31%), the corporate income tax (10%), and excise and other taxes (5%). Each has a distinct distributional profile.</p>
+      <p><strong>Payroll taxes</strong> fund Social Security and Medicare. The combined employee-employer rate is 15.3%, but because the Social Security portion applies only to wages below $160,200 (in 2022) and because investment income — concentrated heavily at upper income levels — is not subject to payroll taxes at all, the effective payroll rate actually falls as income rises above the middle quintile. Payroll taxes are structurally regressive.</p>
+      <p><strong>Excise taxes</strong> on gasoline, tobacco, and alcohol take a larger bite out of low-income budgets. Lower-income households spend a higher fraction of their income on goods subject to excise taxation, making these taxes regressive when measured as a share of income.</p>
+      <p><strong>Corporate income taxes</strong> require an incidence assumption: who ultimately bears the cost of a tax imposed on corporate profits? The CBO allocates 75% to capital owners (progressive) and 25% to labor through reduced wages (more broadly distributed). Because capital ownership is heavily concentrated at the top of the income distribution, the corporate tax is the most progressive federal tax per dollar raised.</p>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="figures/fig09_payroll_tax_rates.png" alt="Payroll tax effective rates by income group" />
+        <div class="figure-caption">Fig. 9 — Payroll tax effective rates by income group, 2022</div>
+      </div>
+      <div class="figure-panel">
+        <img src="figures/fig10_excise_tax_burden.png" alt="Excise tax burden by income group" />
+        <div class="figure-caption">Fig. 10 — Federal excise tax burden by income group, 2022</div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>Payroll taxes impose a higher effective rate on middle-income households (9.2%) than on the top 1% (2.0%). Excise taxes consume 1.6% of bottom-quintile income but only 0.2% of top-1% income. Both work against the progressivity established by the income tax.</p>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="figures/fig11_corporate_tax_incidence.png" alt="Corporate tax incidence by income group" />
+        <div class="figure-caption">Fig. 11 — Corporate tax incidence by income group, 2022</div>
+      </div>
+      <div class="figure-panel">
+        <img src="figures/fig14_progressive_vs_regressive.png" alt="Progressive vs regressive taxes comparison" />
+        <div class="figure-caption">Fig. 14 — Progressive vs. regressive federal taxes, 2022</div>
+      </div>
+    </div>
+
+    <div class="sec-body">
+      <p>The revenue mix tells a longer story. In 1950, corporate income taxes provided more than a quarter of all federal revenue. By 2022, that share had fallen to 10%. Payroll taxes went the other direction: from under 7% in 1950 to over 30% today. This shift matters for distribution: the revenue base has moved toward taxes that fall more heavily on workers and away from taxes on capital.</p>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="figures/fig12_revenue_by_source.png" alt="Federal revenue by source FY2022" />
+        <div class="figure-caption">Fig. 12 — Federal revenue by source, FY2022</div>
+      </div>
+      <div class="figure-panel">
+        <img src="figures/fig13_revenue_mix_shift.png" alt="Revenue mix shift 1950 to 2022" />
+        <div class="figure-caption">Fig. 13 — Revenue mix shift, 1950–2022</div>
+      </div>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="figures/fig15_total_revenue_gdp.png" alt="Total federal revenue as percent of GDP" />
+        <div class="figure-caption">Fig. 15 — Total federal revenue as % of GDP, 1950–2022</div>
+      </div>
+      <div class="figure-panel">
+        <img src="figures/fig16_estate_tax.png" alt="Estate tax exemption and share paying" />
+        <div class="figure-caption">Fig. 16 — Estate tax: exemption threshold and share paying, 2001–2023</div>
+      </div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Effective Rates by Tax Type and Income Group, 2022 (% of Pre-Tax Income)</div>
+      <table class="styled">
+        <thead>
+          <tr>
+            <th>Income Group</th>
+            <th>Income Tax</th>
+            <th>Payroll Tax</th>
+            <th>Corporate</th>
+            <th>Excise</th>
+            <th>Progressivity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="val-lo">Bottom 20%</td><td>0.5%</td><td class="val-reg">8.3%</td><td>0.5%</td><td class="val-reg">1.6%</td><td class="val-lo">Mixed</td></tr>
+          <tr><td>Second 20%</td><td>3.2%</td><td class="val-reg">9.2%</td><td>0.7%</td><td>1.1%</td><td class="val-lo">Mixed</td></tr>
+          <tr><td>Middle 20%</td><td>5.8%</td><td>8.7%</td><td>0.9%</td><td>0.8%</td><td>Moderate</td></tr>
+          <tr><td>Fourth 20%</td><td>9.1%</td><td>7.4%</td><td>1.2%</td><td>0.6%</td><td>Moderate</td></tr>
+          <tr><td>Next 15%</td><td>12.8%</td><td>5.6%</td><td>1.9%</td><td>0.4%</td><td class="val-prog">Progressive</td></tr>
+          <tr><td>Next 4%</td><td>17.3%</td><td>3.1%</td><td>3.3%</td><td>0.3%</td><td class="val-prog">Progressive</td></tr>
+          <tr><td class="val-hi">Top 1%</td><td class="val-hi">25.9%</td><td class="val-lo">2.0%</td><td class="val-hi">6.6%</td><td class="val-lo">0.2%</td><td class="val-prog">Progressive</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- SECTION III: COMBINED BURDEN -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <section class="analysis-section" id="s3">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section III</span>
+      <span class="sec-method">CBO Distribution Analysis · All Federal Taxes</span>
+    </div>
+    <h2 class="sec-title">The Full Picture: <em>Total Federal Tax Burden by Income Level</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>Adding all four major federal tax components gives the CBO's comprehensive measure of the all-federal effective tax rate. The result is a system that remains progressive in its overall structure: the bottom quintile faces a combined rate of around 11%, while the top 1% faces a combined rate of nearly 35%. But the progression is slower than income tax data alone implies, because payroll and excise taxes compress the gap between middle and lower earners.</p>
+      <p>The stacked figure below breaks down each group's combined burden by tax component, making visible how income taxes drive progressivity at the top while payroll taxes create a burden plateau across the middle of the distribution.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="figures/fig17_total_burden_stacked.png" alt="Total federal tax burden stacked by type" />
+      <div class="figure-caption" style="text-align:center; padding:.8rem 1rem;">Fig. 17 — All-federal effective tax rate, stacked by type, by income group, 2022</div>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="figures/fig18_income_vs_tax_paid.png" alt="Average income vs average federal tax paid" />
+        <div class="figure-caption">Fig. 18 — Average income vs. average federal tax paid, 2022</div>
+      </div>
+      <div class="figure-panel">
+        <img src="figures/fig23_total_effective_rate_curve.png" alt="Total effective rate curve vs income" />
+        <div class="figure-caption">Fig. 23 — All-federal effective rate vs. income level, 2022</div>
+      </div>
+    </div>
+
+    <div class="sec-body">
+      <p>Case studies give the abstract rate comparisons human scale. The five representative households below span the income distribution from the bottom quintile ($28,000) to the top 5% ($500,000). They illustrate how the EITC can reduce a low-income household's income tax below zero; how payroll taxes dominate middle-income bills; and how corporate tax allocation and investment income taxation shape the top-income picture.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="figures/fig19_household_case_studies.png" alt="Household case studies federal tax bills" />
+      <div class="figure-caption" style="text-align:center; padding:.8rem 1rem;">Fig. 19 — Federal tax bill by component: five representative households, 2022</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Five Representative Households — 2022 Federal Tax Breakdown</div>
+      <table class="styled">
+        <thead>
+          <tr>
+            <th>Household</th>
+            <th>Income</th>
+            <th>Income Tax</th>
+            <th>Payroll (Emp.)</th>
+            <th>Payroll (Empr.)</th>
+            <th>Excise</th>
+            <th>Corp. Alloc.</th>
+            <th>Total Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="val-lo">A — Bottom quintile</td><td>$28,000</td><td class="val-prog">−$1,200</td><td>$2,142</td><td>$2,142</td><td>$450</td><td>$50</td><td>12.6%</td></tr>
+          <tr><td>B — Second quintile</td><td>$55,000</td><td>$3,800</td><td>$4,207</td><td>$4,207</td><td>$600</td><td>$200</td><td>23.7%</td></tr>
+          <tr><td>C — Middle quintile</td><td>$90,000</td><td>$9,800</td><td>$6,885</td><td>$6,885</td><td>$700</td><td>$500</td><td>27.5%</td></tr>
+          <tr><td>D — Fourth quintile</td><td>$175,000</td><td>$24,500</td><td>$12,240</td><td>$12,240</td><td>$750</td><td>$1,500</td><td>29.3%</td></tr>
+          <tr><td class="val-hi">E — Top 5%</td><td>$500,000</td><td class="val-hi">$110,000</td><td>$14,800</td><td>$14,800</td><td>$900</td><td>$12,000</td><td>30.5%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- SECTION IV: REDISTRIBUTION -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <section class="analysis-section" id="s4">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section IV</span>
+      <span class="sec-method">Taxes + Transfers · CBO (2024) · Census Bureau</span>
+    </div>
+    <h2 class="sec-title">What Redistribution Actually Does: <em>Taxes, Transfers, and Inequality</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>Taxes are only one side of the government's distributional ledger. The other side is transfers: Social Security payments, Medicare and Medicaid benefits, SNAP, the EITC, and dozens of other programs that deliver cash or in-kind benefits largely (though not exclusively) to lower-income households. To understand the full redistributive impact of government, both sides must be counted together.</p>
+      <p>The CBO's comprehensive income measure makes this possible. By comparing a household's market income (wages, capital gains, business income) to their income after taxes and transfers, the CBO can show how much the fiscal system shifts resources across the distribution. The results are substantial: lower-income quintiles receive far more in transfers than they pay in taxes, while upper-income quintiles are substantial net contributors.</p>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="figures/fig20_net_redistribution.png" alt="Net redistribution taxes minus transfers by group" />
+        <div class="figure-caption">Fig. 20 — Net fiscal position: taxes paid minus transfers received, 2022</div>
+      </div>
+      <div class="figure-panel">
+        <img src="figures/fig21_gini_redistribution.png" alt="Gini coefficient before and after taxes and transfers" />
+        <div class="figure-caption">Fig. 21 — Gini coefficient before and after federal redistribution, 1979–2022</div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>The bottom quintile receives transfers worth 35% of its pre-tax income while paying combined federal taxes of about 11% — a net transfer of roughly 24 percentage points. The top 1% pays nearly 35% of pre-tax income in taxes while receiving transfers worth under 1% — a net contribution of over 34 points.</p>
+    </div>
+
+    <div class="sec-body">
+      <p>The Gini coefficient captures this redistribution in a single number. In 2022, pre-tax market income had a Gini of 0.568 — a level reflecting widening inequality in wages and capital returns over the past four decades. After federal taxes and transfers, the Gini fell to approximately 0.384. That 0.184-point reduction represents the equalizing work of the entire federal fiscal system. The reduction has grown modestly since the early 1980s, though market income inequality has grown faster than redistribution can offset.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- SECTION V: INTERNATIONAL CONTEXT -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <section class="analysis-section" id="s5">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section V</span>
+      <span class="sec-method">OECD Revenue Statistics · 2023</span>
+    </div>
+    <h2 class="sec-title">International Context: <em>Where the U.S. Sits Among Peer Nations</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>A final frame of reference is comparative. The U.S. collects total taxes — federal, state, and local combined — equal to about 27.7% of GDP. That places it near the bottom of the OECD distribution, well below the 34% OECD average and far below high-tax nations like Denmark (46.9%) or France (46.1%). This is despite having a relatively high top marginal income tax rate by international standards at the federal level.</p>
+      <p>The gap reflects structural differences: the U.S. lacks a national value-added tax, imposes payroll taxes at a lower rate than most European systems, and relies more heavily on employer-provided benefits (health insurance, retirement) funded outside the tax system entirely. Whether this is a feature or a bug is a normative question. The data simply establish that by total tax burden, the U.S. is not a high-tax country relative to its peers.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="figures/fig22_international_comparison.png" alt="Total tax revenue as percent of GDP OECD comparison" />
+      <div class="figure-caption" style="text-align:center; padding:.8rem 1rem;">Fig. 22 — Total tax revenue as % of GDP: U.S. vs. OECD nations, 2022</div>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>At 27.7% of GDP, total U.S. tax revenue ranks 34th out of 38 OECD nations — below every major European economy and below the OECD average of 34%. The U.S. collects relatively less from consumption taxes and payroll contributions than most peers, relying more on income and corporate taxes for its share of revenue.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- METHODS -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <section id="methods">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Methods</span>
+    </div>
+    <h2 class="sec-title">Data and <em>Methodology</em></h2>
+    <div class="sec-rule"></div>
+    <div class="sec-body">
+      <p><strong>Income Tax (Section I).</strong> Data from IRS Statistics of Income (SOI) 2022, Table 1 — Individual Income Tax Returns with Positive AGI. Effective rates calculated as total income tax after credits divided by adjusted gross income. AGI bracket categories follow IRS SOI conventions. Top marginal rate history assembled from IRS and Tax Foundation historical records.</p>
+      <p><strong>Payroll and Excise Taxes (Section II).</strong> Effective rates by income quintile from CBO (2024), <em>The Distribution of Federal Taxes</em>. CBO uses a comprehensive income measure (market income + government transfers + imputed employer contributions) as the denominator. Payroll rates include both employee and employer shares, treating the employer contribution as an economic burden on labor. Excise tax incidence is allocated based on consumption patterns by income group.</p>
+      <p><strong>Corporate Tax Incidence.</strong> CBO allocates 75% of the corporate income tax to capital owners in proportion to their capital income, and 25% to workers in proportion to their labor income. This is the standard approach used in distributional analysis. Some analysts use a 100% capital allocation; the distributional effect of the corporate tax is progressive under any reasonable assumption.</p>
+      <p><strong>Combined Burden and Redistribution (Sections III–IV).</strong> All-federal effective rates sum individual income, payroll, corporate, and excise components from CBO (2024). Net redistribution figures compare taxes paid to transfers received (Social Security, Medicare, Medicaid, SNAP, housing assistance, and refundable credits) as percentages of pre-tax comprehensive income. Gini coefficients from CBO distributional analysis, 1979–2022.</p>
+      <p><strong>International Comparison (Section V).</strong> Total tax revenue as % of GDP from OECD Revenue Statistics 2023, covering all levels of government (central + subnational + social security funds). 2022 data used for consistency with domestic analysis year.</p>
+      <p><strong>Household Case Studies.</strong> Estimates based on 2022 tax law applied to hypothetical single-earner households. Income tax calculated using 2022 brackets and standard deduction ($12,950). EITC applied for household A. Payroll taxes at statutory rates (6.2% SS + 1.45% Medicare for both employee and employer). Corporate tax allocation based on CBO quintile methodology applied to household income level. Excise taxes estimated from average spending patterns by income quintile.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- REFERENCES -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <section id="references">
+    <div class="sec-eyebrow">
+      <span class="sec-num">References</span>
+    </div>
+    <h2 class="sec-title">Data <em>Sources</em></h2>
+    <div class="sec-rule"></div>
+    <ul class="ref-list">
+      <li>Congressional Budget Office. (2024). <em>The Distribution of Federal Taxes, 2024.</em> Washington, D.C.: CBO.</li>
+      <li>Congressional Budget Office. (2023). <em>The Budget and Economic Outlook: 2023 to 2033.</em> Washington, D.C.: CBO.</li>
+      <li>Internal Revenue Service. (2024). <em>Statistics of Income — 2022 Individual Income Tax Returns Complete Report.</em> Publication 1304. Washington, D.C.: IRS.</li>
+      <li>Office of Management and Budget. (2024). <em>Historical Tables: Budget of the U.S. Government, Fiscal Year 2025.</em> Tables 1.2, 2.1, 2.2. Washington, D.C.: OMB.</li>
+      <li>OECD. (2023). <em>Revenue Statistics 2023.</em> Paris: OECD Publishing. doi:10.1787/b2a8e811-en.</li>
+      <li>Tax Policy Center. (2023). <em>Distributional Analysis of the Federal Excise Tax System.</em> Washington, D.C.: Urban Institute and Brookings Institution.</li>
+      <li>Tax Foundation. (2024). <em>Historical U.S. Federal Individual Income Tax Rates and Brackets, 1913–2024.</em> Washington, D.C.: Tax Foundation.</li>
+      <li>Piketty, T., Saez, E., &amp; Zucman, G. (2018). Distributional national accounts: Methods and estimates for the United States. <em>Quarterly Journal of Economics,</em> 133(2), 553–609.</li>
+      <li>Gravelle, J. G., &amp; Marples, D. J. (2019). <em>Corporate Tax Incidence: Review of General Equilibrium Estimates and Analysis.</em> Congressional Research Service Report R44823.</li>
+    </ul>
+  </section>
+
+</div><!-- /.proj-body -->
+
+<footer>
+  <span class="footer-logo">L. <em>Maharaj</em></span>
+  <p>© 2025 · Data Analysis &amp; Research</p>
+  <ul class="footer-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../about.html">About</a></li>
+    <li><a href="../../index.html#specializations">Projects</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>
