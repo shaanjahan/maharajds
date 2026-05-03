@@ -279,7 +279,7 @@
 
     <div class="sec-body">
       <p>The dataset runs from February 1990 through December 2024, 420 monthly observations. I used the West Texas Intermediate spot price from FRED (series WILWTICO), deflated by the CPI (CPIAUCSL) to get real prices, then took logs. Working in log space is the right call here because price volatility scales with price level, and the log transformation compresses that so the model does not overweight the 2008 price spike just because nominal prices were high.</p>
-      <p>Before running any formal tests I identified eight candidate break dates based on well-documented geopolitical and macroeconomic events. The Gulf War buildup in August 1990, the Asian financial crisis in July 1997, the September 2001 attacks, the Iraq War in March 2003, the commodity super-cycle peak in June 2008, the OPEC supply decision in June 2014, the COVID-19 demand collapse in March 2020, and the Russia-Ukraine war in February 2022. The monthly average in April 2020 came in at $16.55 per barrel in real terms. WTI futures briefly traded at negative $37.63 that month, but that does not show up in the monthly data.</p>
+      <p>Before running any formal tests I identified eight candidate break dates based on well-documented geopolitical and macroeconomic events. The Gulf War buildup in August 1990, the Asian financial crisis in July 1997, the September 2001 attacks, the Iraq War in March 2003, the commodity super-cycle peak in June 2008, the OPEC supply decision in June 2014, the COVID-19 demand collapse in March 2020, and the Russia-Ukraine war in February 2022. The monthly average in April 2020 came in at &#36;16.55 per barrel in real terms. WTI futures briefly traded at negative &#36;37.63 that month, but that does not show up in the monthly data.</p>
       <p>These candidate dates set the prior for what to look for. The Bai-Perron algorithm then runs independently on the data, so we can see directly where the two approaches agree and where they diverge.</p>
     </div>
 
@@ -293,13 +293,13 @@
       <table class="styled">
         <thead><tr><th>Date</th><th>Event</th><th>Real Price (Approx.)</th></tr></thead>
         <tbody>
-          <tr><td>Aug 1990</td><td>Gulf War I invasion of Kuwait</td><td class="val-hi">$65.90 / bbl</td></tr>
+          <tr><td>Aug 1990</td><td>Gulf War I invasion of Kuwait</td><td class="val-hi">&#36;65.90 / bbl</td></tr>
           <tr><td>Jul 1997</td><td>Asian financial crisis onset</td><td>Demand collapse</td></tr>
           <tr><td>Sep 2001</td><td>September 11 attacks</td><td>Demand shock</td></tr>
           <tr><td>Mar 2003</td><td>U.S. invasion of Iraq</td><td>Supply uncertainty</td></tr>
-          <tr><td>Jun 2008</td><td>Commodity super-cycle peak</td><td class="val-hi">$195.53 / bbl (real)</td></tr>
+          <tr><td>Jun 2008</td><td>Commodity super-cycle peak</td><td class="val-hi">&#36;195.53 / bbl (real)</td></tr>
           <tr><td>Jun 2014</td><td>OPEC decision / U.S. shale</td><td>Supply glut</td></tr>
-          <tr><td>Mar 2020</td><td>COVID-19 demand collapse</td><td class="val-hi">$16.55 / bbl (Apr avg)</td></tr>
+          <tr><td>Mar 2020</td><td>COVID-19 demand collapse</td><td class="val-hi">&#36;16.55 / bbl (Apr avg)</td></tr>
           <tr><td>Feb 2022</td><td>Russia-Ukraine war</td><td>Supply disruption</td></tr>
         </tbody>
       </table>
