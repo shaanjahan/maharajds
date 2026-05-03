@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — L. Maharaj</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #0b0d14;
+      --deep:     #0e1119;
+      --surface:  #121520;
+      --card:     #161a27;
+      --rule:     #222840;
+      --gold:     #b89a5a;
+      --gold-lt:  #d4b97a;
+      --gold-dim: #7a6332;
+      --blue:     #2a4a8a;
+      --blue-mid: #3b6abf;
+      --blue-lt:  #6b96d6;
+      --slate:    #6b7a96;
+      --mist:     #a0aabf;
+      --cream:    #dde2ec;
+      --white:    #eef1f8;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--ink); color: var(--cream); font-family: 'Jost', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+
+    /* ── NAV ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 6%; height: 72px; background: rgba(11,13,20,.92); backdrop-filter: blur(20px); border-bottom: 1px solid var(--rule); }
+    .nav-logo { font-family: 'Cinzel', serif; font-size: .95rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--white); text-decoration: none; }
+    .nav-logo em { font-style: normal; color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 2.8rem; list-style: none; }
+    .nav-links a { font-family: 'Cinzel', serif; font-size: .68rem; font-weight: 400; letter-spacing: .2em; text-transform: uppercase; color: var(--slate); text-decoration: none; transition: color .25s; position: relative; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1px; background: var(--gold); transition: width .3s; }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a.active { color: var(--gold-lt); }
+    .nav-links a.active::after { width: 100%; }
+    .nav-cta { border: 1px solid var(--gold-dim) !important; color: var(--gold-lt) !important; padding: .38rem 1.2rem; }
+    .nav-cta::after { display: none !important; }
+    @media(max-width:760px){ .nav-links { display: none; } }
+
+    /* ── PAGE HEADER ── */
+    .page-header { padding: 130px 6% 64px; background: var(--deep); border-bottom: 1px solid var(--rule); }
+    .page-header-inner { max-width: 860px; }
+    .page-eyebrow { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .32em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 1.2rem; }
+    .page-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 300; line-height: 1.05; color: var(--white); margin-bottom: 1.2rem; }
+    .page-title em { font-style: italic; color: var(--blue-lt); }
+    .page-sub { font-size: .95rem; font-weight: 300; color: var(--mist); line-height: 1.85; max-width: 640px; }
+    .page-home { display: inline-flex; align-items: center; gap: .6rem; margin-top: 1.6rem; padding: .7rem 1.1rem; border: 1px solid var(--gold-dim); color: var(--gold-lt); text-decoration: none; font-family: 'Cinzel', serif; font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; transition: background .25s, border-color .25s, color .25s; }
+    .page-home:hover { background: rgba(184,154,90,.08); border-color: var(--gold); color: var(--white); }
+
+    /* ── STICKY CATEGORY NAV ── */
+    .cat-nav { position: sticky; top: 72px; z-index: 90; background: var(--surface); border-bottom: 1px solid var(--rule); padding: .9rem 6%; display: flex; flex-wrap: wrap; gap: .5rem 1.2rem; align-items: center; }
+    .cat-nav-label { font-family: 'Cinzel', serif; font-size: .56rem; letter-spacing: .24em; text-transform: uppercase; color: var(--gold-dim); margin-right: .4rem; flex-shrink: 0; }
+    .cat-nav a { font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--slate); text-decoration: none; padding: .26rem .7rem; border: 1px solid var(--rule); transition: border-color .2s, color .2s; white-space: nowrap; }
+    .cat-nav a:hover { border-color: var(--gold-dim); color: var(--gold-lt); }
+
+    /* ── MAIN BODY ── */
+    .projects-body { max-width: 1200px; margin: 0 auto; padding: 0 6% 100px; }
+
+    /* ── DISCIPLINE BLOCK ── */
+    .discipline { padding: 80px 0 64px; border-bottom: 1px solid var(--rule); }
+    .discipline:last-of-type { border-bottom: none; }
+
+    .disc-header { margin-bottom: 48px; }
+    .disc-eyebrow { display: flex; align-items: center; gap: 1rem; margin-bottom: .9rem; }
+    .disc-num { font-family: 'Cinzel', serif; font-size: .56rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold-dim); padding: .22rem .65rem; }
+    .disc-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 300; color: var(--white); line-height: 1.1; }
+    .disc-title em { font-style: italic; color: var(--blue-lt); }
+    .disc-rule { width: 56px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin: 1rem 0 1.2rem; }
+    .disc-desc { font-size: .9rem; font-weight: 300; color: var(--mist); max-width: 600px; line-height: 1.8; }
+
+    /* ── SUB-DISCIPLINE ── */
+    .sub-discipline { margin-bottom: 56px; }
+    .sub-disc-label { display: flex; align-items: center; gap: .8rem; margin-bottom: 24px; }
+    .sub-disc-label span { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .24em; text-transform: uppercase; color: var(--slate); }
+    .sub-disc-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--rule); }
+    .sub-disc-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+    /* ── PROJECT GRID ── */
+    .proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.4rem; }
+
+    /* ── PROJECT CARD ── */
+    .proj-card { background: var(--card); border: 1px solid var(--rule); padding: 1.8rem; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 1rem; transition: border-color .25s, transform .2s; position: relative; overflow: hidden; }
+    .proj-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--rule); transition: background .25s; }
+    .proj-card:hover { border-color: var(--gold-dim); transform: translateY(-2px); }
+    .proj-card:hover::before { background: var(--gold); }
+
+    .proj-card-symbol { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
+    .proj-card-label { font-family: 'Cinzel', serif; font-size: .54rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-dim); }
+    .proj-card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; color: var(--white); line-height: 1.3; }
+    .proj-card-divider { width: 28px; height: 1px; background: var(--gold-dim); }
+    .proj-card-desc { font-size: .85rem; font-weight: 300; color: var(--mist); line-height: 1.75; flex: 1; }
+    .proj-card-link { font-family: 'Cinzel', serif; font-size: .56rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-dim); display: flex; align-items: center; gap: .5rem; margin-top: auto; padding-top: .6rem; transition: color .2s; }
+    .proj-card:hover .proj-card-link { color: var(--gold-lt); }
+    .proj-card-link::after { content: '→'; }
+
+    /* ── COMING SOON CARD ── */
+    .proj-card-soon { background: transparent; border: 1px dashed var(--rule); padding: 1.8rem; display: flex; flex-direction: column; gap: 1rem; opacity: .45; }
+    .proj-card-soon .proj-card-label { color: var(--slate); }
+    .proj-card-soon .proj-card-title { color: var(--mist); }
+    .soon-badge { font-family: 'Cinzel', serif; font-size: .5rem; letter-spacing: .22em; text-transform: uppercase; color: var(--slate); border: 1px solid var(--rule); padding: .18rem .6rem; display: inline-block; margin-top: auto; width: fit-content; }
+
+    /* ── EMPTY DISCIPLINE (placeholder) ── */
+    .disc-empty { background: var(--surface); border: 1px dashed var(--rule); padding: 2.4rem; text-align: center; }
+    .disc-empty p { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .22em; text-transform: uppercase; color: var(--slate); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--surface); border-top: 1px solid var(--rule); padding: 2.4rem 6%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+    .footer-logo { font-family: 'Cinzel', serif; font-size: .75rem; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--cream); }
+    .footer-logo em { font-style: normal; color: var(--gold); }
+    footer p { font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .18em; color: var(--slate); text-transform: uppercase; }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .2em; color: var(--slate); text-decoration: none; text-transform: uppercase; transition: color .25s; }
+    .footer-links a:hover { color: var(--gold-lt); }
+
+    @media(max-width:640px){ .proj-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">L. <em>Maharaj</em></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About Me</a></li>
+    <li><a href="projects.html" class="active">Projects</a></li>
+    <li><a href="outside-data.html" class="nav-cta">Outside Data</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <p class="page-eyebrow">Research &amp; Analysis</p>
+    <h1 class="page-title">Where Data Meets <em>Society</em></h1>
+    <p class="page-sub">Projects across economics and the social sciences, grouped by field.</p>
+    <a href="index.html" class="page-home">Home</a>
+  </div>
+</header>
+
+<!-- STICKY CATEGORY NAV -->
+<nav class="cat-nav" aria-label="Disciplines">
+  <span class="cat-nav-label">Jump to</span>
+  <a href="#economics">Economics</a>
+  <a href="#sociology">Sociology</a>
+  <a href="#social-sciences">Social Sciences</a>
+  <a href="#mathematics">Mathematics</a>
+  <a href="#prob-stats">Probability &amp; Statistics</a>
+  <a href="#algorithmic">Algorithmic Programming</a>
+</nav>
+
+<div class="projects-body">
+
+  <!-- ══════════════════════════════════════════
+       ECONOMICS
+  ══════════════════════════════════════════ -->
+  <section class="discipline" id="economics">
+    <div class="disc-header">
+      <div class="disc-eyebrow">
+        <span class="disc-num">I</span>
+      </div>
+      <h2 class="disc-title">Economics</h2>
+      <div class="disc-rule"></div>
+      <p class="disc-desc">Work on labor, trade, public finance, capital flows, and macroeconomic measurement.</p>
+    </div>
+
+    <div class="proj-grid">
+
+      <a class="proj-card" href="projects/tax-burden/index.html">
+        <div class="proj-card-symbol"><svg width="52" height="48" viewBox="0 0 52 48" fill="none"><rect x="4" y="34" width="8" height="10" fill="#7a6332" opacity=".9" rx="1"/><rect x="16" y="26" width="8" height="18" fill="#b89a5a" opacity=".9" rx="1"/><rect x="28" y="18" width="8" height="26" fill="#b89a5a" rx="1"/><rect x="40" y="8" width="8" height="36" fill="#d4b97a" rx="1"/><line x1="2" y1="44" x2="50" y2="44" stroke="#b89a5a" stroke-width="1.2"/><polyline points="30,2 34,6 30,10" stroke="#d4b97a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+        <div class="proj-card-label">Public Finance · Tax Policy</div>
+        <div class="proj-card-title">Who Pays? The U.S. Tax Burden by Income Level</div>
+        <div class="proj-card-divider"></div>
+        <div class="proj-card-desc">A breakdown of who pays federal taxes across income groups, including payroll, corporate, and excise taxes.</div>
+        <div class="proj-card-link">View Project</div>
+      </a>
+
+      <a class="proj-card" href="projects/tariffs/index.html">
+        <div class="proj-card-symbol"><svg width="54" height="44" viewBox="0 0 54 44" fill="none"><rect x="2" y="8" width="14" height="10" rx="1" stroke="#b89a5a" stroke-width="1.5" fill="none"/><rect x="38" y="26" width="14" height="10" rx="1" stroke="#b89a5a" stroke-width="1.5" fill="none"/><line x1="16" y1="13" x2="34" y2="13" stroke="#b89a5a" stroke-width="1.4"/><polyline points="30,9 34,13 30,17" stroke="#b89a5a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="38" y1="31" x2="20" y2="31" stroke="#7a6332" stroke-width="1.4"/><polyline points="24,27 20,31 24,35" stroke="#7a6332" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="27" y1="4" x2="27" y2="40" stroke="#d4b97a" stroke-width="1" stroke-dasharray="3,3" opacity=".5"/></svg></div>
+        <div class="proj-card-label">Trade Economics</div>
+        <div class="proj-card-title">Second Term Tariffs 2.0: What Does the Data Say?</div>
+        <div class="proj-card-divider"></div>
+        <div class="proj-card-desc">A look at second-term tariffs and how they affected trade flows, trade diversion, and prices in U.S. commerce with China, Mexico, and Canada through October 2025.</div>
+        <div class="proj-card-link">View Project</div>
+      </a>
+
+      <a class="proj-card" href="projects/immigrant-workforce/index.html">
+        <div class="proj-card-symbol"><svg width="52" height="50" viewBox="0 0 52 50" fill="none"><circle cx="26" cy="10" r="6" stroke="#b89a5a" stroke-width="1.6" fill="none"/><path d="M14 32 C14 24 38 24 38 32 L38 42 L14 42 Z" stroke="#b89a5a" stroke-width="1.4" fill="none"/><line x1="4" y1="26" x2="14" y2="26" stroke="#b89a5a" stroke-width="1.4"/><polyline points="10,22 14,26 10,30" stroke="#b89a5a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="4" y1="20" x2="4" y2="44" stroke="#b89a5a" stroke-width="1.1" opacity=".5"/></svg></div>
+        <div class="proj-card-label">Labor Economics · Immigration</div>
+        <div class="proj-card-title">The Immigrant Place in the U.S. Labor Force</div>
+        <div class="proj-card-divider"></div>
+        <div class="proj-card-desc">A profile of immigrant workers covering labor force participation, wage gaps, assimilation over time, and differences by country of origin.</div>
+        <div class="proj-card-link">View Project</div>
+      </a>
+
+      <a class="proj-card" href="projects/ai-exposure-job-risk/index.html">
+        <div class="proj-card-symbol"><svg width="54" height="46" viewBox="0 0 54 46" fill="none"><rect x="17" y="10" width="20" height="18" rx="3" stroke="#b89a5a" stroke-width="1.5"/><path d="M22 28V34M32 28V34M27 6V10M11 18H17M37 18H43M14 10L18 13M40 10L36 13M14 28L18 25M40 28L36 25" stroke="#d4b97a" stroke-width="1.2" stroke-linecap="round"/><circle cx="24" cy="18" r="1.6" fill="#b89a5a"/><circle cx="30" cy="18" r="1.6" fill="#b89a5a"/><path d="M23 23C24.2 24.2 29.8 24.2 31 23" stroke="#3b6abf" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        <div class="proj-card-label">Labor Economics · AI</div>
+        <div class="proj-card-title">Artificial Intelligence Exposure and Job Risk in the U.S. Labor Market</div>
+        <div class="proj-card-divider"></div>
+        <div class="proj-card-desc">A machine learning analysis of which occupations, majors, states, and metros are most exposed to AI-driven labor-market disruption.</div>
+        <div class="proj-card-link">View Project</div>
+      </a>
+
+      <a class="proj-card" href="projects/safety-net/index.html">
+        <div class="proj-card-symbol"><svg width="50" height="50" viewBox="0 0 50 50" fill="none"><line x1="25" y1="6" x2="25" y2="44" stroke="#b89a5a" stroke-width="1.6"/><line x1="10" y1="12" x2="40" y2="12" stroke="#b89a5a" stroke-width="1.6"/><line x1="10" y1="12" x2="10" y2="26" stroke="#b89a5a" stroke-width="1.2"/><line x1="40" y1="12" x2="40" y2="20" stroke="#b89a5a" stroke-width="1.2"/><path d="M6 26 Q10 32 14 26" stroke="#b89a5a" stroke-width="1.2" fill="none"/><path d="M36 20 Q40 27 44 20" stroke="#b89a5a" stroke-width="1.2" fill="none"/><line x1="22" y1="44" x2="28" y2="44" stroke="#b89a5a" stroke-width="1.6"/></svg></div>
+        <div class="proj-card-label">Labor Economics · Social Policy</div>
+        <div class="proj-card-title">Safety Net and Ethnic Stratification</div>
+        <div class="proj-card-divider"></div>
+        <div class="proj-card-desc">An examination of how unemployment, food assistance, and transfer programs are distributed across racial and ethnic groups in the United States.</div>
+        <div class="proj-card-link">View Project</div>
+      </a>
+
+      <a class="proj-card" href="projects/gdp-gdi/index.html">
+        <div class="proj-card-symbol"><svg width="52" height="44" viewBox="0 0 52 44" fill="none"><rect x="2" y="28" width="8" height="14" fill="#b89a5a"/><rect x="14" y="20" width="8" height="22" fill="#b89a5a"/><rect x="26" y="12" width="8" height="30" fill="#b89a5a"/><rect x="38" y="4" width="8" height="38" fill="#b89a5a"/><polyline points="6,28 18,20 30,12 42,4" stroke="#d4b97a" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></div>
+        <div class="proj-card-label">Macroeconomics</div>
+        <div class="proj-card-title">Optimal Weight GDP GDI Project</div>
+        <div class="proj-card-divider"></div>
+        <div class="proj-card-desc">A look at weighted GDP and GDI measures as a cleaner read on underlying economic output.</div>
+        <div class="proj-card-link">View Project</div>
+      </a>
+
+      <a class="proj-card" href="projects/oil-breaks/index.html">
+        <div class="proj-card-symbol"><svg width="52" height="44" viewBox="0 0 52 44" fill="none"><polyline points="2,38 10,22 18,30 26,8 34,26 42,14 50,20" stroke="#b89a5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="18" y1="4" x2="18" y2="40" stroke="#7a6332" stroke-width="1" stroke-dasharray="3,3"/><line x1="34" y1="4" x2="34" y2="40" stroke="#7a6332" stroke-width="1" stroke-dasharray="3,3"/><circle cx="18" cy="30" r="3" fill="#d4b97a"/><circle cx="34" cy="26" r="3" fill="#d4b97a"/></svg></div>
+        <div class="proj-card-label">Energy Economics</div>
+        <div class="proj-card-title">Structural Breaks in Global Oil Prices</div>
+        <div class="proj-card-divider"></div>
+        <div class="proj-card-desc">Pinpointing regime shifts in WTI and Brent crude from geopolitical and macroeconomic shocks using the Bai-Perron multiple structural change framework, 1990–2024.</div>
+        <div class="proj-card-link">View Project</div>
+      </a>
+
+      <a class="proj-card" href="projects/tic/index.html">
+        <div class="proj-card-symbol"><svg width="52" height="44" viewBox="0 0 52 44" fill="none"><rect x="2" y="28" width="8" height="14" fill="#b89a5a"/><rect x="14" y="20" width="8" height="22" fill="#b89a5a"/><rect x="26" y="12" width="8" height="30" fill="#b89a5a"/><rect x="38" y="4" width="8" height="38" fill="#b89a5a"/><polyline points="6,28 18,20 30,12 42,4" stroke="#d4b97a" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></div>
+        <div class="proj-card-label">International Finance</div>
+        <div class="proj-card-title">Foreign Holdings of U.S. Securities</div>
+        <div class="proj-card-divider"></div>
+        <div class="proj-card-desc">An analysis of foreign demand for U.S. securities and what it suggests about capital flows and financial stability.</div>
+        <div class="proj-card-link">View Project</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SOCIOLOGY
+  ══════════════════════════════════════════ -->
+  <section class="discipline" id="sociology">
+    <div class="disc-header">
+      <div class="disc-eyebrow">
+        <span class="disc-num">II</span>
+      </div>
+      <h2 class="disc-title">Sociology</h2>
+      <div class="disc-rule"></div>
+      <p class="disc-desc">Work on inequality, group outcomes, and how social structure shapes economic mobility.</p>
+    </div>
+
+    <div class="proj-grid">
+
+      <a class="proj-card" href="projects/hindu-profile/index.html">
+        <div class="proj-card-symbol"><svg width="52" height="44" viewBox="0 0 52 44" fill="none"><circle cx="26" cy="22" r="5" fill="#3b6abf"/><circle cx="8" cy="8" r="4" fill="#3b6abf" opacity=".8"/><circle cx="44" cy="8" r="4" fill="#3b6abf" opacity=".8"/><circle cx="8" cy="36" r="4" fill="#3b6abf" opacity=".8"/><circle cx="44" cy="36" r="4" fill="#3b6abf" opacity=".8"/><line x1="26" y1="22" x2="8" y2="8" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="26" y1="22" x2="44" y2="8" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="26" y1="22" x2="8" y2="36" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="26" y1="22" x2="44" y2="36" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="8" y1="8" x2="44" y2="8" stroke="#6b96d6" stroke-width=".8" opacity=".3"/><line x1="8" y1="36" x2="44" y2="36" stroke="#6b96d6" stroke-width=".8" opacity=".3"/></svg></div>
+        <div class="proj-card-label">Sociology</div>
+        <div class="proj-card-title">The Hindu American Profile: Education, Income and Crime</div>
+        <div class="proj-card-divider"></div>
+        <div class="proj-card-desc">A demographic profile of Hindu Americans focused on education, income, and reported crime patterns.</div>
+        <div class="proj-card-link">View Project</div>
+      </a>
+
+      <a class="proj-card" href="projects/ethnic-mobility/index.html">
+        <div class="proj-card-symbol"><svg width="52" height="44" viewBox="0 0 52 44" fill="none"><circle cx="26" cy="22" r="5" fill="#3b6abf"/><circle cx="8" cy="8" r="4" fill="#3b6abf" opacity=".8"/><circle cx="44" cy="8" r="4" fill="#3b6abf" opacity=".8"/><circle cx="8" cy="36" r="4" fill="#3b6abf" opacity=".8"/><circle cx="44" cy="36" r="4" fill="#3b6abf" opacity=".8"/><line x1="26" y1="22" x2="8" y2="8" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="26" y1="22" x2="44" y2="8" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="26" y1="22" x2="8" y2="36" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="26" y1="22" x2="44" y2="36" stroke="#6b96d6" stroke-width="1.2" opacity=".5"/><line x1="8" y1="8" x2="44" y2="8" stroke="#6b96d6" stroke-width=".8" opacity=".3"/><line x1="8" y1="36" x2="44" y2="36" stroke="#6b96d6" stroke-width=".8" opacity=".3"/></svg></div>
+        <div class="proj-card-label">Sociology</div>
+        <div class="proj-card-title">Ethnic Mobility and Income Stratification in the U.S.</div>
+        <div class="proj-card-divider"></div>
+        <div class="proj-card-desc">A study of how ethnic groups move across the income distribution over time and across generations.</div>
+        <div class="proj-card-link">View Project</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SOCIAL SCIENCES
+  ══════════════════════════════════════════ -->
+  <section class="discipline" id="social-sciences">
+    <div class="disc-header">
+      <div class="disc-eyebrow">
+        <span class="disc-num">III</span>
+      </div>
+      <h2 class="disc-title">Social Sciences</h2>
+      <div class="disc-rule"></div>
+      <p class="disc-desc">Quantitative work in political science, criminology, anthropology, and related fields.</p>
+    </div>
+
+    <!-- Political Science -->
+    <div class="sub-discipline">
+      <div class="sub-disc-label"><span>Political Science</span></div>
+      <div class="proj-grid">
+        <a class="proj-card" href="projects/economic-anxiety/index.html">
+          <div class="proj-card-symbol"><svg width="52" height="50" viewBox="0 0 52 50" fill="none"><line x1="26" y1="4" x2="26" y2="46" stroke="#4a6890" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="14" x2="44" y2="14" stroke="#4a6890" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="14" x2="4" y2="28" stroke="#4a6890" stroke-width="1.1"/><line x1="8" y1="14" x2="12" y2="28" stroke="#4a6890" stroke-width="1.1"/><path d="M2,28 Q8,35 14,28" stroke="#4a6890" stroke-width="1.6" fill="none"/><line x1="44" y1="14" x2="40" y2="30" stroke="#4a6890" stroke-width="1.1"/><line x1="44" y1="14" x2="48" y2="30" stroke="#4a6890" stroke-width="1.1"/><path d="M38,30 Q44,37 50,30" stroke="#4a6890" stroke-width="1.6" fill="none"/><circle cx="26" cy="4" r="2.5" fill="#4a6890"/><line x1="20" y1="46" x2="32" y2="46" stroke="#4a6890" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="proj-card-label">Political Science</div>
+          <div class="proj-card-title">Economic Anxiety and Voting Behavior</div>
+          <div class="proj-card-divider"></div>
+          <div class="proj-card-desc">A study of whether economic stress helps explain regional shifts in voting behavior.</div>
+          <div class="proj-card-link">View Project</div>
+        </a>
+        <div class="proj-card-soon">
+          <div class="proj-card-label">Political Science</div>
+          <div class="proj-card-title">More research coming</div>
+          <div class="soon-badge">Coming Soon</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Criminology -->
+    <div class="sub-discipline">
+      <div class="sub-disc-label"><span>Criminology</span></div>
+      <div class="proj-grid">
+        <a class="proj-card" href="projects/hate-crime-geography/index.html">
+          <div class="proj-card-symbol"><svg width="50" height="50" viewBox="0 0 50 50" fill="none"><circle cx="20" cy="20" r="14" stroke="#8a3838" stroke-width="1.8"/><circle cx="20" cy="20" r="7" stroke="#8a3838" stroke-width=".8" opacity=".45"/><line x1="20" y1="11" x2="20" y2="29" stroke="#8a3838" stroke-width=".8" opacity=".4"/><line x1="11" y1="20" x2="29" y2="20" stroke="#8a3838" stroke-width=".8" opacity=".4"/><line x1="30" y1="30" x2="46" y2="46" stroke="#8a3838" stroke-width="2.8" stroke-linecap="round"/></svg></div>
+          <div class="proj-card-label">Criminology</div>
+          <div class="proj-card-title">Hate Crime Geography in the United States</div>
+          <div class="proj-card-divider"></div>
+          <div class="proj-card-desc">A geographic analysis of hate crime rates across the United States, with attention to spatial patterns and local social conditions.</div>
+          <div class="proj-card-link">View Project</div>
+        </a>
+        <div class="proj-card-soon">
+          <div class="proj-card-label">Criminology</div>
+          <div class="proj-card-title">More research coming</div>
+          <div class="soon-badge">Coming Soon</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anthropology -->
+    <div class="sub-discipline">
+      <div class="sub-disc-label"><span>Anthropology</span></div>
+      <div class="proj-grid">
+        <a class="proj-card" href="projects/religion-modernization/index.html">
+          <div class="proj-card-symbol"><svg width="48" height="52" viewBox="0 0 48 52" fill="none"><line x1="24" y1="50" x2="24" y2="30" stroke="#8a7040" stroke-width="2" stroke-linecap="round"/><line x1="24" y1="30" x2="10" y2="18" stroke="#8a7040" stroke-width="1.6" stroke-linecap="round"/><line x1="24" y1="30" x2="38" y2="18" stroke="#8a7040" stroke-width="1.6" stroke-linecap="round"/><line x1="24" y1="30" x2="24" y2="14" stroke="#8a7040" stroke-width="1.6" stroke-linecap="round"/><line x1="10" y1="18" x2="4" y2="8" stroke="#8a7040" stroke-width="1.1" stroke-linecap="round"/><line x1="10" y1="18" x2="14" y2="8" stroke="#8a7040" stroke-width="1.1" stroke-linecap="round"/><line x1="38" y1="18" x2="34" y2="8" stroke="#8a7040" stroke-width="1.1" stroke-linecap="round"/><line x1="38" y1="18" x2="44" y2="8" stroke="#8a7040" stroke-width="1.1" stroke-linecap="round"/><line x1="24" y1="14" x2="20" y2="4" stroke="#8a7040" stroke-width="1.1" stroke-linecap="round"/><line x1="24" y1="14" x2="28" y2="4" stroke="#8a7040" stroke-width="1.1" stroke-linecap="round"/><circle cx="4" cy="7" r="2" fill="#8a7040"/><circle cx="14" cy="7" r="2" fill="#8a7040"/><circle cx="20" cy="3" r="2" fill="#8a7040"/><circle cx="28" cy="3" r="2" fill="#8a7040"/><circle cx="34" cy="7" r="2" fill="#8a7040"/><circle cx="44" cy="7" r="2" fill="#8a7040"/></svg></div>
+          <div class="proj-card-label">Anthropology</div>
+          <div class="proj-card-title">Religion, Modernization and Social Values</div>
+          <div class="proj-card-divider"></div>
+          <div class="proj-card-desc">A cross-cultural study of how urbanization and modernization relate to religious practice and social values.</div>
+          <div class="proj-card-link">View Project</div>
+        </a>
+        <div class="proj-card-soon">
+          <div class="proj-card-label">Anthropology</div>
+          <div class="proj-card-title">More research coming</div>
+          <div class="soon-badge">Coming Soon</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Psychology -->
+    <div class="sub-discipline">
+      <div class="sub-disc-label"><span>Psychology</span></div>
+      <div class="proj-grid">
+        <div class="proj-card-soon">
+          <div class="proj-card-label">Psychology</div>
+          <div class="proj-card-title">Research in progress</div>
+          <div class="soon-badge">Coming Soon</div>
+        </div>
+        <div class="proj-card-soon">
+          <div class="proj-card-label">Psychology</div>
+          <div class="proj-card-title">Research in progress</div>
+          <div class="soon-badge">Coming Soon</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       MATHEMATICS
+  ══════════════════════════════════════════ -->
+  <section class="discipline" id="mathematics">
+    <div class="disc-header">
+      <div class="disc-eyebrow">
+        <span class="disc-num">IV</span>
+      </div>
+      <h2 class="disc-title">Mathematics</h2>
+      <div class="disc-rule"></div>
+      <p class="disc-desc">Work in proof-based and applied mathematics.</p>
+    </div>
+    <div class="disc-empty">
+      <p>Research in progress — projects coming soon</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PROBABILITY & STATISTICS
+  ══════════════════════════════════════════ -->
+  <section class="discipline" id="prob-stats">
+    <div class="disc-header">
+      <div class="disc-eyebrow">
+        <span class="disc-num">V</span>
+      </div>
+      <h2 class="disc-title">Probability <em>&amp;</em> Statistics</h2>
+      <div class="disc-rule"></div>
+      <p class="disc-desc">Work on inference, modeling, and statistical theory.</p>
+    </div>
+    <div class="disc-empty">
+      <p>Research in progress — projects coming soon</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       ALGORITHMIC PROGRAMMING
+  ══════════════════════════════════════════ -->
+  <section class="discipline" id="algorithmic">
+    <div class="disc-header">
+      <div class="disc-eyebrow">
+        <span class="disc-num">VI</span>
+      </div>
+      <h2 class="disc-title">Algorithmic <em>Programming</em></h2>
+      <div class="disc-rule"></div>
+      <p class="disc-desc">Computational projects focused on algorithms, data structures, and analytical tooling.</p>
+    </div>
+    <div class="disc-empty">
+      <p>Research in progress — projects coming soon</p>
+    </div>
+  </section>
+
+</div><!-- /.projects-body -->
+
+<footer>
+  <span class="footer-logo">L. <em>Maharaj</em></span>
+  <p>© 2025 · Data Analysis &amp; Research</p>
+  <ul class="footer-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="projects.html">Projects</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>

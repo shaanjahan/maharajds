@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Exposure and Job Risk — L. Maharaj</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #0b0d14;
+      --deep:     #0e1119;
+      --surface:  #121520;
+      --card:     #161a27;
+      --rule:     #222840;
+      --gold:     #b89a5a;
+      --gold-lt:  #d4b97a;
+      --gold-dim: #7a6332;
+      --blue:     #2a4a8a;
+      --blue-mid: #3b6abf;
+      --blue-lt:  #6b96d6;
+      --slate:    #6b7a96;
+      --mist:     #a0aabf;
+      --cream:    #dde2ec;
+      --white:    #eef1f8;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--ink); color: var(--cream); font-family: 'Jost', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 6%; height: 72px; background: rgba(11,13,20,.92); backdrop-filter: blur(20px); border-bottom: 1px solid var(--rule); }
+    .nav-logo { font-family: 'Cinzel', serif; font-size: .95rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--white); text-decoration: none; }
+    .nav-logo em { font-style: normal; color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 2.8rem; list-style: none; }
+    .nav-links a { font-family: 'Cinzel', serif; font-size: .68rem; font-weight: 400; letter-spacing: .2em; text-transform: uppercase; color: var(--slate); text-decoration: none; transition: color .25s; position: relative; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1px; background: var(--gold); transition: width .3s; }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta { border: 1px solid var(--gold-dim) !important; color: var(--gold-lt) !important; padding: .38rem 1.2rem; }
+    .nav-cta::after { display: none !important; }
+    @media(max-width:760px){ .nav-links { display: none; } }
+
+    #proj-header { position: relative; z-index: 1; padding: 130px 6% 60px; background: var(--deep); border-bottom: 1px solid var(--rule); }
+    .proj-breadcrumb { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .28em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 1.4rem; display: flex; align-items: center; gap: .6rem; }
+    .proj-breadcrumb a { color: var(--gold-dim); text-decoration: none; }
+    .proj-breadcrumb a:hover { color: var(--gold-lt); }
+    .proj-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem,3.5vw,3rem); font-weight: 300; line-height: 1.1; color: var(--white); margin-bottom: 1rem; max-width: 900px; }
+    .proj-title em { font-style: italic; color: var(--blue-lt); }
+    .proj-meta { display: flex; flex-wrap: wrap; gap: 1.8rem; margin-bottom: 1.8rem; }
+    .proj-meta-item { display: flex; flex-direction: column; gap: .25rem; }
+    .proj-meta-label { font-family: 'Cinzel', serif; font-size: .55rem; letter-spacing: .25em; text-transform: uppercase; color: var(--gold-dim); }
+    .proj-meta-val { font-size: .88rem; font-weight: 400; color: var(--mist); }
+    .proj-abstract { font-size: .97rem; color: var(--mist); max-width: 840px; line-height: 1.85; padding: 1.4rem 0 1.4rem 1.4rem; border-left: 2px solid var(--gold-dim); margin-top: .8rem; }
+
+    .toc-strip { position: relative; z-index: 1; background: var(--surface); border-bottom: 1px solid var(--rule); padding: 1rem 6%; display: flex; flex-wrap: wrap; gap: .6rem 1.4rem; align-items: center; }
+    .toc-label { font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-dim); margin-right: .4rem; }
+    .toc-link { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--slate); text-decoration: none; padding: .28rem .7rem; border: 1px solid var(--rule); transition: border-color .2s, color .2s; }
+    .toc-link:hover { border-color: var(--gold-dim); color: var(--gold-lt); }
+
+    .proj-body { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 6% 80px; }
+    .analysis-section { padding: 72px 0 56px; border-bottom: 1px solid var(--rule); }
+    .analysis-section:last-of-type { border-bottom: none; }
+    .sec-eyebrow { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .sec-num { font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold-dim); padding: .25rem .7rem; }
+    .sec-method { font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .2em; text-transform: uppercase; color: var(--slate); }
+    .sec-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.4rem,2.5vw,2rem); font-weight: 400; color: var(--white); line-height: 1.2; margin-bottom: 1.2rem; }
+    .sec-title em { font-style: italic; color: var(--blue-lt); }
+    .sec-rule { width: 48px; height: 1px; background: linear-gradient(90deg,var(--gold),transparent); margin-bottom: 1.6rem; }
+    .sec-body { font-size: .95rem; color: var(--mist); line-height: 1.9; max-width: 780px; }
+    .sec-body p { margin-bottom: 1rem; }
+    .sec-body strong { color: var(--cream); font-weight: 400; }
+
+    .eq-block { background: var(--card); border: 1px solid var(--rule); border-left: 2px solid var(--gold-dim); padding: 1.4rem 1.8rem; margin: 1.6rem 0; overflow-x: auto; }
+    .eq-label { font-family: 'Cinzel', serif; font-size: .55rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: .7rem; display: block; }
+    .eq-math { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--cream); }
+    .eq-note { font-size: .82rem; color: var(--slate); margin-top: .6rem; }
+
+    .data-table-wrap { margin: 2rem 0; overflow-x: auto; }
+    .data-table-title { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: .8rem; display: flex; align-items: center; gap: .8rem; }
+    .data-table-title::before { content: ''; width: 4px; height: 4px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
+    table.styled { width: 100%; border-collapse: collapse; font-family: 'Jost', sans-serif; font-size: .85rem; }
+    table.styled thead tr { border-bottom: 1px solid var(--gold-dim); }
+    table.styled th { font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-dim); font-weight: 400; padding: .65rem .9rem; text-align: left; }
+    table.styled td { padding: .6rem .9rem; color: var(--mist); border-bottom: 1px solid rgba(34,40,64,.6); }
+    table.styled tbody tr:hover td { background: rgba(184,154,90,.04); }
+    .val-hi { color: var(--cream); font-weight: 400; }
+    .val-lo { color: var(--slate); }
+
+    .figure-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2.4rem 0; align-items: start; }
+    .figure-panel { background: var(--card); border: 1px solid var(--rule); overflow: hidden; }
+    .figure-panel img { width: 100%; display: block; }
+    .figure-caption { font-family: 'Cinzel', serif; font-size: .55rem; letter-spacing: .16em; text-transform: uppercase; color: var(--slate); padding: .7rem 1rem; border-top: 1px solid var(--rule); text-align: center; }
+    .figure-full { background: var(--card); border: 1px solid var(--rule); margin: 2.4rem 0; overflow: hidden; }
+    .figure-full img { width: 100%; display: block; }
+
+    .finding { background: rgba(184,154,90,.06); border: 1px solid rgba(184,154,90,.18); border-left: 3px solid var(--gold); padding: 1.2rem 1.6rem; margin: 1.8rem 0; }
+    .finding-label { font-family: 'Cinzel', serif; font-size: .55rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: .5rem; display: block; }
+    .finding p { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 400; color: var(--cream); line-height: 1.6; font-style: italic; margin: 0; }
+
+    #methods, #references { padding: 72px 0; border-top: 1px solid var(--rule); }
+    .ref-list { list-style: none; display: flex; flex-direction: column; gap: .9rem; margin-top: 1.4rem; }
+    .ref-list li { font-size: .88rem; color: var(--mist); line-height: 1.7; padding-left: 1.2rem; position: relative; }
+    .ref-list li::before { content: '—'; position: absolute; left: 0; color: var(--gold-dim); font-size: .75rem; }
+    .ref-list em { font-style: italic; color: var(--cream); }
+
+    footer { position: relative; z-index: 1; background: var(--surface); border-top: 1px solid var(--rule); padding: 2.4rem 6%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+    .footer-logo { font-family: 'Cinzel', serif; font-size: .75rem; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--cream); }
+    .footer-logo em { font-style: normal; color: var(--gold); }
+    footer p { font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .18em; color: var(--slate); text-transform: uppercase; }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .2em; color: var(--slate); text-decoration: none; text-transform: uppercase; }
+    .footer-links a:hover { color: var(--gold-lt); }
+
+    @media(max-width:700px){ .figure-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../index.html" class="nav-logo">L. <em>Maharaj</em></a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../about.html">About Me</a></li>
+    <li><a href="../../index.html#specializations">Projects</a></li>
+    <li><a href="../../outside-data.html" class="nav-cta">Outside Data</a></li>
+  </ul>
+</nav>
+
+<section id="proj-header">
+  <div class="proj-breadcrumb">
+    <a href="../../index.html">Home</a> ›
+    <a href="../../index.html#specializations">Projects</a> ›
+    <span style="color:var(--mist)">AI Exposure and Job Risk</span>
+  </div>
+  <h1 class="proj-title">
+    Artificial Intelligence Exposure and Job Risk<br/>
+    <em>in the U.S. Labor Market</em>
+  </h1>
+  <div class="proj-meta">
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Author</span>
+      <span class="proj-meta-val">L. Maharaj</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Date</span>
+      <span class="proj-meta-val">2025</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Data Sources</span>
+      <span class="proj-meta-val">O*NET 28.0 · BLS OES 2023 · BLS Projections 2022–2032 · ACS 2022</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Coverage</span>
+      <span class="proj-meta-val">Occupations · College Majors · 50 States · Major U.S. Metros</span>
+    </div>
+    <div class="proj-meta-item">
+      <span class="proj-meta-label">Category</span>
+      <span class="proj-meta-val">Labor Economics · Machine Learning · AI</span>
+    </div>
+  </div>
+  <p class="proj-abstract">
+    This project asks a narrower question than the usual “AI will change everything” claim: which U.S. occupations and college majors are most exposed to artificial intelligence, and what kind of labor-market risk travels with that exposure? Using NLP on O*NET task descriptions, published AI exposure benchmarks, wage data, employment projections, and geographic workforce composition, the analysis builds a composite exposure index and then separates jobs into substitutable, complementary, and mixed roles. The main pattern is not that AI risk is concentrated in low-skill manual work. It is concentrated in clerical, finance, legal-support, and analytical occupations built around codifiable information tasks, while more technical and human-intensive roles appear more complementary than threatened.
+  </p>
+</section>
+
+<div class="toc-strip">
+  <span class="toc-label">Sections</span>
+  <a href="#s1" class="toc-link">I. Occupation Exposure</a>
+  <a href="#s2" class="toc-link">II. Labor Market Outcomes</a>
+  <a href="#s3" class="toc-link">III. Geography</a>
+  <a href="#s4" class="toc-link">IV. College Majors</a>
+  <a href="#methods" class="toc-link">Methods</a>
+  <a href="#references" class="toc-link">References</a>
+</div>
+
+<div class="proj-body">
+
+  <div class="analysis-section" id="s1">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section I</span>
+      <span class="sec-method">O*NET Task NLP · Composite Exposure Index · Occupational Rankings</span>
+    </div>
+    <h2 class="sec-title">Which Occupations Look Most Exposed: <em>The Task Content Evidence</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>The ranking does not place factory or construction roles at the top. It places information-processing occupations there. <strong>Data entry keyers</strong> sit at the top of the index with an exposure score of <strong>0.907</strong>, followed by <strong>bookkeeping clerks</strong> at <strong>0.838</strong>, <strong>credit analysts</strong> at <strong>0.826</strong>, <strong>tax preparers</strong> at <strong>0.817</strong>, and <strong>insurance underwriters</strong> at <strong>0.780</strong>. The common feature is not physical routine; it is text-heavy, rules-based, codifiable judgment that contemporary AI systems can increasingly replicate or compress.</p>
+      <p>This is the core reason the project focuses on the labor market rather than headline AI adoption. Exposure is task-specific. Occupations centered on drafting, checking, sorting, summarizing, and standardized evaluation are much more vulnerable than occupations that require embodied care, relationship management, or technical problem-solving under uncertainty. That is why paralegals, market research analysts, accountants, and customer service representatives all appear in the high-risk tier while many manual occupations do not.</p>
+    </div>
+
+    <div class="eq-block">
+      <span class="eq-label">Composite AI Exposure Index</span>
+      <div class="eq-math">AI Exposure = w₁(NLP Task Similarity) + w₂(Felten AIOE) + w₃(Webb Patent Exposure) + w₄(Task-Based Benchmark)</div>
+      <p class="eq-note">The composite score combines text similarity from O*NET task descriptions with published external exposure measures to reduce dependence on any single index construction choice.</p>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig01_top25_exposure.png" alt="Top 25 occupations by AI exposure" loading="lazy" />
+      <div class="figure-caption">Fig. 1 — Top 25 occupations by AI exposure. The highest-ranked jobs are overwhelmingly clerical, finance, legal-support, and analytical roles rather than manual labor. Source: O*NET 28.0; BLS.</div>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig03_exposure_by_group.png" alt="AI exposure by occupational group" loading="lazy" />
+      <div class="figure-caption">Fig. 2 — Mean AI exposure by occupational group. Office and administrative work and business-finance occupations sit above the labor-market average. Source: O*NET 28.0; composite index.</div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Top Exposed Occupations</div>
+      <table class="styled">
+        <thead><tr><th>Occupation</th><th>Group</th><th>Exposure</th><th>Median Wage</th><th>Projected Growth</th></tr></thead>
+        <tbody>
+          <tr><td class="val-hi">Data Entry Keyers</td><td>Office &amp; Admin</td><td class="val-hi">0.907</td><td>$36,380</td><td class="val-lo">−26%</td></tr>
+          <tr><td class="val-hi">Bookkeeping Clerks</td><td>Office &amp; Admin</td><td class="val-hi">0.838</td><td>$47,440</td><td class="val-lo">−5%</td></tr>
+          <tr><td class="val-hi">Credit Analysts</td><td>Business &amp; Finance</td><td class="val-hi">0.826</td><td>$79,010</td><td>2%</td></tr>
+          <tr><td class="val-hi">Tax Preparers</td><td>Business &amp; Finance</td><td class="val-hi">0.817</td><td>$47,400</td><td class="val-lo">−5%</td></tr>
+          <tr><td class="val-hi">Insurance Underwriters</td><td>Business &amp; Finance</td><td class="val-hi">0.780</td><td>$76,250</td><td class="val-lo">−4%</td></tr>
+          <tr><td class="val-hi">Telemarketers</td><td>Sales</td><td class="val-hi">0.779</td><td>$29,920</td><td class="val-lo">−15%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>The first wave of AI labor-market disruption appears most concentrated in white-collar routine cognition, not in factory-style manual repetition. The occupations at greatest risk are administrative, financial, legal-support, and communication roles built around standardized information handling.</p>
+    </div>
+  </div>
+
+  <div class="analysis-section" id="s2">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section II</span>
+      <span class="sec-method">BLS Wages · Employment Projections · Risk-Tier Comparison</span>
+    </div>
+    <h2 class="sec-title">Does Exposure Translate Into Risk: <em>Wages, Growth, and Job Tiers</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>Exposure by itself does not mechanically imply decline, but the tier comparisons show a strong directional pattern. The <strong>high / substitutable</strong> tier has mean projected growth of just <strong>0.3%</strong> across <strong>9.5 million</strong> jobs. The <strong>low / complementary</strong> tier grows at <strong>6.5%</strong> across <strong>13.1 million</strong> jobs, while the <strong>mixed / transitional</strong> tier grows even faster at <strong>8.2%</strong>. The more revealing comparison comes from the unsupervised cluster summary: substitutable occupations average just <strong>$52.9K</strong> in wages and <strong>−6.9%</strong> projected growth, compared with <strong>$101.4K</strong> and <strong>6.5%</strong> growth in the complementary cluster.</p>
+      <p>That makes the AI story asymmetric. Some high-exposure jobs remain well-paid, especially in finance and analytics, but exposure is much more dangerous when the work is routine and easily standardized. Technical and quantitative roles can have moderate exposure while still benefiting from AI as a complement. This is why operations research analysts and statisticians appear on the exposure list but retain strong projected growth.</p>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="fig06_wage_exposure.png" alt="Wages and AI exposure" loading="lazy" />
+        <div class="figure-caption">Fig. 3 — Wage levels versus AI exposure. High exposure is not confined to low-wage jobs; finance and analytical occupations also appear in the upper-right portion of the distribution. Source: BLS OES 2023.</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig07_growth_exposure.png" alt="Employment growth and AI exposure" loading="lazy" />
+        <div class="figure-caption">Fig. 4 — Projected employment growth versus AI exposure. Many of the most exposed routine occupations cluster near zero or negative projected growth. Source: BLS Employment Projections 2022–2032.</div>
+      </div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Risk Tiers and Projected Outcomes</div>
+      <table class="styled">
+        <thead><tr><th>Tier</th><th>Mean Growth</th><th>Total Employment</th><th>Occupation Count</th></tr></thead>
+        <tbody>
+          <tr><td class="val-hi">High / Substitutable</td><td class="val-lo">0.3%</td><td>9,486K</td><td>22</td></tr>
+          <tr><td>Mixed / Transitional</td><td class="val-hi">8.2%</td><td>7,351K</td><td>20</td></tr>
+          <tr><td class="val-hi">Low / Complementary</td><td class="val-hi">6.5%</td><td>13,149K</td><td>26</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="figure-full">
+      <img src="fig22_sub_vs_comp.png" alt="Substitutable versus complementary occupations" loading="lazy" />
+      <div class="figure-caption">Fig. 5 — Substitutable versus complementary occupations. The labor-market split is not exposure alone but whether AI replaces a routine workflow or augments a higher-skill one. Source: Composite index and K-Means classification.</div>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>High exposure becomes genuine job risk when the work is routinized and codifiable. Complementary occupations are often exposed too, but they pair that exposure with higher wages, stronger projected growth, and task structures that favor augmentation over replacement.</p>
+    </div>
+  </div>
+
+  <div class="analysis-section" id="s3">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section III</span>
+      <span class="sec-method">ACS Occupational Composition · State and Metro Exposure Scores</span>
+    </div>
+    <h2 class="sec-title">Where Is AI Risk Concentrated: <em>States, Metros, and Sector Mix</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>Geographically, the highest exposure is concentrated in administrative, finance, and tech-heavy labor markets rather than in the traditional manufacturing belt. At the state level, <strong>Delaware</strong> ranks first with an exposure score of <strong>0.492</strong>, followed by <strong>Maryland</strong> at <strong>0.491</strong>, <strong>Connecticut</strong> at <strong>0.488</strong>, <strong>Massachusetts</strong> at <strong>0.482</strong>, and <strong>Illinois</strong> at <strong>0.478</strong>. California, despite its large technical workforce, still posts a high score of <strong>0.471</strong> because of its scale in finance, services, and white-collar admin work.</p>
+      <p>The metro rankings make the pattern even clearer. <strong>San Jose</strong> leads at <strong>0.538</strong>, followed by <strong>Washington, DC</strong> at <strong>0.535</strong>, <strong>San Francisco</strong> at <strong>0.528</strong>, <strong>Seattle</strong> at <strong>0.521</strong>, and <strong>Hartford</strong> at <strong>0.518</strong>. AI exposure is therefore highest in cities with large footprints in software, government administration, insurance, finance, and formalized professional services.</p>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="fig11_state_exposure_ranked.png" alt="State AI exposure rankings" loading="lazy" />
+        <div class="figure-caption">Fig. 6 — State AI exposure rankings. Smaller finance-heavy states outrank many larger and more industrial states. Source: ACS 2022 occupational composition.</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig14_metro_exposure.png" alt="Metro AI exposure rankings" loading="lazy" />
+        <div class="figure-caption">Fig. 7 — Metro AI exposure rankings. San Jose, Washington, and San Francisco lead because of their concentration in tech, government, and professional services. Source: ACS 2022.</div>
+      </div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Selected Geography Rankings</div>
+      <table class="styled">
+        <thead><tr><th>Geography</th><th>Exposure</th><th>High-Risk Jobs</th><th>Dominant Sector</th></tr></thead>
+        <tbody>
+          <tr><td class="val-hi">Delaware</td><td class="val-hi">0.492</td><td>202K</td><td>Finance</td></tr>
+          <tr><td>Maryland</td><td class="val-hi">0.491</td><td>1,245K</td><td>Finance</td></tr>
+          <tr><td>Connecticut</td><td class="val-hi">0.488</td><td>742K</td><td>Finance</td></tr>
+          <tr><td class="val-hi">San Jose-Sunnyvale, CA</td><td class="val-hi">0.538</td><td>1,285K employment</td><td>Tech / Software</td></tr>
+          <tr><td>Washington, DC</td><td class="val-hi">0.535</td><td>3,245K employment</td><td>Government / Defense</td></tr>
+          <tr><td>Hartford, CT</td><td class="val-hi">0.518</td><td>485K employment</td><td>Insurance</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="analysis-section" id="s4">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Section IV</span>
+      <span class="sec-method">Major-to-Occupation Mapping · K-Means Clustering · Earnings Comparison</span>
+    </div>
+    <h2 class="sec-title">Which College Majors Are Most Exposed: <em>Educational Pathways Into Risk and Complementarity</em></h2>
+    <div class="sec-rule"></div>
+
+    <div class="sec-body">
+      <p>The major-level results are one of the most useful parts of the project because they connect occupational change to the educational pipeline. The most exposed majors are <strong>Accounting</strong> at <strong>0.748</strong>, <strong>Finance</strong> at <strong>0.718</strong>, <strong>Business Management</strong> at <strong>0.652</strong>, and <strong>Business Analytics</strong> at <strong>0.645</strong>. By contrast, many STEM majors show only moderate exposure but much larger complementary shares: <strong>Computer Science</strong> has exposure of <strong>0.512</strong> with a <strong>62%</strong> complementary share, while <strong>Data Science / Statistics</strong> has exposure of <strong>0.558</strong> with a <strong>68%</strong> complementary share.</p>
+      <p>The contrast matters because high exposure does not mean a major is “bad.” It means its graduate occupations are especially likely to be reorganized. Business majors appear most at risk of direct substitution in clerical-financial workflows, while technical majors appear more likely to use AI as a force multiplier. Health majors are the least exposed overall: <strong>Nursing</strong> scores just <strong>0.288</strong>, <strong>Physical Therapy</strong> <strong>0.225</strong>, and <strong>Social Work</strong> <strong>0.218</strong>, reflecting their reliance on embodied and interpersonal tasks.</p>
+    </div>
+
+    <div class="figure-row">
+      <div class="figure-panel">
+        <img src="fig16_major_exposure.png" alt="Major exposure ranking" loading="lazy" />
+        <div class="figure-caption">Fig. 8 — AI exposure across college majors. Business-oriented majors dominate the upper tail of exposure, while health majors remain comparatively insulated. Source: Major-to-occupation mapping.</div>
+      </div>
+      <div class="figure-panel">
+        <img src="fig18_cluster_pca.png" alt="PCA clusters of occupations" loading="lazy" />
+        <div class="figure-caption">Fig. 9 — Cluster structure in exposure space. Occupations sort into complementary, mixed, and substitutable groups with clearly different labor-market profiles. Source: K-Means on composite exposure features.</div>
+      </div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="data-table-title">Selected Major Rankings</div>
+      <table class="styled">
+        <thead><tr><th>Major</th><th>Field</th><th>Exposure</th><th>Median Earnings</th><th>Complementary Share</th></tr></thead>
+        <tbody>
+          <tr><td class="val-hi">Accounting</td><td>Business</td><td class="val-hi">0.748</td><td>$58K</td><td>18%</td></tr>
+          <tr><td class="val-hi">Finance</td><td>Business</td><td class="val-hi">0.718</td><td>$72K</td><td>22%</td></tr>
+          <tr><td>Business Analytics</td><td>Business</td><td>0.645</td><td>$68K</td><td>38%</td></tr>
+          <tr><td>Computer Science</td><td>STEM</td><td>0.512</td><td class="val-hi">$92K</td><td class="val-hi">62%</td></tr>
+          <tr><td>Data Science / Statistics</td><td>STEM</td><td>0.558</td><td class="val-hi">$95K</td><td class="val-hi">68%</td></tr>
+          <tr><td class="val-lo">Nursing</td><td>Health</td><td class="val-lo">0.288</td><td>$68K</td><td class="val-hi">72%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding">
+      <span class="finding-label">Key Finding</span>
+      <p>The majors most exposed to AI are not the usual STEM targets. They are accounting, finance, and business pathways that feed directly into routine white-collar information work. Technical majors are more exposed than insulated, but they are exposed in a complementary way that is tied to stronger pay and stronger growth.</p>
+    </div>
+  </div>
+
+  <section id="methods">
+    <div class="sec-eyebrow">
+      <span class="sec-num">Methods</span>
+      <span class="sec-method">Machine Learning · Labor Economics · Occupational Classification</span>
+    </div>
+    <h2 class="sec-title">How the Analysis Was Built</h2>
+    <div class="sec-rule"></div>
+    <div class="sec-body">
+      <p>The project combines NLP on O*NET task descriptions with published AI exposure benchmarks from Felten, Webb, and related task-based research. TF-IDF vectorization and cosine similarity are used to score how closely occupational tasks align with current AI capability language. Those measures are combined into a composite exposure index, then joined to BLS wage and employment data, long-run growth projections, ACS geography, and major-to-occupation mappings. K-Means clustering is used to classify occupations into substitutable, complementary, and mixed groups.</p>
+    </div>
+  </section>
+
+  <section id="references">
+    <div class="sec-eyebrow">
+      <span class="sec-num">References</span>
+      <span class="sec-method">Selected Sources</span>
+    </div>
+    <h2 class="sec-title">Research Foundation</h2>
+    <div class="sec-rule"></div>
+    <ul class="ref-list">
+      <li>Felten, E., Raj, M., &amp; Seamans, R. <em>Occupational, Industry, and Geographic Exposure to Artificial Intelligence</em>.</li>
+      <li>Webb, M. <em>The Impact of Artificial Intelligence on the Labor Market</em>.</li>
+      <li>Acemoglu, D. task-based work on automation and labor-market exposure.</li>
+      <li>O*NET 28.0 Task Database for occupational task descriptions and skill content.</li>
+      <li>BLS Occupational Employment and Wage Statistics, 2023; BLS Employment Projections, 2022–2032.</li>
+      <li>ACS 2022 for state and metro occupational composition and major-to-occupation mapping.</li>
+    </ul>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-logo">L. <em>Maharaj</em></div>
+  <p>Economics · Social Science · Quantitative Research</p>
+  <ul class="footer-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../about.html">About</a></li>
+    <li><a href="../../projects.html">Projects</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>
