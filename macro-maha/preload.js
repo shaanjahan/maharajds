@@ -7,5 +7,6 @@ contextBridge.exposeInMainWorld('maha', {
   history: (symbol, range, interval) => ipcRenderer.invoke('yahoo:history', symbol, range, interval),
   search: (query) => ipcRenderer.invoke('yahoo:search', query),
   summary: (symbol) => ipcRenderer.invoke('yahoo:summary', symbol),
+  fredAll: () => ipcRenderer.invoke('fred:all'),
   openExternal: (url) => ipcRenderer.invoke('app:openExternal', url)
 });

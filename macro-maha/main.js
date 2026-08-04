@@ -6,6 +6,7 @@
 const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const path = require('path');
 const yahoo = require('./src/yahoo');
+const fred = require('./src/fred');
 
 let win;
 
@@ -51,6 +52,7 @@ ipcMain.handle('yahoo:quote', wrap((symbols) => yahoo.quote(symbols)));
 ipcMain.handle('yahoo:history', wrap((symbol, range, interval) => yahoo.history(symbol, range, interval)));
 ipcMain.handle('yahoo:search', wrap((query) => yahoo.search(query)));
 ipcMain.handle('yahoo:summary', wrap((symbol) => yahoo.quoteSummary(symbol)));
+ipcMain.handle('fred:all', wrap(() => fred.all()));
 ipcMain.handle('app:openExternal', wrap((url) => {
   if (!/^https?:/i.test(String(url))) throw new Error('Only http(s) URLs may be opened');
   return shell.openExternal(String(url));

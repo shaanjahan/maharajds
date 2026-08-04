@@ -537,7 +537,7 @@
 
   // ---- command line ---------------------------------------------------------
 
-  const VERBS = new Set(['GP', 'DES', 'STAT', 'FC', 'FORE', 'BAYES', 'BAY', 'REL', 'PAIR', 'RSI', 'MACD', 'NEWS', 'HELP', 'WL', 'PORT']);
+  const VERBS = new Set(['GP', 'DES', 'STAT', 'FC', 'FORE', 'BAYES', 'BAY', 'REL', 'PAIR', 'RSI', 'MACD', 'NEWS', 'HELP', 'WL', 'PORT', 'ECON']);
 
   async function runCommand(input) {
     const tokens = input.trim().toUpperCase().split(/\s+/).filter(Boolean);
@@ -547,6 +547,14 @@
     if (tokens[0] === 'HELP') return showTab('HELP');
 
     if (tokens[0] === 'PORT') return handlePortCommand(tokens.slice(1));
+
+    if (tokens[0] === 'ECON') {
+      await showTab('ECON');
+      const id = tokens[1];
+      if (id && ECON_BY_ID[id]) chartEconSeries(ECON_BY_ID[id]);
+      else if (id) setStatus(`Unknown indicator "${id}". Click a row in the ECON panel.`, 'err');
+      return;
+    }
 
     if (tokens[0] === 'WL') {
       const op = tokens[1];
@@ -812,10 +820,11 @@
   async function renderActiveTab() {
     const tab = state.activeTab;
     if (tab === 'HELP') return renderHELP();
-    if (tab === 'PORT') {
+    if (tab === 'PORT' || tab === 'ECON') {
       el.tabBody.innerHTML = '<div class="placeholder">Computing…</div>';
       try {
-        await renderPORT();
+        if (tab === 'PORT') await renderPORT();
+        else await renderECON();
       } catch (err) {
         el.tabBody.innerHTML = `<div class="placeholder">⚠ ${esc(err.message)}</div>`;
       }
@@ -1420,6 +1429,193 @@
     chart.hideSub();
   }
 
+  // ---- ECON (FRED macro dashboard) ------------------------------------------
+  // transform: 'level' plots the series as-is, 'yoy' converts an index to
+  // year-over-year % (steps = observations per year), 'chg' plots the
+  // period-over-period change. scale rescales units for display.
+
+  const ECON_GROUPS = [
+    {
+      title: 'GROWTH',
+      items: [
+        { id: 'A191RL1Q225SBEA', label: 'REAL GDP GROWTH (Q/Q SAAR)', freq: 'Q', tf: 'level', unit: '%', dec: 1, signed: true },
+        { id: 'GDPC1', label: 'REAL GDP (CHAINED 2017$)', freq: 'Q', tf: 'level', unit: 'T$', dec: 2, scale: 1 / 1000 },
+        { id: 'INDPRO', label: 'INDUSTRIAL PRODUCTION (Y/Y)', freq: 'M', tf: 'yoy', steps: 12, unit: '%', dec: 1, signed: true },
+        { id: 'RSAFS', label: 'RETAIL SALES (Y/Y)', freq: 'M', tf: 'yoy', steps: 12, unit: '%', dec: 1, signed: true }
+      ]
+    },
+    {
+      title: 'LABOR',
+      items: [
+        { id: 'UNRATE', label: 'UNEMPLOYMENT RATE', freq: 'M', tf: 'level', unit: '%', dec: 1 },
+        { id: 'PAYEMS', label: 'NONFARM PAYROLLS (M/M)', freq: 'M', tf: 'chg', unit: 'K', dec: 0, signed: true },
+        { id: 'ICSA', label: 'INITIAL CLAIMS (WEEKLY)', freq: 'W', tf: 'level', unit: 'K', dec: 0, scale: 1 / 1000 },
+        { id: 'CIVPART', label: 'LABOR FORCE PARTICIPATION', freq: 'M', tf: 'level', unit: '%', dec: 1 }
+      ]
+    },
+    {
+      title: 'INFLATION',
+      items: [
+        { id: 'CPIAUCSL', label: 'CPI INFLATION (Y/Y)', freq: 'M', tf: 'yoy', steps: 12, unit: '%', dec: 1 },
+        { id: 'CPILFESL', label: 'CORE CPI (Y/Y)', freq: 'M', tf: 'yoy', steps: 12, unit: '%', dec: 1 },
+        { id: 'PCEPILFE', label: 'CORE PCE (Y/Y)', freq: 'M', tf: 'yoy', steps: 12, unit: '%', dec: 1 }
+      ]
+    },
+    {
+      title: 'RATES & MONEY',
+      items: [
+        { id: 'FEDFUNDS', label: 'FED FUNDS RATE', freq: 'M', tf: 'level', unit: '%', dec: 2 },
+        { id: 'DGS2', label: 'UST 2Y YIELD', freq: 'D', tf: 'level', unit: '%', dec: 2 },
+        { id: 'DGS10', label: 'UST 10Y YIELD', freq: 'D', tf: 'level', unit: '%', dec: 2 },
+        { id: 'T10Y2Y', label: 'YIELD CURVE (10Y-2Y)', freq: 'D', tf: 'level', unit: '%', dec: 2, signed: true },
+        { id: 'M2SL', label: 'M2 MONEY SUPPLY (Y/Y)', freq: 'M', tf: 'yoy', steps: 12, unit: '%', dec: 1, signed: true }
+      ]
+    },
+    {
+      title: 'PRODUCTIVITY & FISCAL',
+      items: [
+        { id: 'OPHNFB', label: 'LABOR PRODUCTIVITY (Y/Y)', freq: 'Q', tf: 'yoy', steps: 4, unit: '%', dec: 1, signed: true },
+        { id: 'RTFPNAUSA632NRUG', label: 'TFP GROWTH (PWT, ANNUAL)', freq: 'A', tf: 'yoy', steps: 1, unit: '%', dec: 1, signed: true },
+        { id: 'GFDEGDQ188S', label: 'FEDERAL DEBT / GDP', freq: 'Q', tf: 'level', unit: '%', dec: 1 }
+      ]
+    },
+    {
+      title: 'SENTIMENT & HOUSING',
+      items: [
+        { id: 'UMCSENT', label: 'UMICH CONSUMER SENTIMENT', freq: 'M', tf: 'level', unit: 'idx', dec: 1 },
+        { id: 'HOUST', label: 'HOUSING STARTS (SAAR)', freq: 'M', tf: 'level', unit: 'M', dec: 2, scale: 1 / 1000 }
+      ]
+    }
+  ];
+
+  const ECON_BY_ID = {};
+  ECON_GROUPS.forEach((g) => g.items.forEach((it) => (ECON_BY_ID[it.id] = it)));
+
+  function econTransform(item, arr) {
+    const scale = item.scale || 1;
+    if (item.tf === 'yoy') {
+      const out = [];
+      for (let i = item.steps; i < arr.length; i++) {
+        if (arr[i - item.steps].v !== 0) {
+          out.push({ t: arr[i].t, v: (arr[i].v / arr[i - item.steps].v - 1) * 100 });
+        }
+      }
+      return out;
+    }
+    if (item.tf === 'chg') {
+      const out = [];
+      for (let i = 1; i < arr.length; i++) {
+        out.push({ t: arr[i].t, v: (arr[i].v - arr[i - 1].v) * scale });
+      }
+      return out;
+    }
+    return arr.map((p) => ({ t: p.t, v: p.v * scale }));
+  }
+
+  function fmtEcon(item, v) {
+    if (v == null || !isFinite(v)) return '—';
+    const sign = item.signed && v > 0 ? '+' : '';
+    const n = v.toFixed(item.dec);
+    if (item.unit === '%') return sign + n + '%';
+    if (item.unit === 'K') return sign + n + 'K';
+    if (item.unit === 'M') return sign + n + 'M';
+    if (item.unit === 'T$') return '$' + n + 'T';
+    return sign + n;
+  }
+
+  function sparkline(points) {
+    const pts = points.slice(-48);
+    if (pts.length < 2) return '';
+    const vals = pts.map((p) => p.v);
+    const min = Math.min.apply(null, vals);
+    const max = Math.max.apply(null, vals);
+    const span = max - min || 1;
+    const W = 84;
+    const H = 20;
+    const coords = pts
+      .map((p, i) => `${((i / (pts.length - 1)) * W).toFixed(1)},${(H - 2 - ((p.v - min) / span) * (H - 4)).toFixed(1)}`)
+      .join(' ');
+    const color = vals[vals.length - 1] >= vals[0] ? 'var(--up)' : 'var(--down)';
+    return (
+      `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true">` +
+      `<polyline fill="none" stroke="${color}" stroke-width="1.2" points="${coords}"/></svg>`
+    );
+  }
+
+  async function renderECON() {
+    if (!state.econ) {
+      el.tabBody.innerHTML = '<div class="placeholder">Loading FRED data…</div>';
+      state.econ = await api(window.maha.fredAll());
+    }
+    const series = state.econ.series || {};
+    const html = [];
+    for (const group of ECON_GROUPS) {
+      html.push(`<div class="sec-title">${group.title}</div>`);
+      for (const item of group.items) {
+        const raw = series[item.id];
+        if (!raw || raw.length < (item.steps || 1) + 2) {
+          html.push(
+            `<div class="econ-row" style="cursor:default"><span class="econ-name">${esc(item.label)}` +
+            '<span class="econ-date">unavailable</span></span><span></span><span class="econ-val flat">—</span></div>'
+          );
+          continue;
+        }
+        const tv = econTransform(item, raw);
+        const last = tv[tv.length - 1];
+        const prev = tv[tv.length - 2];
+        const delta = prev ? last.v - prev.v : 0;
+        const arrow = delta > 0 ? '▲' : delta < 0 ? '▼' : '·';
+        const deltaCls = delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat';
+        const date = new Date(last.t * 1000).toISOString().slice(0, 7);
+        html.push(
+          `<div class="econ-row" data-eid="${item.id}">` +
+          `<span class="econ-name">${esc(item.label)}<span class="econ-date">${date} · ${item.freq}</span></span>` +
+          `<span class="econ-spark">${sparkline(tv)}</span>` +
+          `<span class="econ-val">${fmtEcon(item, last.v)}<span class="econ-delta ${deltaCls}">${arrow} ${fmtEcon(item, Math.abs(delta)).replace('+', '')}</span></span>` +
+          '</div>'
+        );
+      }
+    }
+    if (state.econ.errors && state.econ.errors.length) {
+      html.push(`<div class="note">Some series failed to load: ${esc(state.econ.errors.join(' · '))}</div>`);
+    }
+    html.push(
+      '<div class="note">Source: FRED, St. Louis Fed (no API key, fetched directly). ' +
+      'Click any row to chart its full history. TFP is the Penn World Table annual series — it lags a few years by nature. ' +
+      'Data refreshes every 6 hours.</div>'
+    );
+    el.tabBody.innerHTML = html.join('');
+    el.tabBody.querySelectorAll('.econ-row[data-eid]').forEach((row) =>
+      row.addEventListener('click', () => chartEconSeries(ECON_BY_ID[row.dataset.eid]))
+    );
+  }
+
+  function chartEconSeries(item) {
+    const raw = state.econ && state.econ.series && state.econ.series[item.id];
+    if (!raw) return;
+    const tv = econTransform(item, raw);
+    chart.setLineMode(item.id, tv.map((p) => ({ time: p.t, value: p.v })), (v) => fmtEcon(item, v));
+    chart.hideSub();
+    state.studyOn = null;
+    state.symbol = null; // symbol commands need an explicit symbol again
+    document.querySelectorAll('#watchlist .qrow').forEach((r) => r.classList.remove('active'));
+
+    const last = tv[tv.length - 1];
+    const prev = tv[tv.length - 2];
+    const delta = prev ? last.v - prev.v : 0;
+    el.qhSymbol.textContent = item.id;
+    el.qhName.textContent = item.label + ' — FRED';
+    el.qhPrice.textContent = fmtEcon(item, last.v);
+    el.qhChg.textContent = `${delta >= 0 ? '▲' : '▼'} ${fmtEcon(item, Math.abs(delta)).replace('+', '')} vs prior`;
+    el.qhChg.className = delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat';
+    el.qhSub.innerHTML =
+      `<b>LAST OBS</b> ${new Date(last.t * 1000).toISOString().slice(0, 10)}` +
+      `<span style="color:var(--border-bright)">|</span><b>FREQ</b> ${item.freq}` +
+      `<span style="color:var(--border-bright)">|</span><b>SOURCE</b> FRED / ST. LOUIS FED` +
+      `<span style="color:var(--border-bright)">|</span><b>OBS</b> ${tv.length}`;
+    setStatus(`${item.id} charted — ${item.label} (FRED). Click a watchlist symbol to return to equities.`, 'okay');
+  }
+
   // ---- NEWS -----------------------------------------------------------------
 
   async function renderNEWS() {
@@ -1469,6 +1665,8 @@
         ['PORT', 'Portfolio dashboard: P&L, VaR, risk contribution'],
         ['PORT ADD AAPL 10 150', 'Add 10 shares @ $150 (omit cost = live price)'],
         ['PORT DEL AAPL / CLEAR', 'Remove a position / clear portfolio'],
+        ['ECON', 'Macro dashboard: GDP, jobs, inflation, rates, TFP (FRED)'],
+        ['ECON UNRATE', 'Chart one indicator directly by its FRED id'],
         ['HELP', 'This screen'],
         ['⌘K', 'Focus command line'],
         ['F1–F8', 'Function keys for the active symbol']

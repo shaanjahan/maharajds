@@ -255,6 +255,26 @@
       this.perfSeries.clear();
     }
 
+    // Single-series line mode for economic indicators (FRED data).
+    setLineMode(label, points, formatter) {
+      this.mode = 'line';
+      this.clearOverlays();
+      this._clearPerf();
+      this.candles.applyOptions({ visible: false });
+      this.volume.applyOptions({ visible: false });
+      const line = this.chart.addLineSeries({
+        color: C.accent,
+        lineWidth: 2,
+        title: label,
+        priceFormat: formatter
+          ? { type: 'custom', formatter, minMove: 0.01 }
+          : undefined
+      });
+      line.setData(points);
+      this.perfSeries.set(label, line);
+      this.chart.timeScale().fitContent();
+    }
+
     // ---- sub pane ----
     _ensureSub() {
       if (this.subChart) return;

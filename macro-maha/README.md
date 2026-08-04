@@ -57,6 +57,12 @@ npm test
   chart/quote/quoteSummary/search endpoints in the Electron main process
   (which is CORS-free). Cookie/crumb auth for the fundamentals endpoints is
   handled automatically, with graceful degradation if Yahoo declines.
+- **Economic data** — 20 macro indicators (unemployment, GDP & GDP growth,
+  CPI/core CPI/core PCE inflation, payrolls, claims, participation, Fed funds,
+  2Y/10Y yields and the curve, M2, industrial production, retail sales,
+  consumer sentiment, housing starts, federal debt/GDP, labor productivity
+  and Penn World Table TFP) pulled straight from FRED's keyless
+  `fredgraph.csv` endpoint, cached 6 h, charted on click.
 - **Everything else is local** — every statistic, forecast and posterior is
   computed inside the app in plain JavaScript. Watchlist persists locally.
 
@@ -80,6 +86,8 @@ symbols. Commands:
 | `PORT` | Portfolio dashboard: P&L, VaR in $, risk contribution, Monte Carlo |
 | `PORT ADD AAPL 10 150` | Add 10 shares @ $150 cost basis (omit cost to use live price) |
 | `PORT DEL AAPL` / `PORT CLEAR` | Remove a position / clear the portfolio |
+| `ECON` | Macro dashboard: GDP, jobs, inflation, rates, productivity, TFP |
+| `ECON UNRATE` | Chart one indicator directly by its FRED id |
 | `HELP` (or `F1`) | Command reference |
 
 Function keys `F1–F8` mirror the buttons under the chart.
