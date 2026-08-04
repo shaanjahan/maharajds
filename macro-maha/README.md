@@ -77,6 +77,9 @@ symbols. Commands:
 | `AAPL RSI` / `AAPL MACD` | Indicator study pane under the chart |
 | `AAPL NEWS` | Latest headlines (opens in your browser) |
 | `WL ADD TSLA` / `WL DEL TSLA` | Manage the watchlist |
+| `PORT` | Portfolio dashboard: P&L, VaR in $, risk contribution, Monte Carlo |
+| `PORT ADD AAPL 10 150` | Add 10 shares @ $150 cost basis (omit cost to use live price) |
+| `PORT DEL AAPL` / `PORT CLEAR` | Remove a position / clear the portfolio |
 | `HELP` (or `F1`) | Command reference |
 
 Function keys `F1–F8` mirror the buttons under the chart.
@@ -105,6 +108,12 @@ All implemented from scratch in `renderer/js/analytics.js` and
 - **Cross-asset** — correlation matrices on aligned daily log returns,
   β/α/R² vs `^GSPC`, relative performance charting, and pair analysis with
   OLS hedge ratio, spread z-score and Ornstein–Uhlenbeck half-life.
+- **Portfolio** — live-valued positions panel (persisted locally) and a full
+  risk dashboard: unrealized/day P&L, annualized return/vol/Sharpe/drawdown
+  of your actual holdings, dollar VaR & CVaR, per-position risk contribution
+  (`w_i · cov(r_i, r_p) / var(r_p)`), diversification ratio, effective number
+  of positions, β/α vs the S&P, plus Bayesian drift and Monte Carlo outlook
+  on the portfolio as a whole.
 
 Numerical plumbing (inverse normal CDF, regularized incomplete beta,
 Student-t CDF/quantiles, Gaussian elimination) is also hand-rolled and tested.

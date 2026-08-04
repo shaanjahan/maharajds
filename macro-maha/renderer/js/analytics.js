@@ -666,6 +666,70 @@
     return saa === 0 || sbb === 0 ? 0 : sab / Math.sqrt(saa * sbb);
   }
 
+  function cov(a, b) {
+    const n = Math.min(a.length, b.length);
+    if (n < 2) return 0;
+    const ma = mean(a.slice(0, n));
+    const mb = mean(b.slice(0, n));
+    let s = 0;
+    for (let i = 0; i < n; i++) s += (a[i] - ma) * (b[i] - mb);
+    return s / (n - 1);
+  }
+
+  // ---- portfolio analytics --------------------------------------------------
+  // weights: {SYM: w} with Σw = 1; returnsMap arrays must be pre-aligned.
+
+  function portfolioReturns(returnsMap, weights) {
+    const syms = Object.keys(weights);
+    const len = Math.min.apply(null, syms.map((s) => returnsMap[s].length));
+    const rp = new Array(len).fill(0);
+    for (const s of syms) {
+      const r = returnsMap[s];
+      const off = r.length - len; // align tails
+      for (let t = 0; t < len; t++) rp[t] += weights[s] * r[off + t];
+    }
+    return rp;
+  }
+
+  // Fraction of portfolio variance contributed by each position:
+  // RC_i = w_i * cov(r_i, r_p) / var(r_p); with fixed weights Σ RC_i = 1.
+  function riskContributions(returnsMap, weights) {
+    const rp = portfolioReturns(returnsMap, weights);
+    const varP = variance(rp);
+    const len = rp.length;
+    const contribs = {};
+    for (const s of Object.keys(weights)) {
+      const r = returnsMap[s];
+      contribs[s] = varP > 0 ? (weights[s] * cov(r.slice(r.length - len), rp)) / varP : 0;
+    }
+    return { varP, volDaily: Math.sqrt(varP), contribs };
+  }
+
+  function diversificationMetrics(returnsMap, weights) {
+    const syms = Object.keys(weights);
+    const rp = portfolioReturns(returnsMap, weights);
+    const volP = std(rp);
+    let wAvgVol = 0;
+    let sumW2 = 0;
+    for (const s of syms) {
+      wAvgVol += weights[s] * std(returnsMap[s]);
+      sumW2 += weights[s] * weights[s];
+    }
+    let pairSum = 0;
+    let pairCount = 0;
+    for (let i = 0; i < syms.length; i++) {
+      for (let j = i + 1; j < syms.length; j++) {
+        pairSum += corr(returnsMap[syms[i]], returnsMap[syms[j]]);
+        pairCount++;
+      }
+    }
+    return {
+      diversificationRatio: volP > 0 ? wAvgVol / volP : 1,
+      effectiveN: sumW2 > 0 ? 1 / sumW2 : syms.length,
+      avgPairCorr: pairCount ? pairSum / pairCount : 1
+    };
+  }
+
   function corrMatrix(returnsMap) {
     const syms = Object.keys(returnsMap);
     const m = syms.map(() => new Array(syms.length).fill(1));
@@ -797,6 +861,10 @@
     mlSignal,
     alignSeries,
     corr,
+    cov,
+    portfolioReturns,
+    riskContributions,
+    diversificationMetrics,
     corrMatrix,
     betaAlpha,
     rollingCorr,

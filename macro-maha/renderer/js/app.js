@@ -45,6 +45,7 @@
     rangeKey: '1Y',
     chartBars: [],
     watchlist: loadWatchlist(),
+    portfolio: loadPortfolio(), // [{sym, qty, cost}]
     quotes: new Map(), // symbol -> latest quote-ish object
     daily: new Map(), // symbol -> {at, t, c, bars}
     activeTab: 'STAT',
@@ -141,6 +142,22 @@
     localStorage.setItem('macro-maha-watchlist', JSON.stringify(state.watchlist));
   }
 
+  function loadPortfolio() {
+    try {
+      const raw = localStorage.getItem('macro-maha-portfolio');
+      const list = raw ? JSON.parse(raw) : null;
+      return Array.isArray(list)
+        ? list.filter((h) => h && h.sym && h.qty > 0 && h.cost >= 0)
+        : [];
+    } catch (_e) {
+      return [];
+    }
+  }
+
+  function savePortfolio() {
+    localStorage.setItem('macro-maha-portfolio', JSON.stringify(state.portfolio));
+  }
+
   // ---- data helpers ---------------------------------------------------------
 
   async function api(promise) {
@@ -211,7 +228,74 @@
     if (q.shortName) state.names.set(q.symbol, q.shortName);
     updateRow('mkt', q.symbol, merged.price, merged.changePercent, direction);
     updateRow('wl', q.symbol, merged.price, merged.changePercent, direction);
+    refreshPortfolioRow(q.symbol, direction);
     if (q.symbol === state.symbol) renderQuoteHeader();
+  }
+
+  // ---- portfolio panel ------------------------------------------------------
+
+  const pfEl = $('portfolio');
+  const pfTotalEl = $('pf-total');
+
+  function renderPortfolioRows() {
+    if (!state.portfolio.length) {
+      pfEl.innerHTML =
+        '<div class="placeholder" style="padding:14px 10px;color:var(--text-faint)">' +
+        'No positions.<br>PORT ADD AAPL 10 150</div>';
+      pfTotalEl.innerHTML = 'PORT ADD &lt;SYM&gt; &lt;QTY&gt; [PX]';
+      return;
+    }
+    pfEl.innerHTML = state.portfolio
+      .map(
+        (h) =>
+          `<div class="qrow" id="${rowId('pf', h.sym)}" data-sym="${esc(h.sym)}">` +
+          `<span><span class="q-sym">${esc(h.sym)}</span>` +
+          `<span class="q-sub">${h.qty} @ ${fmtPx(h.cost)}</span></span>` +
+          '<span class="q-px">—</span>' +
+          '<span class="q-chg flat">—</span></div>'
+      )
+      .join('');
+    pfEl.querySelectorAll('.qrow').forEach((row) => {
+      row.addEventListener('click', () => loadSymbol(row.dataset.sym));
+    });
+    state.portfolio.forEach((h) => refreshPortfolioRow(h.sym));
+  }
+
+  function refreshPortfolioRow(sym, direction) {
+    const h = state.portfolio.find((p) => p.sym === sym);
+    if (!h) return;
+    const q = state.quotes.get(sym);
+    const row = $(rowId('pf', sym));
+    if (!row || !q || q.price == null) return;
+    row.querySelector('.q-px').textContent = '$' + fmtBig(q.price * h.qty);
+    const pnl = h.cost > 0 ? (q.price / h.cost - 1) * 100 : 0;
+    const chgEl = row.querySelector('.q-chg');
+    chgEl.textContent = fmtPct(pnl, 1);
+    chgEl.className = 'q-chg ' + pctClass(pnl);
+    if (direction) {
+      row.classList.remove('tick-up', 'tick-down');
+      void row.offsetWidth;
+      row.classList.add(direction > 0 ? 'tick-up' : 'tick-down');
+    }
+    refreshPortfolioTotals();
+  }
+
+  function refreshPortfolioTotals() {
+    let value = 0;
+    let cost = 0;
+    let priced = 0;
+    for (const h of state.portfolio) {
+      const q = state.quotes.get(h.sym);
+      if (q && q.price != null) {
+        value += q.price * h.qty;
+        cost += h.cost * h.qty;
+        priced++;
+      }
+    }
+    if (!priced) return;
+    const pnl = cost > 0 ? (value / cost - 1) * 100 : 0;
+    pfTotalEl.innerHTML =
+      `$${fmtBig(value)} <span class="${pctClass(pnl)}">${fmtPct(pnl, 1)}</span>`;
   }
 
   // ---- quote header ---------------------------------------------------------
@@ -413,6 +497,7 @@
   function allTrackedSymbols() {
     const set = new Set(MARKET_SYMBOLS.map(([s]) => s));
     state.watchlist.forEach((s) => set.add(s));
+    state.portfolio.forEach((h) => set.add(h.sym));
     if (state.symbol) set.add(state.symbol);
     return Array.from(set);
   }
@@ -452,7 +537,7 @@
 
   // ---- command line ---------------------------------------------------------
 
-  const VERBS = new Set(['GP', 'DES', 'STAT', 'FC', 'FORE', 'BAYES', 'BAY', 'REL', 'PAIR', 'RSI', 'MACD', 'NEWS', 'HELP', 'WL']);
+  const VERBS = new Set(['GP', 'DES', 'STAT', 'FC', 'FORE', 'BAYES', 'BAY', 'REL', 'PAIR', 'RSI', 'MACD', 'NEWS', 'HELP', 'WL', 'PORT']);
 
   async function runCommand(input) {
     const tokens = input.trim().toUpperCase().split(/\s+/).filter(Boolean);
@@ -460,6 +545,8 @@
     hideSuggest();
 
     if (tokens[0] === 'HELP') return showTab('HELP');
+
+    if (tokens[0] === 'PORT') return handlePortCommand(tokens.slice(1));
 
     if (tokens[0] === 'WL') {
       const op = tokens[1];
@@ -571,6 +658,65 @@
     return state.watchlist.filter((s) => s !== symbol).slice(0, 4);
   }
 
+  async function handlePortCommand(args) {
+    const op = args[0];
+    if (!op) return showTab('PORT');
+
+    if (op === 'ADD') {
+      const sym = args[1];
+      const qty = parseFloat(args[2]);
+      let cost = args[3] != null ? parseFloat(args[3]) : NaN;
+      if (!sym || !(qty > 0)) {
+        setStatus('Usage: PORT ADD <SYM> <QTY> [COST] — e.g. PORT ADD AAPL 10 150', 'err');
+        return;
+      }
+      if (!(cost >= 0)) {
+        // No cost given: use the live price as the basis.
+        try {
+          const rows = await api(window.maha.quote([sym]));
+          cost = rows[0] && rows[0].price;
+        } catch (_e) { /* fall through */ }
+        if (!(cost >= 0)) {
+          setStatus(`Could not fetch a price for ${sym} — give a cost: PORT ADD ${sym} ${qty} <COST>`, 'err');
+          return;
+        }
+      }
+      const existing = state.portfolio.find((h) => h.sym === sym);
+      if (existing) {
+        const newQty = existing.qty + qty;
+        existing.cost = (existing.qty * existing.cost + qty * cost) / newQty;
+        existing.qty = newQty;
+      } else {
+        state.portfolio.push({ sym, qty, cost });
+      }
+      savePortfolio();
+      renderPortfolioRows();
+      streamer.subscribe([sym]);
+      pollQuotes([sym]);
+      setStatus(`Position ${sym} ${existing ? 'updated' : 'added'}: ${qty} @ ${fmtPx(cost)}.`, 'okay');
+    } else if (op === 'DEL' || op === 'RM') {
+      const sym = args[1];
+      const before = state.portfolio.length;
+      state.portfolio = state.portfolio.filter((h) => h.sym !== sym);
+      if (state.portfolio.length < before) {
+        savePortfolio();
+        renderPortfolioRows();
+        setStatus(`Position ${sym} removed.`, 'okay');
+      } else {
+        setStatus(`No position in ${sym}.`, 'err');
+      }
+    } else if (op === 'CLEAR') {
+      state.portfolio = [];
+      savePortfolio();
+      renderPortfolioRows();
+      setStatus('Portfolio cleared.', 'okay');
+    } else {
+      setStatus('Usage: PORT | PORT ADD <SYM> <QTY> [COST] | PORT DEL <SYM> | PORT CLEAR', 'err');
+      return;
+    }
+    if (state.activeTab === 'PORT') await renderActiveTab();
+  }
+
   // ---- command suggestions --------------------------------------------------
 
   let suggestTimer = null;
@@ -666,6 +812,15 @@
   async function renderActiveTab() {
     const tab = state.activeTab;
     if (tab === 'HELP') return renderHELP();
+    if (tab === 'PORT') {
+      el.tabBody.innerHTML = '<div class="placeholder">Computing…</div>';
+      try {
+        await renderPORT();
+      } catch (err) {
+        el.tabBody.innerHTML = `<div class="placeholder">⚠ ${esc(err.message)}</div>`;
+      }
+      return;
+    }
     if (!state.symbol) return;
     el.tabBody.innerHTML = '<div class="placeholder">Computing…</div>';
     try {
@@ -1103,6 +1258,168 @@
     state.pairMode = false;
   }
 
+  // ---- PORT (portfolio analysis) --------------------------------------------
+
+  async function renderPORT() {
+    if (!state.portfolio.length) {
+      el.tabBody.innerHTML =
+        '<div class="sec-title">PORTFOLIO</div>' +
+        '<div class="desc-text">No positions yet. Add holdings from the command line:</div>' +
+        '<table class="kv cmd-list">' +
+        '<tr><td>PORT ADD AAPL 10 150</td><td style="text-align:left">10 shares, cost basis $150</td></tr>' +
+        '<tr><td>PORT ADD BTC-USD 0.5</td><td style="text-align:left">cost basis = current price</td></tr>' +
+        '<tr><td>PORT DEL AAPL</td><td style="text-align:left">remove a position</td></tr>' +
+        '</table>' +
+        '<div class="note">Positions persist locally on this Mac (no backend, nothing leaves your machine). Adding to an existing position merges lots at the weighted-average cost.</div>';
+      return;
+    }
+
+    // Live valuation from the quote map (stream/poll keeps it fresh).
+    const rowsLive = state.portfolio.map((h) => {
+      const q = state.quotes.get(h.sym) || {};
+      const price = q.price != null ? q.price : null;
+      return {
+        sym: h.sym,
+        qty: h.qty,
+        cost: h.cost,
+        price,
+        value: price != null ? price * h.qty : null,
+        dayPnl: q.change != null ? q.change * h.qty : null,
+        pnlPct: price != null && h.cost > 0 ? (price / h.cost - 1) * 100 : null
+      };
+    });
+    const totalValue = rowsLive.reduce((s, r) => s + (r.value || 0), 0);
+    const totalCost = state.portfolio.reduce((s, h) => s + h.qty * h.cost, 0);
+    const dayPnl = rowsLive.reduce((s, r) => s + (r.dayPnl || 0), 0);
+
+    // Daily histories for risk analytics.
+    const symsAll = state.portfolio.map((h) => h.sym);
+    const fetched = await Promise.all(
+      symsAll.concat([BENCH]).map(async (s) => {
+        try {
+          return [s, await getDaily(s)];
+        } catch (_e) {
+          return [s, null];
+        }
+      })
+    );
+    const seriesMap = {};
+    for (const [s, ser] of fetched) {
+      if (ser && ser.c.length > 60) seriesMap[s] = { t: ser.t, c: ser.c };
+    }
+    const analyzable = symsAll.filter((s) => seriesMap[s]);
+    const missing = symsAll.filter((s) => !seriesMap[s]);
+    if (analyzable.length < 1) throw new Error('No daily history available for the portfolio.');
+    const aligned = A.alignSeries(seriesMap);
+
+    // Buy-and-hold portfolio value series with current share counts.
+    const qtyOf = Object.fromEntries(state.portfolio.map((h) => [h.sym, h.qty]));
+    const Vt = aligned.t.map((_, i) =>
+      analyzable.reduce((s, sym2) => s + qtyOf[sym2] * aligned.closes[sym2][i], 0)
+    );
+    const rv = A.logReturns(Vt);
+    const annRet = A.mean(rv) * A.TRADING_DAYS;
+    const annVol = A.std(rv) * Math.sqrt(A.TRADING_DAYS);
+    const dd = A.maxDrawdown(Vt);
+
+    // Current-composition weights (aligned last closes) for risk decomposition.
+    const lastClose = Object.fromEntries(
+      analyzable.map((s) => [s, aligned.closes[s][aligned.closes[s].length - 1]])
+    );
+    const valNow = analyzable.reduce((s, sym2) => s + qtyOf[sym2] * lastClose[sym2], 0);
+    const weights = Object.fromEntries(
+      analyzable.map((s) => [s, (qtyOf[s] * lastClose[s]) / valNow])
+    );
+    const returnsMap = {};
+    for (const s of Object.keys(aligned.closes)) returnsMap[s] = A.logReturns(aligned.closes[s]);
+    const rp = A.portfolioReturns(returnsMap, weights);
+    const risk95 = A.varCvar(rp, 0.95);
+    const risk99 = A.varCvar(rp, 0.99);
+    const rc = A.riskContributions(returnsMap, weights);
+    const div = A.diversificationMetrics(returnsMap, weights);
+    const post = B.posteriorReturns(rp);
+    const mc = B.monteCarlo(Vt, 63, { nPaths: 2000, seed: 42 });
+
+    let betaHtml = '—';
+    if (returnsMap[BENCH]) {
+      const ba = A.betaAlpha(rv, returnsMap[BENCH].slice(-rv.length));
+      betaHtml = `${ba.beta.toFixed(2)} / ${fmtPct(ba.alphaAnnual * 100, 1)} / ${ba.r2.toFixed(2)}`;
+    }
+
+    const posTable =
+      '<table class="mat"><tr><th>SYM</th><th>QTY</th><th>COST</th><th>LAST</th><th>VALUE</th><th>WT</th><th>P&amp;L</th></tr>' +
+      rowsLive
+        .map((r) => {
+          const w = r.value != null && totalValue > 0 ? (r.value / totalValue) * 100 : null;
+          return (
+            `<tr><th>${esc(r.sym)}</th>` +
+            `<td>${r.qty}</td><td>${fmtPx(r.cost)}</td><td>${fmtPx(r.price)}</td>` +
+            `<td>$${fmtBig(r.value)}</td><td>${w != null ? w.toFixed(1) + '%' : '—'}</td>` +
+            `<td class="${pctClass(r.pnlPct)}">${fmtPct(r.pnlPct, 1)}</td></tr>`
+          );
+        })
+        .join('') +
+      '</table>';
+
+    const rcBars = analyzable
+      .map((s) => {
+        const pct = rc.contribs[s] * 100;
+        const w = Math.min(Math.abs(pct), 100) * 0.98;
+        return (
+          `<div class="bar-row"><span class="bar-label">${esc(s)}</span>` +
+          `<span class="bar-track"><span class="bar-fill" style="left:0;width:${w}%;background:var(--accent)"></span></span>` +
+          `<span class="bar-val">${pct.toFixed(1)}%</span></div>`
+        );
+      })
+      .join('');
+
+    const pnlTotal = totalCost > 0 ? (totalValue / totalCost - 1) * 100 : 0;
+    el.tabBody.innerHTML =
+      '<div class="sec-title">POSITIONS</div>' +
+      posTable +
+      '<div class="sec-title">PERFORMANCE</div>' +
+      kv([
+        ['Market value', '$' + fmtBig(totalValue)],
+        ['Cost basis', '$' + fmtBig(totalCost)],
+        ['Unrealized P&L', `<span class="${pctClass(pnlTotal)}">$${fmtBig(totalValue - totalCost)} (${fmtPct(pnlTotal, 1)})</span>`],
+        ['Day P&L', `<span class="${pctClass(dayPnl)}">$${fmtBig(dayPnl)}</span>`],
+        ['Ann. return (2Y, B&H)', pctSpan(annRet * 100)],
+        ['Ann. volatility', (annVol * 100).toFixed(2) + '%'],
+        ['Sharpe (rf=0)', annVol > 0 ? (annRet / annVol).toFixed(2) : '—'],
+        ['Max drawdown', pctSpan(dd.dd * 100)],
+        [`β / α / R² vs ${esc(BENCH)}`, betaHtml]
+      ]) +
+      '<div class="sec-title">RISK (CURRENT WEIGHTS, DAILY)</div>' +
+      kv([
+        ['VaR 95%', `<span class="down">$${fmtBig(Math.abs(risk95.historicalVaR) * totalValue)} (${fmtPct(risk95.historicalVaR * 100)})</span>`],
+        ['CVaR 95%', `<span class="down">$${fmtBig(Math.abs(risk95.cvar) * totalValue)} (${fmtPct(risk95.cvar * 100)})</span>`],
+        ['VaR 99%', `<span class="down">$${fmtBig(Math.abs(risk99.historicalVaR) * totalValue)} (${fmtPct(risk99.historicalVaR * 100)})</span>`],
+        ['Portfolio vol (daily)', (rc.volDaily * 100).toFixed(2) + '%'],
+        ['Diversification ratio', div.diversificationRatio.toFixed(2)],
+        ['Effective # positions', div.effectiveN.toFixed(1) + ' of ' + analyzable.length],
+        ['Avg pairwise corr', div.avgPairCorr.toFixed(2)],
+        ['Largest weight', (Math.max.apply(null, Object.values(weights)) * 100).toFixed(1) + '%']
+      ]) +
+      '<div class="sec-title">RISK CONTRIBUTION BY POSITION</div>' +
+      rcBars +
+      '<div class="sec-title">OUTLOOK (STATISTICAL)</div>' +
+      kv([
+        ['Bayesian P(drift > 0)', (post.probPositive * 100).toFixed(1) + '%'],
+        ['Posterior drift (ann.)', pctSpan(post.muAnnual.mean * 100)],
+        ['MC P(portfolio up in 3M)', (mc.probUp * 100).toFixed(1) + '%'],
+        ['MC expected value (3M)', '$' + fmtBig((mc.expectedTerminal / mc.s0) * totalValue)],
+        ['MC 5th percentile (3M)', `<span class="down">$${fmtBig((mc.terminalP5 / mc.s0) * totalValue)}</span>`]
+      ]) +
+      (missing.length ? `<div class="note">Excluded from risk analytics (no history): ${missing.map(esc).join(', ')}</div>` : '') +
+      `<div class="note">Chart shows your portfolio vs ${esc(BENCH)} (normalized %). Risk uses 2Y of aligned daily closes: VaR/CVaR and contributions use current weights; return/drawdown assume today's share counts held throughout. Statistical estimates — not investment advice.</div>`;
+
+    // Chart: portfolio index vs benchmark, normalized.
+    const perfMap = { PORT: { t: aligned.t, c: Vt } };
+    if (seriesMap[BENCH]) perfMap[BENCH] = { t: aligned.t, c: aligned.closes[BENCH] };
+    chart.setPerformanceMode(perfMap, PERF_COLORS);
+    chart.hideSub();
+  }
+
   // ---- NEWS -----------------------------------------------------------------
 
   async function renderNEWS() {
@@ -1149,6 +1466,9 @@
         ['AAPL RSI / MACD', 'Indicator study pane'],
         ['AAPL NEWS', 'Latest headlines'],
         ['WL ADD TSLA', 'Add to watchlist (WL DEL removes)'],
+        ['PORT', 'Portfolio dashboard: P&L, VaR, risk contribution'],
+        ['PORT ADD AAPL 10 150', 'Add 10 shares @ $150 (omit cost = live price)'],
+        ['PORT DEL AAPL / CLEAR', 'Remove a position / clear portfolio'],
         ['HELP', 'This screen'],
         ['⌘K', 'Focus command line'],
         ['F1–F8', 'Function keys for the active symbol']
@@ -1186,6 +1506,7 @@
     MARKET_SYMBOLS.forEach(([s, label]) => state.names.set(s, label));
     renderQuoteRows(el.markets, MARKET_SYMBOLS.map(([s]) => s), 'mkt');
     renderQuoteRows(el.watchlist, state.watchlist, 'wl');
+    renderPortfolioRows();
 
     tickClock();
     setInterval(tickClock, 1000);

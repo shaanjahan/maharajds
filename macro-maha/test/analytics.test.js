@@ -240,6 +240,40 @@ test('spreadAnalysis detects mean reversion in a stationary spread', () => {
   assert.ok(pa.lambdaT < -3);
 });
 
+// ---- portfolio --------------------------------------------------------------
+test('cov(a,a) equals variance', () => {
+  const a = A.logReturns(gbmSeries(200, 0, 0.02, 41));
+  near(A.cov(a, a), A.variance(a), 1e-15);
+});
+
+test('portfolioReturns is the weighted sum', () => {
+  const a = [0.01, -0.02, 0.03];
+  const b = [0.02, 0.02, -0.01];
+  const rp = A.portfolioReturns({ A: a, B: b }, { A: 0.6, B: 0.4 });
+  near(rp[0], 0.6 * 0.01 + 0.4 * 0.02, 1e-15);
+  near(rp[2], 0.6 * 0.03 + 0.4 * -0.01, 1e-15);
+});
+
+test('riskContributions sum to 1 and split identical assets evenly', () => {
+  const a = A.logReturns(gbmSeries(300, 0, 0.02, 43));
+  const b = A.logReturns(gbmSeries(300, 0, 0.02, 44));
+  const rc = A.riskContributions({ A: a, B: b }, { A: 0.7, B: 0.3 });
+  near(rc.contribs.A + rc.contribs.B, 1, 1e-9);
+  const rcSame = A.riskContributions({ A: a, B: a.slice() }, { A: 0.5, B: 0.5 });
+  near(rcSame.contribs.A, 0.5, 1e-9);
+  near(rcSame.contribs.B, 0.5, 1e-9);
+});
+
+test('diversificationMetrics: effective N and ratio behave', () => {
+  const a = A.logReturns(gbmSeries(400, 0, 0.02, 45));
+  const b = A.logReturns(gbmSeries(400, 0, 0.02, 46));
+  const d = A.diversificationMetrics({ A: a, B: b }, { A: 0.5, B: 0.5 });
+  near(d.effectiveN, 2, 1e-12);
+  assert.ok(d.diversificationRatio > 1.15); // independent assets diversify
+  const same = A.diversificationMetrics({ A: a, B: a.slice() }, { A: 0.5, B: 0.5 });
+  near(same.diversificationRatio, 1, 1e-9); // perfectly correlated: no benefit
+});
+
 // ---- Bayes ------------------------------------------------------------------
 test('posteriorReturns centers on sample mean with weak prior', () => {
   const r = A.logReturns(gbmSeries(500, 0.001, 0.01, 17));
