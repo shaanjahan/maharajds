@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' file:; script-src 'self' file:; style-src 'self' file: 'unsafe-inline'; connect-src wss://streamer.finance.yahoo.com; img-src file: data:;" />
+  <title>Macro Maha</title>
+  <link rel="stylesheet" href="css/terminal.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ===== top bar ===== -->
+    <header id="topbar">
+      <div class="brand">MACRO<span>MAHA</span></div>
+      <div id="cmd-wrap">
+        <span class="cmd-prompt">&gt;</span>
+        <input id="cmd" type="text" spellcheck="false" autocomplete="off"
+               placeholder="AAPL GP · TSLA STAT · NVDA FC · AAPL REL MSFT GOOGL · HELP  (⌘K)" />
+        <div id="cmd-suggest" class="hidden"></div>
+      </div>
+      <div id="conn" class="conn" title="Data feed status">
+        <span class="dot"></span><span id="conn-label">INIT</span>
+      </div>
+      <div id="clock">
+        <div id="clock-local">--:--:--</div>
+        <div id="clock-ny">NY --:--:-- <span id="mkt-state"></span></div>
+      </div>
+    </header>
+
+    <!-- ===== main grid ===== -->
+    <main id="grid">
+
+      <!-- left column: markets + watchlist -->
+      <aside id="left">
+        <section class="panel" id="panel-markets">
+          <div class="panel-title">MARKETS</div>
+          <div id="markets" class="quote-rows"></div>
+        </section>
+        <section class="panel grow" id="panel-watchlist">
+          <div class="panel-title">WATCHLIST
+            <span class="panel-hint">WL ADD/DEL &lt;SYM&gt;</span>
+          </div>
+          <div id="watchlist" class="quote-rows"></div>
+        </section>
+      </aside>
+
+      <!-- center column: quote header + chart -->
+      <section id="center">
+        <div class="panel" id="panel-quote">
+          <div id="qh-main">
+            <span id="qh-symbol">—</span>
+            <span id="qh-name"></span>
+            <span id="qh-price">—</span>
+            <span id="qh-chg" class="flat">—</span>
+          </div>
+          <div id="qh-sub"></div>
+        </div>
+        <div class="panel grow" id="panel-chart">
+          <div id="chart-toolbar">
+            <div class="tb-group" id="tb-ranges"></div>
+            <div class="tb-group" id="tb-overlays"></div>
+            <div class="tb-group" id="tb-studies"></div>
+          </div>
+          <div id="chart-main"></div>
+          <div id="chart-sub"></div>
+        </div>
+        <div id="fkeys">
+          <button data-cmd="HELP"><b>F1</b> HELP</button>
+          <button data-cmd="DES"><b>F2</b> DES</button>
+          <button data-cmd="GP"><b>F3</b> CHART</button>
+          <button data-cmd="STAT"><b>F4</b> STAT</button>
+          <button data-cmd="FC"><b>F5</b> FORECAST</button>
+          <button data-cmd="BAYES"><b>F6</b> BAYES</button>
+          <button data-cmd="REL"><b>F7</b> REL</button>
+          <button data-cmd="NEWS"><b>F8</b> NEWS</button>
+        </div>
+      </section>
+
+      <!-- right column: analytics tabs -->
+      <aside id="right">
+        <div class="panel grow" id="panel-analytics">
+          <div id="tabs">
+            <button data-tab="DES">DES</button>
+            <button data-tab="STAT" class="active">STAT</button>
+            <button data-tab="FC">FC</button>
+            <button data-tab="BAYES">BAYES</button>
+            <button data-tab="REL">REL</button>
+            <button data-tab="NEWS">NEWS</button>
+          </div>
+          <div id="tab-body" class="tab-body">
+            <div class="placeholder">Loading…</div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- ===== status bar ===== -->
+    <footer id="statusbar">
+      <span id="status-msg">MACRO MAHA — personal analytics terminal. Type HELP for commands.</span>
+      <span id="status-right"></span>
+    </footer>
+  </div>
+
+  <script src="../node_modules/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/bayes.js"></script>
+  <script src="js/streamer.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
