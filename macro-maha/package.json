@@ -1,0 +1,36 @@
+{
+  "name": "macro-maha",
+  "productName": "Macro Maha",
+  "version": "1.0.0",
+  "description": "Personal Bloomberg-style financial analysis terminal. Realtime Yahoo Finance data, statistical / time-series / Bayesian analytics and ML forecasting. No backend.",
+  "main": "main.js",
+  "author": "Lamae Maharaj",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test": "node test/analytics.test.js",
+    "dist": "electron-builder --mac"
+  },
+  "dependencies": {
+    "lightweight-charts": "^4.2.0"
+  },
+  "devDependencies": {
+    "electron": "^31.7.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.lamaemaharaj.macromaha",
+    "productName": "Macro Maha",
+    "mac": {
+      "category": "public.app-category.finance",
+      "target": ["dmg", "zip"]
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**",
+      "renderer/**",
+      "node_modules/lightweight-charts/dist/lightweight-charts.standalone.production.js"
+    ]
+  }
+}
